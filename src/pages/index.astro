@@ -86,14 +86,12 @@ import { getOrSetUserId } from '../lib/user';
 		<script>
 			import { getOrSetUserId } from '../lib/user';
 
-			const BACKEND_URL = 'https://script.google.com/macros/s/AKfycbyOhkO-K9w-ErN47ZSYSfYqohMTU0VMi6ytTZKI_9lGprRKORxQ8zRDNXns7vM9dHS15g/exec';
-
 			const form = document.getElementById('detailsForm') as HTMLFormElement;
 
 			// Ensure user ID is set on load
-			const userId = getOrSetUserId();
+			getOrSetUserId();
 
-			form?.addEventListener('submit', async (e) => {
+			form?.addEventListener('submit', (e) => {
 				e.preventDefault();
 
 				const formData = new FormData(form);
@@ -105,28 +103,9 @@ import { getOrSetUserId } from '../lib/user';
 					userId: getOrSetUserId()
 				};
 
-				try {
-					// Using no-cors might be necessary for Google Apps Script if it doesn't handle CORS preflight
-					// But usually, we want to know if it succeeded.
-					// Note: Google Apps Script redirects might cause issues with fetch in some environments.
-					const response = await fetch(BACKEND_URL, {
-						method: 'POST',
-						mode: 'no-cors', // Important for Google Apps Script sometimes
-						headers: {
-							'Content-Type': 'application/json',
-						},
-						body: JSON.stringify(payload),
-					});
-
-					// Save to local storage for the Kundli page
-					localStorage.setItem('user_details', JSON.stringify(payload));
-
-					alert('Details saved successfully!');
-					window.location.href = '/kundli';
-				} catch (error) {
-					console.error('Error:', error);
-					alert('There was an error saving your details. Please try again.');
-				}
+				// Save to local storage and redirect to Kundli page where calculation and POST will happen
+				localStorage.setItem('user_details', JSON.stringify(payload));
+				window.location.href = '/kundli';
 			});
 		</script>
 	</body>

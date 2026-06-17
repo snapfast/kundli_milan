@@ -11,11 +11,13 @@ export interface PlanetData {
 export interface PanchangData {
     tithi: string;
     nakshatra: string;
+    nakshatraIdx: number;
     yoga: string;
     karana: string;
     vara: string;
     sunSign: string;
     moonSign: string;
+    moonSignIdx: number;
     sunrise: string;
     sunset: string;
 }
@@ -133,6 +135,7 @@ export function calculateAstrology(dob: string, tob: string, lat: number = 28.61
     const diff = (moonLong - sunLong + 360) % 360;
     const tithiIdx = Math.floor(diff / 12);
     const nakIdx = Math.floor(siderealMoonLong / (360 / 27));
+    const moonRasiIdx = Math.floor(siderealMoonLong / 30);
     const yogaIdx = Math.floor(((siderealSunLong + siderealMoonLong) % 360) / (360 / 27));
 
     const karanaIdxTotal = Math.floor(diff / 6);
@@ -148,11 +151,13 @@ export function calculateAstrology(dob: string, tob: string, lat: number = 28.61
     const panchang: PanchangData = {
         tithi: TITHIS[tithiIdx],
         nakshatra: NAKSHATRAS[nakIdx],
+        nakshatraIdx: nakIdx,
         yoga: YOGAS[yogaIdx],
         karana: KARANAS[karanaIdx],
         vara: VARAS[istDate.getUTCDay()],
         sunSign: RASIS[Math.floor(siderealSunLong / 30)],
-        moonSign: RASIS[Math.floor(siderealMoonLong / 30)],
+        moonSign: RASIS[moonRasiIdx],
+        moonSignIdx: moonRasiIdx,
         sunrise: formatTime(sunrise ? new Date(sunrise.date.getTime() + 5.5*60*60*1000) : null),
         sunset: formatTime(sunset ? new Date(sunset.date.getTime() + 5.5*60*60*1000) : null)
     };

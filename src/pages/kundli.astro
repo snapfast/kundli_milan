@@ -69,6 +69,67 @@
 				border-radius: 4px;
 			}
 		</style>
+
+		<style is:global>
+			.matches-section {
+				margin-top: 2rem;
+			}
+			.match-card {
+				background: #fff;
+				border: 1px solid #e1e4e8;
+				border-radius: 12px;
+				padding: 1.5rem;
+				margin-bottom: 1rem;
+				transition: transform 0.2s;
+				box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+			}
+			.match-card:hover {
+				transform: translateY(-5px);
+			}
+			.match-header {
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+				margin-bottom: 0.5rem;
+			}
+			.match-name {
+				font-size: 1.25rem;
+				font-weight: bold;
+				color: #2c3e50;
+			}
+			.match-category {
+				background: #6c5ce7;
+				color: white;
+				padding: 0.25rem 0.75rem;
+				border-radius: 20px;
+				font-size: 0.8rem;
+				font-weight: bold;
+			}
+			.match-score {
+				font-size: 1.5rem;
+				font-weight: bold;
+				color: #00b894;
+			}
+			.match-description {
+				font-style: italic;
+				color: #636e72;
+				font-size: 0.95rem;
+			}
+			.koota-grid {
+				display: grid;
+				grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+				gap: 0.5rem;
+				margin-top: 1rem;
+			}
+			.koota-item {
+				font-size: 0.8rem;
+				color: #2d3436;
+				background: #f1f2f6;
+				padding: 0.4rem;
+				border-radius: 4px;
+				text-align: center;
+			}
+		</style>
 	</head>
 	<body>
 		<div class="container">
@@ -128,16 +189,23 @@
 					</tbody>
 				</table>
 
-				<div class="matchmaking-notice">
-					<strong>Matchmaking System:</strong> Your details have been saved. Our system will use these planetary positions to find highly compatible matches based on Vedic Astrology principles.
+				<div id="matches" class="matches-section" style="display: none;">
+					<h2>Your Top 3 Cosmic Matches</h2>
+					<div id="matches-list"></div>
+				</div>
+
+				<div class="matchmaking-notice" id="matching-status">
+					<strong>Matchmaking System:</strong> Calculating your cosmic matches and saving your profile...
 				</div>
 			</div>
 		</div>
 
 		<script>
 			import { calculateAstrology } from '../lib/astrology';
+			import { calculateCompatibility } from '../lib/compatibility';
+			import { fetchUsers, saveUserProfile } from '../lib/api';
 
-			window.addEventListener('load', () => {
+			window.addEventListener('load', async () => {
 				const stored = localStorage.getItem('user_details');
 				if (!stored) {
 					window.location.href = '/';
@@ -154,6 +222,13 @@
 
 				try {
 					const data = calculateAstrology(details.dob, details.tob);
+
+					// Update local details with indices for matching
+					const currentUserAstrology = {
+						name: details.name,
+						nakshatraIdx: data.panchang.nakshatraIdx,
+						moonSignIdx: data.panchang.moonSignIdx
+					};
 
 					// Fill Panchang
 					document.getElementById('p-tithi')!.textContent = data.panchang.tithi;
@@ -178,6 +253,74 @@
 
 					document.getElementById('loading')!.style.display = 'none';
 					document.getElementById('results')!.style.display = 'block';
+
+					// Matchmaking Logic
+					const otherUsers = await fetchUsers();
+					const filteredUsers = otherUsers.filter(u => u.userId !== details.userId);
+
+					const resultsWithScores = filteredUsers.map(user => {
+						// We need to calculate their astrology on the fly if they don't have indices
+						let uNakIdx = user.nakshatraIdx;
+						let uMoonSignIdx = user.moonSignIdx;
+
+						if (uNakIdx === undefined || uMoonSignIdx === undefined) {
+							const uData = calculateAstrology(user.dob, user.tob);
+							uNakIdx = uData.panchang.nakshatraIdx;
+							uMoonSignIdx = uData.panchang.moonSignIdx;
+						}
+
+						const compat = calculateCompatibility(currentUserAstrology, {
+							name: user.name,
+							nakshatraIdx: uNakIdx,
+							moonSignIdx: uMoonSignIdx
+						});
+
+						return { user, compat };
+					});
+
+					// Sort and take top 3
+					resultsWithScores.sort((a, b) => b.compat.score - a.compat.score);
+					const top3 = resultsWithScores.slice(0, 3);
+
+					// Save to backend
+					await saveUserProfile({
+						...details,
+						nakshatraIdx: data.panchang.nakshatraIdx,
+						moonSignIdx: data.panchang.moonSignIdx,
+						matches: top3.map(m => ({
+							name: m.user.name,
+							score: m.compat.score,
+							category: m.compat.category
+						}))
+					});
+
+					document.getElementById('matching-status')!.innerHTML = `<strong>Matchmaking Complete!</strong> Your profile has been updated with your top matches.`;
+
+					// Display Matches
+					if (top3.length > 0) {
+						const matchesList = document.getElementById('matches-list')!;
+						top3.forEach(m => {
+							const card = document.createElement('div');
+							card.className = 'match-card';
+							card.innerHTML = `
+								<div class="match-header">
+									<span class="match-name">${m.user.name}</span>
+									<span class="match-category">${m.compat.category}</span>
+								</div>
+								<div class="match-score">${m.compat.score} / 36</div>
+								<div class="match-description">${m.compat.description}</div>
+								<div class="koota-grid">
+									${m.compat.kootas.map(k => `<div class="koota-item">${k.name}: ${k.score}/${k.max}</div>`).join('')}
+								</div>
+							`;
+							matchesList.appendChild(card);
+						});
+						document.getElementById('matches')!.style.display = 'block';
+					} else {
+						document.getElementById('matches-list')!.innerHTML = '<p>No other users found yet to match with. Check back later!</p>';
+						document.getElementById('matches')!.style.display = 'block';
+					}
+
 				} catch (e) {
 					console.error(e);
 					document.getElementById('loading')!.textContent = 'Error calculating Kundli. Please check your input.';
