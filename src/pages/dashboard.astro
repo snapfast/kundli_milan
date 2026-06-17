@@ -152,6 +152,10 @@
 					<!-- Profile data injected here -->
 				</div>
 
+				<div style="margin-bottom: 2rem;">
+					<button id="resetProfileBtn" class="btn" style="background-color: #dc3545;">Reset My Profile</button>
+				</div>
+
 				<h2>Your Current Top Matches</h2>
 				<div id="matches-list">
 					<!-- Matches injected here -->
@@ -165,13 +169,23 @@
 		</div>
 
 		<script>
-			import { getOrSetUserId } from '../lib/user';
-			import { fetchUsers } from '../lib/api';
+			import { getOrSetUserId, clearUserData } from '../lib/user';
+			import { fetchUsers, resetUserProfile } from '../lib/api';
 			import { calculateCompatibility } from '../lib/compatibility';
 			import { KOOTA_INFO } from '../lib/constants';
 
 			window.addEventListener('load', async () => {
 				const userId = getOrSetUserId();
+				const resetBtn = document.getElementById('resetProfileBtn') as HTMLButtonElement;
+
+				resetBtn?.addEventListener('click', async () => {
+					if (confirm('Are you sure you want to reset your cosmic profile? This will delete all your data and you will start fresh.')) {
+						if (userId) await resetUserProfile(userId);
+						clearUserData();
+						window.location.href = '/';
+					}
+				});
+
 				const users = await fetchUsers();
 				const profile = users.find(u => u.userId === userId);
 
