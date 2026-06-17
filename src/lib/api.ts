@@ -20,10 +20,19 @@ export async function fetchUsers(): Promise<UserProfile[]> {
     try {
         const response = await fetch(BACKEND_URL);
         if (!response.ok) {
-            throw new Error('Failed to fetch users');
+            throw new Error(`HTTP error! status: ${response.status}`);
         }
-        const data = await response.json();
-        return data as UserProfile[];
+        const result = await response.json();
+
+        // Handle both direct array and { status: 'success', data: [...] } formats
+        if (Array.isArray(result)) {
+            return result as UserProfile[];
+        } else if (result && typeof result === 'object' && Array.isArray(result.data)) {
+            return result.data as UserProfile[];
+        }
+
+        console.warn('API returned unexpected format:', result);
+        return [];
     } catch (error) {
         console.error('Error fetching users:', error);
         return [];
@@ -34,16 +43,19 @@ export async function saveUserProfile(profile: UserProfile): Promise<boolean> {
     try {
         const response = await fetch(BACKEND_URL, {
             method: 'POST',
-            mode: 'no-cors',
+            mode: 'no-cors', // This is used to bypass CORS preflight; response is opaque
             headers: {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify(profile),
         });
-        // Since we use no-cors, we can't really see the response body or status
+
+        // With 'no-cors', response.ok is always false and status is 0.
+        // We assume success if no error was thrown during fetch.
+        console.log('User profile submission sent to backend');
         return true;
     } catch (error) {
-        console.error('Error saving user profile:', error);
+        console.error('Critical error during profile submission:', error);
         return false;
     }
 }
