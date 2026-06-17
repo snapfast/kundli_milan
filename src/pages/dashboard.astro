@@ -1,0 +1,248 @@
+---
+---
+
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width" />
+		<title>Cosmic Dashboard</title>
+		<style>
+			body {
+				font-family: sans-serif;
+				max-width: 800px;
+				margin: 2rem auto;
+				padding: 0 1rem;
+				line-height: 1.6;
+				background-color: #f4f7f6;
+			}
+			.container {
+				background: white;
+				padding: 2rem;
+				border-radius: 12px;
+				box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+			}
+			h1, h2 {
+				color: #2c3e50;
+				border-bottom: 2px solid #6c5ce7;
+				padding-bottom: 0.5rem;
+			}
+			.profile-summary {
+				display: grid;
+				grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+				gap: 1.5rem;
+				margin-bottom: 2rem;
+				background: #fff;
+				border: 1px solid #e1e4e8;
+				padding: 1.5rem;
+				border-radius: 8px;
+			}
+			.summary-item {
+				display: flex;
+				flex-direction: column;
+			}
+			.label {
+				font-weight: bold;
+				color: #7f8c8d;
+				font-size: 0.85rem;
+				text-transform: uppercase;
+			}
+			.value {
+				font-size: 1.2rem;
+				color: #2d3436;
+			}
+			.no-data {
+				text-align: center;
+				padding: 3rem;
+				color: #636e72;
+			}
+			.btn {
+				display: inline-block;
+				background: #6c5ce7;
+				color: white;
+				padding: 0.8rem 1.5rem;
+				border-radius: 6px;
+				text-decoration: none;
+				margin-top: 1rem;
+			}
+		</style>
+		<style is:global>
+			.match-card {
+				background: #fff;
+				border: 1px solid #e1e4e8;
+				border-radius: 12px;
+				padding: 1.5rem;
+				margin-bottom: 1rem;
+				box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+			}
+			.match-header {
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+				margin-bottom: 0.5rem;
+			}
+			.match-name {
+				font-size: 1.25rem;
+				font-weight: bold;
+				color: #2c3e50;
+			}
+			.match-category {
+				background: #00b894;
+				color: white;
+				padding: 0.25rem 0.75rem;
+				border-radius: 20px;
+				font-size: 0.8rem;
+				font-weight: bold;
+			}
+			.match-score {
+				font-size: 1.5rem;
+				font-weight: bold;
+				color: #6c5ce7;
+			}
+			.koota-grid {
+				display: grid;
+				grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+				gap: 0.5rem;
+				margin-top: 1rem;
+			}
+			.koota-item {
+				font-size: 0.8rem;
+				color: #2d3436;
+				background: #f1f2f6;
+				padding: 0.4rem;
+				border-radius: 4px;
+				text-align: center;
+				cursor: help;
+				position: relative;
+			}
+			.koota-item:hover .koota-explanation {
+				display: block;
+			}
+			.koota-explanation {
+				display: none;
+				position: absolute;
+				bottom: 100%;
+				left: 50%;
+				transform: translateX(-50%);
+				background: #333;
+				color: white;
+				padding: 0.5rem;
+				border-radius: 4px;
+				width: 200px;
+				z-index: 10;
+				font-size: 0.75rem;
+				text-align: left;
+				box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+			}
+		</style>
+	</head>
+	<body>
+		<nav style="margin-bottom: 2rem; display: flex; gap: 1rem;">
+			<a href="/">Home</a>
+			<a href="/dashboard">Dashboard</a>
+		</nav>
+
+		<div class="container">
+			<h1>Your Cosmic Dashboard</h1>
+
+			<div id="loading">Syncing with the stars...</div>
+
+			<div id="dashboard-content" style="display: none;">
+				<div class="profile-summary" id="profile-summary">
+					<!-- Profile data injected here -->
+				</div>
+
+				<h2>Your Current Top Matches</h2>
+				<div id="matches-list">
+					<!-- Matches injected here -->
+				</div>
+			</div>
+
+			<div id="no-profile" style="display: none;" class="no-data">
+				<p>We couldn't find your cosmic profile. Please share your birth details to get started!</p>
+				<a href="/" class="btn">Create Profile</a>
+			</div>
+		</div>
+
+		<script>
+			import { getOrSetUserId } from '../lib/user';
+			import { fetchUsers } from '../lib/api';
+			import { calculateCompatibility } from '../lib/compatibility';
+			import { KOOTA_INFO } from '../lib/constants';
+
+			window.addEventListener('load', async () => {
+				const userId = getOrSetUserId();
+				const users = await fetchUsers();
+				const profile = users.find(u => u.userId === userId);
+
+				document.getElementById('loading')!.style.display = 'none';
+
+				if (profile) {
+					const summary = document.getElementById('profile-summary')!;
+					summary.innerHTML = `
+						<div class="summary-item">
+							<span class="label">Name</span>
+							<span class="value">${profile.name}</span>
+						</div>
+						<div class="summary-item">
+							<span class="label">Born</span>
+							<span class="value">${profile.dob} at ${profile.tob}</span>
+						</div>
+						<div class="summary-item">
+							<span class="label">Location</span>
+							<span class="value">${profile.location}</span>
+						</div>
+						<div class="summary-item">
+							<span class="label">Gender</span>
+							<span class="value" style="text-transform: capitalize;">${profile.gender}</span>
+						</div>
+					`;
+
+					const matchesList = document.getElementById('matches-list')!;
+					if (profile.matches && profile.matches.length > 0) {
+						profile.matches.forEach(m => {
+							const otherUser = users.find(u => u.name === m.name);
+							let kootaHtml = '';
+
+							if (otherUser && profile.nakshatraIdx !== undefined && otherUser.nakshatraIdx !== undefined) {
+								const compat = calculateCompatibility(
+									{ name: profile.name, nakshatraIdx: profile.nakshatraIdx, moonSignIdx: profile.moonSignIdx! },
+									{ name: otherUser.name, nakshatraIdx: otherUser.nakshatraIdx, moonSignIdx: otherUser.moonSignIdx! }
+								);
+
+								kootaHtml = `
+									<div class="koota-grid">
+										${compat.kootas.map(k => `
+											<div class="koota-item">
+												${k.name}: ${k.score}/${k.max}
+												<div class="koota-explanation">${KOOTA_INFO[k.name] || ""}</div>
+											</div>
+										`).join('')}
+									</div>
+								`;
+							}
+
+							const card = document.createElement('div');
+							card.className = 'match-card';
+							card.innerHTML = `
+								<div class="match-header">
+									<span class="match-name">${m.name}</span>
+									<span class="match-category">${m.category}</span>
+								</div>
+								<div class="match-score">${m.score} / 36</div>
+								${kootaHtml}
+							`;
+							matchesList.appendChild(card);
+						});
+					} else {
+						matchesList.innerHTML = '<p>No matches found yet. We will update your dashboard as more people join!</p>';
+					}
+
+					document.getElementById('dashboard-content')!.style.display = 'block';
+				} else {
+					document.getElementById('no-profile')!.style.display = 'block';
+				}
+			});
+		</script>
+	</body>
+</html>
