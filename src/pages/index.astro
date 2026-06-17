@@ -119,7 +119,10 @@ import { getOrSetUserId } from '../lib/user';
 				<input type="hidden" id="lat" name="lat" />
 				<input type="hidden" id="lon" name="lon" />
 			</div>
-			<button type="submit">Submit Details</button>
+			<div style="display: flex; gap: 1rem;">
+				<button type="submit" style="flex: 1;">Submit Details</button>
+				<button type="button" id="resetBtn" style="background-color: #dc3545; flex: 1;">Reset</button>
+			</div>
 		</form>
 
 		<footer>
@@ -128,10 +131,11 @@ import { getOrSetUserId } from '../lib/user';
 		</footer>
 
 		<script>
-			import { getOrSetUserId } from '../lib/user';
-			import { fetchUsers } from '../lib/api';
+			import { getOrSetUserId, getCookie, setCookie, clearUserData } from '../lib/user';
+			import { fetchUsers, resetUserProfile } from '../lib/api';
 
 			const form = document.getElementById('detailsForm') as HTMLFormElement;
+			const resetBtn = document.getElementById('resetBtn') as HTMLButtonElement;
 			const locationInput = document.getElementById('location') as HTMLInputElement;
 			const suggestionsContainer = document.getElementById('suggestions') as HTMLDivElement;
 			const latInput = document.getElementById('lat') as HTMLInputElement;
@@ -141,17 +145,60 @@ import { getOrSetUserId } from '../lib/user';
 			// Ensure user ID is set on load
 			const userId = getOrSetUserId();
 
+			// Pre-fill form from cookies
+			function preFillForm() {
+				const stored = getCookie('user_details');
+				if (stored) {
+					try {
+						const details = JSON.parse(stored);
+						const fields = ['name', 'dob', 'tob', 'gender', 'location', 'lat', 'lon'];
+						fields.forEach(field => {
+							const element = document.getElementById(field) as HTMLInputElement | HTMLSelectElement;
+							if (element && details[field]) {
+								element.value = details[field];
+							}
+						});
+					} catch (e) {
+						console.error('Error parsing user_details cookie:', e);
+					}
+				}
+			}
+			preFillForm();
+
+			// Auto-save logic
+			function autoSave() {
+				const formData = new FormData(form);
+				const data = Object.fromEntries(formData.entries());
+				const payload = {
+					...data,
+					userId: getOrSetUserId()
+				};
+				setCookie('user_details', JSON.stringify(payload), 365);
+			}
+
+			form.addEventListener('input', autoSave);
+			form.addEventListener('change', autoSave);
+
 			// Check if user already exists and redirect to dashboard if so
 			async function checkExistingUser() {
 				const users = await fetchUsers();
 				const existingUser = users.find(u => u.userId === userId);
-				if (existingUser) {
+				if (existingUser && existingUser.name) { // Ensure they actually have a profile
 					form.style.display = 'none';
 					redirectingDiv.style.display = 'block';
 					window.location.href = '/dashboard';
 				}
 			}
 			checkExistingUser();
+
+			resetBtn?.addEventListener('click', async () => {
+				if (confirm('Are you sure you want to reset your profile? This will delete all your local and saved data.')) {
+					const uid = getOrSetUserId();
+					if (uid) await resetUserProfile(uid);
+					clearUserData();
+					window.location.reload();
+				}
+			});
 
 			// Location Autocomplete
 			let timeout: ReturnType<typeof setTimeout>;
@@ -179,6 +226,7 @@ import { getOrSetUserId } from '../lib/user';
 									latInput.value = item.lat;
 									lonInput.value = item.lon;
 									suggestionsContainer.style.display = 'none';
+									autoSave(); // Ensure lat/lon are saved
 								});
 								suggestionsContainer.appendChild(div);
 							});
@@ -209,7 +257,7 @@ import { getOrSetUserId } from '../lib/user';
 					userId: getOrSetUserId()
 				};
 
-				localStorage.setItem('user_details', JSON.stringify(payload));
+				setCookie('user_details', JSON.stringify(payload), 365);
 				window.location.href = '/kundli';
 			});
 		</script>

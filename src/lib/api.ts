@@ -59,3 +59,15 @@ export async function saveUserProfile(profile: UserProfile): Promise<boolean> {
         return false;
     }
 }
+
+export async function resetUserProfile(userId: string): Promise<boolean> {
+    return saveUserProfile({
+        userId,
+        name: '',
+        dob: '',
+        tob: '',
+        gender: '',
+        location: '',
+        matches: []
+    });
+}
