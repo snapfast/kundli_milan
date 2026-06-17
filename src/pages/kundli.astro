@@ -128,10 +128,36 @@
 				padding: 0.4rem;
 				border-radius: 4px;
 				text-align: center;
+				cursor: help;
+				position: relative;
+			}
+			.koota-item:hover .koota-explanation {
+				display: block;
+			}
+			.koota-explanation {
+				display: none;
+				position: absolute;
+				bottom: 100%;
+				left: 50%;
+				transform: translateX(-50%);
+				background: #333;
+				color: white;
+				padding: 0.5rem;
+				border-radius: 4px;
+				width: 200px;
+				z-index: 10;
+				font-size: 0.75rem;
+				text-align: left;
+				box-shadow: 0 2px 5px rgba(0,0,0,0.2);
 			}
 		</style>
 	</head>
 	<body>
+		<nav style="margin-bottom: 2rem; display: flex; gap: 1rem;">
+			<a href="/">Home</a>
+			<a href="/dashboard">Dashboard</a>
+		</nav>
+
 		<div class="container">
 			<h1>Your Astrology Details</h1>
 
@@ -204,6 +230,7 @@
 			import { calculateAstrology } from '../lib/astrology';
 			import { calculateCompatibility } from '../lib/compatibility';
 			import { fetchUsers, saveUserProfile } from '../lib/api';
+			import { KOOTA_INFO } from '../lib/constants';
 
 			window.addEventListener('load', async () => {
 				const stored = localStorage.getItem('user_details');
@@ -221,16 +248,17 @@
 				document.getElementById('res-userid')!.textContent = details.userId;
 
 				try {
-					const data = calculateAstrology(details.dob, details.tob);
+					const lat = details.lat ? parseFloat(details.lat) : 28.6139;
+					const lon = details.lon ? parseFloat(details.lon) : 77.2090;
 
-					// Update local details with indices for matching
+					const data = calculateAstrology(details.dob, details.tob, lat, lon);
+
 					const currentUserAstrology = {
 						name: details.name,
 						nakshatraIdx: data.panchang.nakshatraIdx,
 						moonSignIdx: data.panchang.moonSignIdx
 					};
 
-					// Fill Panchang
 					document.getElementById('p-tithi')!.textContent = data.panchang.tithi;
 					document.getElementById('p-nak')!.textContent = data.panchang.nakshatra;
 					document.getElementById('p-yoga')!.textContent = data.panchang.yoga;
@@ -238,7 +266,6 @@
 					document.getElementById('p-vara')!.textContent = data.panchang.vara;
 					document.getElementById('p-sunrise')!.textContent = data.panchang.sunrise;
 
-					// Fill Planets Table
 					const tbody = document.querySelector('#planets-table tbody')!;
 					data.planets.forEach(p => {
 						const tr = document.createElement('tr');
@@ -254,12 +281,10 @@
 					document.getElementById('loading')!.style.display = 'none';
 					document.getElementById('results')!.style.display = 'block';
 
-					// Matchmaking Logic
 					const otherUsers = await fetchUsers();
 					const filteredUsers = otherUsers.filter(u => u.userId !== details.userId);
 
 					const resultsWithScores = filteredUsers.map(user => {
-						// We need to calculate their astrology on the fly if they don't have indices
 						let uNakIdx = user.nakshatraIdx;
 						let uMoonSignIdx = user.moonSignIdx;
 
@@ -278,11 +303,9 @@
 						return { user, compat };
 					});
 
-					// Sort and take top 3
 					resultsWithScores.sort((a, b) => b.compat.score - a.compat.score);
 					const top3 = resultsWithScores.slice(0, 3);
 
-					// Save to backend
 					await saveUserProfile({
 						...details,
 						nakshatraIdx: data.panchang.nakshatraIdx,
@@ -296,7 +319,6 @@
 
 					document.getElementById('matching-status')!.innerHTML = `<strong>Matchmaking Complete!</strong> Your profile has been updated with your top matches.`;
 
-					// Display Matches
 					if (top3.length > 0) {
 						const matchesList = document.getElementById('matches-list')!;
 						top3.forEach(m => {
@@ -310,7 +332,12 @@
 								<div class="match-score">${m.compat.score} / 36</div>
 								<div class="match-description">${m.compat.description}</div>
 								<div class="koota-grid">
-									${m.compat.kootas.map(k => `<div class="koota-item">${k.name}: ${k.score}/${k.max}</div>`).join('')}
+									${m.compat.kootas.map(k => `
+										<div class="koota-item">
+											${k.name}: ${k.score}/${k.max}
+											<div class="koota-explanation">${KOOTA_INFO[k.name] || ""}</div>
+										</div>
+									`).join('')}
 								</div>
 							`;
 							matchesList.appendChild(card);
