@@ -1,0 +1,167 @@
+import * as Ast from 'astronomy-engine';
+
+export interface PlanetData {
+    name: string;
+    symbol: string;
+    degree: string;
+    rasi: string;
+    house: number;
+}
+
+export interface PanchangData {
+    tithi: string;
+    nakshatra: string;
+    yoga: string;
+    karana: string;
+    vara: string;
+    sunSign: string;
+    moonSign: string;
+    sunrise: string;
+    sunset: string;
+}
+
+export interface ChartData {
+    planets: PlanetData[];
+    panchang: PanchangData;
+}
+
+const NAKSHATRAS = [
+    "Ashwini", "Bharani", "Krittika", "Rohini", "Mrigashira", "Ardra", "Punarvasu", "Pushya", "Ashlesha",
+    "Magha", "Purva Phalguni", "Uttara Phalguni", "Hasta", "Chitra", "Swati", "Vishakha", "Anuradha", "Jyeshtha",
+    "Mula", "Purva Ashadha", "Uttara Ashadha", "Shravana", "Dhanishta", "Shatabhisha", "Purva Bhadrapada", "Uttara Bhadrapada", "Revati"
+];
+
+const RASIS = [
+    "Aries", "Taurus", "Gemini", "Cancer", "Leo", "Virgo", "Libra", "Scorpio", "Sagittarius", "Capricorn", "Aquarius", "Pisces"
+];
+
+const VARAS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+
+const TITHIS = [
+    "Pratipada", "Dwitiya", "Tritiya", "Chaturthi", "Panchami", "Shashti", "Saptami", "Ashtami", "Navami", "Dashami", "Ekadashi", "Dwadashi", "Trayodashi", "Chaturdashi", "Purnima",
+    "Pratipada", "Dwitiya", "Tritiya", "Chaturthi", "Panchami", "Shashti", "Saptami", "Ashtami", "Navami", "Dashami", "Ekadashi", "Dwadashi", "Trayodashi", "Chaturdashi", "Amavasya"
+];
+
+const YOGAS = [
+    "Vishkumbha", "Priti", "Ayushman", "Saubhagya", "Shobhana", "Atiganda", "Sukarma", "Dhriti", "Shula", "Ganda", "Vriddhi", "Dhruva", "Vyaghata", "Harshana", "Vajra", "Siddhi", "Vyatipata", "Variyana", "Parigha", "Shiva", "Siddha", "Sadhya", "Shubha", "Shukla", "Brahma", "Indra", "Vaidhriti"
+];
+
+const KARANAS = ["Bava", "Balava", "Kaulava", "Taitila", "Gara", "Vanija", "Vishti", "Shakuni", "Chatushpada", "Naga", "Kimstughna"];
+
+const PLANET_MAP = [
+    { name: "Sun", body: Ast.Body.Sun, symbol: "Su" },
+    { name: "Moon", body: Ast.Body.Moon, symbol: "Mo" },
+    { name: "Mars", body: Ast.Body.Mars, symbol: "Ma" },
+    { name: "Mercury", body: Ast.Body.Mercury, symbol: "Me" },
+    { name: "Jupiter", body: Ast.Body.Jupiter, symbol: "Ju" },
+    { name: "Venus", body: Ast.Body.Venus, symbol: "Ve" },
+    { name: "Saturn", body: Ast.Body.Saturn, symbol: "Sa" },
+];
+
+function getLahiriAyanamsa(time: Ast.AstroTime): number {
+    const T = time.tt / 36525.0;
+    return 23.85 + 1.39638 * T + 0.000308 * T * T;
+}
+
+function formatTime(date: Date | null): string {
+    if (!date) return "--:--";
+    return date.getUTCHours().toString().padStart(2, '0') + ":" +
+           date.getUTCMinutes().toString().padStart(2, '0');
+}
+
+export function calculateAstrology(dob: string, tob: string, lat: number = 28.6139, lon: number = 77.2090): ChartData {
+    const [year, month, day] = dob.split('-').map(Number);
+    const [hour, minute] = tob.split(':').map(Number);
+
+    // Assuming input is IST (UTC+5:30)
+    const istDate = new Date(Date.UTC(year, month - 1, day, hour, minute));
+    const utcDate = new Date(istDate.getTime() - (5.5 * 60 * 60 * 1000));
+    const time = Ast.MakeTime(utcDate);
+    const ayanamsa = getLahiriAyanamsa(time);
+
+    // 1. Ascendant (Simplified Lagna calculation)
+    const siderealTime = Ast.SiderealTime(time);
+    const RAMC = (siderealTime * 15 + lon) % 360;
+    const rad = Math.PI / 180;
+    const phi = lat * rad;
+    const rot = Ast.Rotation_ECL_EQD(time);
+    const eps = Math.acos(rot.rot[2][2]);
+    const alpha = RAMC * rad;
+    const lagnaTropical = (Math.atan2(Math.cos(alpha), -(Math.sin(alpha) * Math.cos(eps) + Math.tan(phi) * Math.sin(eps))) / rad + 360) % 360;
+    const lagnaSidereal = (lagnaTropical - ayanamsa + 360) % 360;
+    const lagnaRasiIdx = Math.floor(lagnaSidereal / 30);
+
+    const planets: PlanetData[] = [];
+
+    // Add Ascendant
+    planets.push({
+        name: "Ascendant",
+        symbol: "As",
+        degree: formatDegree(lagnaSidereal % 30),
+        rasi: RASIS[lagnaRasiIdx],
+        house: 1
+    });
+
+    // 2. Planets
+    PLANET_MAP.forEach(p => {
+        const pos = Ast.GeoVector(p.body, time, true);
+        const ecl = Ast.Ecliptic(pos);
+        const siderealLong = (ecl.elon - ayanamsa + 360) % 360;
+        const rasiIdx = Math.floor(siderealLong / 30);
+        const house = ((rasiIdx - lagnaRasiIdx + 12) % 12) + 1;
+
+        planets.push({
+            name: p.name,
+            symbol: p.symbol,
+            degree: formatDegree(siderealLong % 30),
+            rasi: RASIS[rasiIdx],
+            house: house
+        });
+    });
+
+    // 3. Panchang
+    const sunPos = Ast.GeoVector(Ast.Body.Sun, time, true);
+    const sunEcl = Ast.Ecliptic(sunPos);
+    const moonPos = Ast.GeoMoon(time);
+    const moonEcl = Ast.Ecliptic(moonPos);
+
+    const sunLong = sunEcl.elon;
+    const moonLong = moonEcl.elon;
+    const siderealSunLong = (sunLong - ayanamsa + 360) % 360;
+    const siderealMoonLong = (moonLong - ayanamsa + 360) % 360;
+
+    const diff = (moonLong - sunLong + 360) % 360;
+    const tithiIdx = Math.floor(diff / 12);
+    const nakIdx = Math.floor(siderealMoonLong / (360 / 27));
+    const yogaIdx = Math.floor(((siderealSunLong + siderealMoonLong) % 360) / (360 / 27));
+
+    const karanaIdxTotal = Math.floor(diff / 6);
+    let karanaIdx;
+    if (karanaIdxTotal === 0) karanaIdx = 10;
+    else if (karanaIdxTotal >= 57) karanaIdx = 7 + (karanaIdxTotal - 57);
+    else karanaIdx = (karanaIdxTotal - 1) % 7;
+
+    const observer = new Ast.Observer(lat, lon, 0);
+    const sunrise = Ast.SearchRiseSet(Ast.Body.Sun, observer, 1, time, -24);
+    const sunset = Ast.SearchRiseSet(Ast.Body.Sun, observer, -1, time, 24);
+
+    const panchang: PanchangData = {
+        tithi: TITHIS[tithiIdx],
+        nakshatra: NAKSHATRAS[nakIdx],
+        yoga: YOGAS[yogaIdx],
+        karana: KARANAS[karanaIdx],
+        vara: VARAS[istDate.getUTCDay()],
+        sunSign: RASIS[Math.floor(siderealSunLong / 30)],
+        moonSign: RASIS[Math.floor(siderealMoonLong / 30)],
+        sunrise: formatTime(sunrise ? new Date(sunrise.date.getTime() + 5.5*60*60*1000) : null),
+        sunset: formatTime(sunset ? new Date(sunset.date.getTime() + 5.5*60*60*1000) : null)
+    };
+
+    return { planets, panchang };
+}
+
+function formatDegree(deg: number): string {
+    const d = Math.floor(deg);
+    const m = Math.floor((deg - d) * 60);
+    return `${d}° ${m}'`;
+}

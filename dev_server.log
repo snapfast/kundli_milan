@@ -1,0 +1,19 @@
+
+> app@0.0.1 dev
+> astro dev
+
+[vite] connected.
+10:37:22 [types] Generated 2ms
+[vite] connected.
+10:37:22 [vite] Re-optimizing dependencies because vite config has changed
+ astro  v6.4.7 ready in 1744 ms
+┃ Local    http://localhost:4321/
+┃ Network  use --host to expose
+10:37:22 watching for file changes...
+10:38:13 [200] / 46ms
+10:38:13 [vite] ✨ new dependencies optimized: uuid
+10:38:13 [vite] ✨ optimized dependencies changed. reloading
+10:38:17 [200] /kundli 38ms
+10:38:18 [vite] ✨ new dependencies optimized: astronomy-engine
+10:38:18 [vite] ✨ optimized dependencies changed. reloading
+10:38:18 [200] /kundli 4ms

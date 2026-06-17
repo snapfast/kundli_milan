@@ -1,0 +1,188 @@
+---
+---
+
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width" />
+		<title>Your Kundli</title>
+		<style>
+			body {
+				font-family: sans-serif;
+				max-width: 800px;
+				margin: 2rem auto;
+				padding: 0 1rem;
+				line-height: 1.6;
+				background-color: #f9f9f9;
+			}
+			.container {
+				background: white;
+				padding: 2rem;
+				border-radius: 8px;
+				box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+			}
+			h1, h2 {
+				color: #333;
+				border-bottom: 2px solid #007bff;
+				padding-bottom: 0.5rem;
+			}
+			.details-grid {
+				display: grid;
+				grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+				gap: 1rem;
+				margin-bottom: 2rem;
+			}
+			.detail-item {
+				background: #eee;
+				padding: 1rem;
+				border-radius: 4px;
+			}
+			.detail-label {
+				font-weight: bold;
+				display: block;
+				font-size: 0.9rem;
+				color: #666;
+			}
+			.detail-value {
+				font-size: 1.1rem;
+				color: #000;
+			}
+			table {
+				width: 100%;
+				border-collapse: collapse;
+				margin-top: 1rem;
+			}
+			th, td {
+				text-align: left;
+				padding: 0.75rem;
+				border-bottom: 1px solid #ddd;
+			}
+			th {
+				background-color: #f2f2f2;
+			}
+			.matchmaking-notice {
+				margin-top: 2rem;
+				padding: 1rem;
+				background-color: #e7f3ff;
+				border-left: 5px solid #007bff;
+				border-radius: 4px;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="container">
+			<h1>Your Astrology Details</h1>
+
+			<div id="loading">Calculating your Kundli...</div>
+
+			<div id="results" style="display: none;">
+				<div class="details-grid">
+					<div class="detail-item">
+						<span class="detail-label">Name</span>
+						<span class="detail-value" id="res-name"></span>
+					</div>
+					<div class="detail-item">
+						<span class="detail-label">DOB</span>
+						<span class="detail-value" id="res-dob"></span>
+					</div>
+					<div class="detail-item">
+						<span class="detail-label">Time</span>
+						<span class="detail-value" id="res-tob"></span>
+					</div>
+					<div class="detail-item">
+						<span class="detail-label">Gender</span>
+						<span class="detail-value" id="res-gender"></span>
+					</div>
+					<div class="detail-item">
+						<span class="detail-label">Location</span>
+						<span class="detail-value" id="res-location"></span>
+					</div>
+					<div class="detail-item">
+						<span class="detail-label">User ID</span>
+						<span class="detail-value" id="res-userid" style="font-size: 0.8rem; word-break: break-all;"></span>
+					</div>
+				</div>
+
+				<h2>Panchang</h2>
+				<div class="details-grid">
+					<div class="detail-item"><span class="detail-label">Tithi</span><span class="detail-value" id="p-tithi"></span></div>
+					<div class="detail-item"><span class="detail-label">Nakshatra</span><span class="detail-value" id="p-nak"></span></div>
+					<div class="detail-item"><span class="detail-label">Yoga</span><span class="detail-value" id="p-yoga"></span></div>
+					<div class="detail-item"><span class="detail-label">Karana</span><span class="detail-value" id="p-karana"></span></div>
+					<div class="detail-item"><span class="detail-label">Vara</span><span class="detail-value" id="p-vara"></span></div>
+					<div class="detail-item"><span class="detail-label">Sunrise</span><span class="detail-value" id="p-sunrise"></span></div>
+				</div>
+
+				<h2>Planetary Positions</h2>
+				<table id="planets-table">
+					<thead>
+						<tr>
+							<th>Planet</th>
+							<th>Rasi (Sign)</th>
+							<th>Degree</th>
+							<th>House</th>
+						</tr>
+					</thead>
+					<tbody>
+					</tbody>
+				</table>
+
+				<div class="matchmaking-notice">
+					<strong>Matchmaking System:</strong> Your details have been saved. Our system will use these planetary positions to find highly compatible matches based on Vedic Astrology principles.
+				</div>
+			</div>
+		</div>
+
+		<script>
+			import { calculateAstrology } from '../lib/astrology';
+
+			window.addEventListener('load', () => {
+				const stored = localStorage.getItem('user_details');
+				if (!stored) {
+					window.location.href = '/';
+					return;
+				}
+
+				const details = JSON.parse(stored);
+				document.getElementById('res-name')!.textContent = details.name;
+				document.getElementById('res-dob')!.textContent = details.dob;
+				document.getElementById('res-tob')!.textContent = details.tob;
+				document.getElementById('res-gender')!.textContent = details.gender;
+				document.getElementById('res-location')!.textContent = details.location;
+				document.getElementById('res-userid')!.textContent = details.userId;
+
+				try {
+					const data = calculateAstrology(details.dob, details.tob);
+
+					// Fill Panchang
+					document.getElementById('p-tithi')!.textContent = data.panchang.tithi;
+					document.getElementById('p-nak')!.textContent = data.panchang.nakshatra;
+					document.getElementById('p-yoga')!.textContent = data.panchang.yoga;
+					document.getElementById('p-karana')!.textContent = data.panchang.karana;
+					document.getElementById('p-vara')!.textContent = data.panchang.vara;
+					document.getElementById('p-sunrise')!.textContent = data.panchang.sunrise;
+
+					// Fill Planets Table
+					const tbody = document.querySelector('#planets-table tbody')!;
+					data.planets.forEach(p => {
+						const tr = document.createElement('tr');
+						tr.innerHTML = `
+							<td>${p.name}</td>
+							<td>${p.rasi}</td>
+							<td>${p.degree}</td>
+							<td>${p.house}</td>
+						`;
+						tbody.appendChild(tr);
+					});
+
+					document.getElementById('loading')!.style.display = 'none';
+					document.getElementById('results')!.style.display = 'block';
+				} catch (e) {
+					console.error(e);
+					document.getElementById('loading')!.textContent = 'Error calculating Kundli. Please check your input.';
+				}
+			});
+		</script>
+	</body>
+</html>
