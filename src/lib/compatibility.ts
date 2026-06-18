@@ -104,6 +104,30 @@ const YONI_COMPAT = [
 export function calculateCompatibility(user1: UserAstrology, user2: UserAstrology): CompatibilityResult {
     const kootas = [];
 
+    // Defensive checks for valid indices
+    const isValidRasi = (idx: number) => typeof idx === 'number' && !isNaN(idx) && idx >= 0 && idx < RASI_PROPS.length;
+    const isValidNak = (idx: number) => typeof idx === 'number' && !isNaN(idx) && idx >= 0 && idx < NAKSHATRA_PROPS.length;
+
+    if (!isValidRasi(user1.moonSignIdx) || !isValidRasi(user2.moonSignIdx) ||
+        !isValidNak(user1.nakshatraIdx) || !isValidNak(user2.nakshatraIdx)) {
+        return {
+            score: 0,
+            maxScore: 36,
+            category: "Incomplete Data",
+            description: "Some cosmic details are missing for this pairing, making it impossible to calculate a precise match.",
+            kootas: [
+                { name: "Varna", score: 0, max: 1 },
+                { name: "Vashya", score: 0, max: 2 },
+                { name: "Tara", score: 0, max: 3 },
+                { name: "Yoni", score: 0, max: 4 },
+                { name: "Maitri", score: 0, max: 5 },
+                { name: "Gana", score: 0, max: 6 },
+                { name: "Bhakoot", score: 0, max: 7 },
+                { name: "Nadi", score: 0, max: 8 }
+            ]
+        };
+    }
+
     // 1. Varna (1 point)
     const v1 = RASI_PROPS[user1.moonSignIdx].varna;
     const v2 = RASI_PROPS[user2.moonSignIdx].varna;
