@@ -3,6 +3,7 @@ const BACKEND_URL = 'https://script.google.com/macros/s/AKfycbyOhkO-K9w-ErN47ZSY
 export interface UserProfile {
     userId: string;
     name: string;
+    email: string;
     dob: string;
     tob: string;
     gender: string;
@@ -65,6 +66,7 @@ export async function resetUserProfile(userId: string): Promise<boolean> {
     return saveUserProfile({
         userId,
         name: '',
+        email: '',
         dob: '',
         tob: '',
         gender: '',
