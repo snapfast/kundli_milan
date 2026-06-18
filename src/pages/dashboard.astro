@@ -218,8 +218,33 @@ import Layout from '../layouts/Layout.astro';
 				const lon = details.lon ? parseFloat(details.lon) : 77.2090;
 				const astroData = calculateAstrology(details.dob, details.tob, lat, lon);
 
-				// If profile doesn't exist on backend or missing key data, save it
-				if (!profile || !profile.matches || profile.matches.length === 0) {
+				// Determine if we need to update the backend
+				const otherUsersCount = users.filter(u => u.uid !== uid && u.name).length;
+				const hasMatches = profile && profile.matches && profile.matches.length > 0;
+
+				// We should update if:
+				// 1. Profile is missing from backend
+				// 2. Matches are missing but there are other users to match with
+				// 3. Local details differ from backend details (e.g. name, dob changed)
+
+				let needsUpdate = !profile;
+
+				if (profile) {
+					const detailsChanged =
+						profile.name !== details.name ||
+						profile.dob !== details.dob ||
+						profile.tob !== details.tob ||
+						profile.location !== details.location;
+
+					const matchesMissing = !hasMatches && otherUsersCount > 0;
+
+					if (detailsChanged || matchesMissing) {
+						needsUpdate = true;
+					}
+				}
+
+				if (needsUpdate) {
+					console.log('Updating profile and matches on backend...');
 					const otherUsers = users.filter(u => u.uid !== uid && u.name && u.dob && u.tob);
 					const currentUserAstrology = {
 						name: details.name,
@@ -273,7 +298,11 @@ import Layout from '../layouts/Layout.astro';
 						}))
 					};
 
-					await saveUserProfile(updatedProfile);
+					// Use a session flag to avoid multiple saves in one session if something loops
+					if (!window.sessionStorage.getItem('profile_saved_' + uid)) {
+						await saveUserProfile(updatedProfile);
+						window.sessionStorage.setItem('profile_saved_' + uid, 'true');
+					}
 					profile = updatedProfile;
 				}
 

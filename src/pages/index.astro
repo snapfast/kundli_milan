@@ -228,19 +228,52 @@ import Layout from '../layouts/Layout.astro';
 				}
 			});
 
-			form?.addEventListener('submit', (e) => {
+			form?.addEventListener('submit', async (e) => {
 				e.preventDefault();
 
 				const formData = new FormData(form);
 				const data = Object.fromEntries(formData.entries());
+				const uid = getOrSetUserId();
 
 				const payload = {
 					...data,
-					uid: getOrSetUserId()
+					uid: uid
 				};
 
+				// Save to cookie immediately for dashboard use
 				setCookie('user_details', JSON.stringify(payload), 365);
-				window.location.href = '/dashboard';
+
+				// Show loading state on button
+				const submitBtn = form.querySelector('button[type="submit"]') as HTMLButtonElement;
+				const originalText = submitBtn.textContent;
+				submitBtn.disabled = true;
+				submitBtn.textContent = 'Saving...';
+
+				try {
+					// We import saveUserProfile here or at the top
+					const { saveUserProfile } = await import('../lib/api');
+					const { calculateAstrology } = await import('../lib/astrology');
+
+					// Calculate basic astrology for the user to store it
+					const lat = payload.lat ? parseFloat(payload.lat as string) : 28.6139;
+					const lon = payload.lon ? parseFloat(payload.lon as string) : 77.2090;
+					const astroData = calculateAstrology(payload.dob as string, payload.tob as string, lat, lon);
+
+					const profileToSave = {
+						...payload,
+						nakshatraIdx: astroData.panchang.nakshatraIdx,
+						moonSignIdx: astroData.panchang.moonSignIdx,
+						isManglik: astroData.panchang.isManglik,
+						matches: [] // Will be populated by dashboard
+					} as any;
+
+					await saveUserProfile(profileToSave);
+					window.location.href = '/dashboard';
+				} catch (error) {
+					console.error('Error saving profile:', error);
+					// Even if save fails, we go to dashboard because we have local cookies
+					window.location.href = '/dashboard';
+				}
 			});
 	</script>
 </Layout>
