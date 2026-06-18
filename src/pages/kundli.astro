@@ -58,6 +58,10 @@ import Layout from '../layouts/Layout.astro';
 						<span class="detail-value" id="res-name"></span>
 					</div>
 					<div class="detail-item">
+						<span class="detail-label">Email</span>
+						<span class="detail-value" id="res-email"></span>
+					</div>
+					<div class="detail-item">
 						<span class="detail-label">DOB</span>
 						<span class="detail-value" id="res-dob"></span>
 					</div>
@@ -128,6 +132,7 @@ import Layout from '../layouts/Layout.astro';
 
 				const details = JSON.parse(stored);
 				document.getElementById('res-name')!.textContent = details.name;
+				document.getElementById('res-email')!.textContent = details.email;
 				document.getElementById('res-dob')!.textContent = details.dob;
 				document.getElementById('res-tob')!.textContent = details.tob;
 				document.getElementById('res-gender')!.textContent = details.gender;
