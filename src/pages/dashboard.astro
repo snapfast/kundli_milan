@@ -3,169 +3,299 @@ import Layout from '../layouts/Layout.astro';
 ---
 
 <Layout title="Cosmic Dashboard">
-	<style>
-		.profile-summary {
+	<style is:global>
+		.dashboard-grid {
 			display: grid;
-			grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-			gap: 1.5rem;
+			grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+			gap: 1rem;
 			margin-bottom: 2rem;
+		}
+		.info-card {
 			background: #fff;
 			border: 1px solid #e1e4e8;
-			padding: 1.5rem;
+			padding: 1rem;
 			border-radius: 8px;
+			box-shadow: 0 2px 4px rgba(0,0,0,0.05);
 		}
-		.summary-item {
+		.info-item {
+			margin-bottom: 0.5rem;
 			display: flex;
 			flex-direction: column;
 		}
-		.label {
+		.info-label {
 			font-weight: bold;
 			color: #7f8c8d;
-			font-size: 0.85rem;
+			font-size: 0.75rem;
 			text-transform: uppercase;
 		}
-		.value {
-			font-size: 1.2rem;
+		.info-value {
+			font-size: 1rem;
 			color: #2d3436;
+			word-break: break-all;
+		}
+		.section-title {
+			font-size: 1.2rem;
+			margin: 1.5rem 0 1rem 0;
+			border-bottom: 1px solid #eee;
+			padding-bottom: 0.3rem;
+		}
+		.compact-table {
+			width: 100%;
+			border-collapse: collapse;
+			font-size: 0.9rem;
+			background: #fff;
+			border-radius: 8px;
+			overflow: hidden;
+			border: 1px solid #e1e4e8;
+		}
+		.compact-table th, .compact-table td {
+			padding: 0.5rem;
+			text-align: left;
+			border-bottom: 1px solid #eee;
+		}
+		.compact-table th {
+			background-color: #f8f9fa;
+			color: #2d3436;
+			font-weight: 600;
 		}
 		.no-data {
 			text-align: center;
 			padding: 3rem;
 			color: #636e72;
 		}
+		.btn-group {
+			margin: 2rem 0;
+			display: flex;
+			gap: 1rem;
+			flex-wrap: wrap;
+		}
+		.btn-sm {
+			padding: 0.5rem 1rem;
+			font-size: 0.9rem;
+		}
 	</style>
 
 	<h1>Your Cosmic Dashboard</h1>
 
-			<div id="loading">Syncing with the stars...</div>
+	<div id="loading">Syncing with the stars...</div>
 
-			<div id="dashboard-content" style="display: none;">
-				<div class="profile-summary" id="profile-summary">
-					<!-- Profile data injected here -->
-				</div>
+	<div id="dashboard-content" style="display: none;">
+		<div class="section-title">Profile & Panchang</div>
+		<div class="dashboard-grid" id="profile-panchang">
+			<!-- Injected here -->
+		</div>
 
-				<div style="margin-bottom: 2rem; display: flex; gap: 1rem; flex-wrap: wrap;">
-					<a href="/kundli" class="btn">View My Kundli</a>
-					<a href="/?edit=true" class="btn">Edit My Profile</a>
-					<button id="resetProfileBtn" class="btn" style="background-color: #dc3545;">Reset My Profile</button>
-				</div>
+		<div class="section-title">Planetary Positions</div>
+		<div style="overflow-x: auto; margin-bottom: 2rem;">
+			<table class="compact-table" id="planets-table">
+				<thead>
+					<tr>
+						<th>Planet</th>
+						<th>Rasi</th>
+						<th>Degree</th>
+						<th>House</th>
+					</tr>
+				</thead>
+				<tbody>
+					<!-- Injected here -->
+				</tbody>
+			</table>
+		</div>
 
-				<h2>Your Current Top Matches</h2>
-				<div id="matches-list">
-					<!-- Matches injected here -->
-				</div>
-			</div>
+		<div class="section-title">Your Top Cosmic Matches</div>
+		<div id="matches-list">
+			<!-- Matches injected here -->
+		</div>
 
-			<div id="no-profile" style="display: none;" class="no-data">
-				<p>We couldn't find your cosmic profile. Please share your birth details to get started!</p>
-				<a href="/" class="btn">Create Profile</a>
-			</div>
+		<div class="btn-group">
+			<a href="/?edit=true" class="btn btn-sm">Edit My Profile</a>
+			<button id="resetProfileBtn" class="btn btn-sm btn-danger">Reset My Profile</button>
+		</div>
+	</div>
 
-			<div id="error-state" style="display: none;" class="no-data">
-				<p style="color: #dc3545; font-weight: bold;">Error connecting to the stars.</p>
-				<p>We encountered a problem while fetching cosmic data. Please try again later.</p>
-			</div>
+	<div id="no-profile" style="display: none;" class="no-data">
+		<p>We couldn't find your cosmic profile. Please share your birth details to get started!</p>
+		<a href="/" class="btn">Create Profile</a>
+	</div>
+
+	<div id="error-state" style="display: none;" class="no-data">
+		<p style="color: #dc3545; font-weight: bold;">Error connecting to the stars.</p>
+		<p>We encountered a problem while fetching cosmic data. Please try again later.</p>
+	</div>
 
 	<script>
-			import { getOrSetUserId, clearUserData } from '../lib/user';
-			import { fetchUsers, resetUserProfile } from '../lib/api';
-			import { calculateCompatibility } from '../lib/compatibility';
-			import { KOOTA_INFO } from '../lib/constants';
-			import { generateMatchCardHtml } from '../lib/ui';
+		import { getOrSetUserId, clearUserData, getCookie } from '../lib/user';
+		import { fetchUsers, saveUserProfile, resetUserProfile, type UserProfile } from '../lib/api';
+		import { calculateAstrology } from '../lib/astrology';
+		import { calculateCompatibility } from '../lib/compatibility';
+		import { KOOTA_INFO } from '../lib/constants';
+		import { generateMatchCardHtml } from '../lib/ui';
 
-			window.addEventListener('load', async () => {
-				const uid = getOrSetUserId();
-				const resetBtn = document.getElementById('resetProfileBtn') as HTMLButtonElement;
+		window.addEventListener('load', async () => {
+			const uid = getOrSetUserId();
+			const stored = getCookie('user_details');
 
-				resetBtn?.addEventListener('click', async () => {
-					if (confirm('Are you sure you want to reset your cosmic profile? This will delete all your data and you will start fresh.')) {
-						if (uid) await resetUserProfile(uid);
-						clearUserData();
-						window.location.href = '/';
-					}
-				});
+			if (!stored) {
+				document.getElementById('loading')!.style.display = 'none';
+				document.getElementById('no-profile')!.style.display = 'block';
+				return;
+			}
 
-				let users: any[] = [];
-				let profile: any = null;
+			const details = JSON.parse(stored);
+			const resetBtn = document.getElementById('resetProfileBtn') as HTMLButtonElement;
 
-				try {
-					users = await fetchUsers();
-					profile = users.find(u => u.uid === uid);
-				} catch (error) {
-					console.error("Error loading dashboard data:", error);
-					document.getElementById('loading')!.style.display = 'none';
-					document.getElementById('error-state')!.style.display = 'block';
-					return;
+			resetBtn?.addEventListener('click', async () => {
+				if (confirm('Are you sure you want to reset your cosmic profile? This will delete all your data.')) {
+					if (uid) await resetUserProfile(uid);
+					clearUserData();
+					window.location.href = '/';
+				}
+			});
+
+			try {
+				const users = await fetchUsers();
+				let profile = users.find(u => u.uid === uid);
+
+				const lat = details.lat ? parseFloat(details.lat) : 28.6139;
+				const lon = details.lon ? parseFloat(details.lon) : 77.2090;
+				const astroData = calculateAstrology(details.dob, details.tob, lat, lon);
+
+				// If profile doesn't exist on backend or missing key data, save it
+				if (!profile || !profile.matches || profile.matches.length === 0) {
+					const otherUsers = users.filter(u => u.uid !== uid);
+					const currentUserAstrology = {
+						name: details.name,
+						nakshatraIdx: astroData.panchang.nakshatraIdx,
+						moonSignIdx: astroData.panchang.moonSignIdx,
+						isManglik: astroData.panchang.isManglik
+					};
+
+					const resultsWithScores = otherUsers.map(user => {
+						let uNakIdx = user.nakshatraIdx;
+						let uMoonSignIdx = user.moonSignIdx;
+						let uIsManglik = user.isManglik;
+
+						if (uNakIdx === undefined || uMoonSignIdx === undefined || uIsManglik === undefined) {
+							const uLat = user.lat ? parseFloat(user.lat) : 28.6139;
+							const uLon = user.lon ? parseFloat(user.lon) : 77.2090;
+							const uData = calculateAstrology(user.dob, user.tob, uLat, uLon);
+							uNakIdx = uData.panchang.nakshatraIdx;
+							uMoonSignIdx = uData.panchang.moonSignIdx;
+							uIsManglik = uData.panchang.isManglik;
+						}
+
+						const compat = calculateCompatibility(currentUserAstrology, {
+							name: user.name,
+							nakshatraIdx: uNakIdx,
+							moonSignIdx: uMoonSignIdx,
+							isManglik: uIsManglik
+						});
+
+						return { user, compat };
+					});
+
+					resultsWithScores.sort((a, b) => b.compat.score - a.compat.score);
+					const top3 = resultsWithScores.slice(0, 3);
+
+					const updatedProfile: UserProfile = {
+						...details,
+						uid: uid,
+						nakshatraIdx: astroData.panchang.nakshatraIdx,
+						moonSignIdx: astroData.panchang.moonSignIdx,
+						isManglik: astroData.panchang.isManglik,
+						matches: top3.map(m => ({
+							uid: m.user.uid,
+							name: m.user.name,
+							score: m.compat.score,
+							category: m.compat.category
+						}))
+					};
+
+					await saveUserProfile(updatedProfile);
+					profile = updatedProfile;
 				}
 
+				// Rendering
 				document.getElementById('loading')!.style.display = 'none';
+				document.getElementById('dashboard-content')!.style.display = 'block';
 
-				if (profile) {
-					const summary = document.getElementById('profile-summary')!;
-					summary.innerHTML = `
-						<div class="summary-item">
-							<span class="label">Name</span>
-							<span class="value">${profile.name}</span>
+				const infoGrid = document.getElementById('profile-panchang')!;
+				const items = [
+					{ label: 'Name', value: profile.name },
+					{ label: 'Born', value: `${profile.dob} ${profile.tob}` },
+					{ label: 'Location', value: profile.location },
+					{ label: 'Nakshatra', value: astroData.panchang.nakshatra },
+					{ label: 'Moon Sign', value: astroData.panchang.moonSign },
+					{ label: 'Tithi', value: astroData.panchang.tithi },
+					{ label: 'Yoga', value: astroData.panchang.yoga },
+					{ label: 'Manglik', value: profile.isManglik ? 'Yes' : 'No' }
+				];
+
+				infoGrid.innerHTML = items.map(i => `
+					<div class="info-card">
+						<div class="info-item">
+							<span class="info-label">${i.label}</span>
+							<span class="info-value">${i.value}</span>
 						</div>
-						<div class="summary-item">
-							<span class="label">Email</span>
-							<span class="value">${profile.email}</span>
-						</div>
-						<div class="summary-item">
-							<span class="label">Born</span>
-							<span class="value">${profile.dob} at ${profile.tob}</span>
-						</div>
-						<div class="summary-item">
-							<span class="label">Location</span>
-							<span class="value">${profile.location}</span>
-						</div>
-						<div class="summary-item">
-							<span class="label">Gender</span>
-							<span class="value" style="text-transform: capitalize;">${profile.gender}</span>
-						</div>
-						<div class="summary-item">
-							<span class="label">Manglik Status</span>
-							<span class="value">${profile.isManglik ? 'Manglik' : 'Non-Manglik'}</span>
-						</div>
+					</div>
+				`).join('');
+
+				const tbody = document.querySelector('#planets-table tbody')!;
+				astroData.planets.forEach(p => {
+					const tr = document.createElement('tr');
+					tr.innerHTML = `
+						<td>${p.name}</td>
+						<td>${p.rasi}</td>
+						<td>${p.degree}</td>
+						<td>${p.house}</td>
 					`;
+					tbody.appendChild(tr);
+				});
 
-					const matchesList = document.getElementById('matches-list')!;
-					if (profile.matches && profile.matches.length > 0) {
-						profile.matches.forEach((m: any) => {
-							const otherUser = users.find(u => (m.uid && u.uid === m.uid) || (!m.uid && u.name === m.name));
-							let kootaHtml = '';
+				const matchesList = document.getElementById('matches-list')!;
+				if (profile.matches && profile.matches.length > 0) {
+					profile.matches.forEach((m: any) => {
+						const otherUser = users.find(u => u.uid === m.uid);
+						let kootaHtml = '';
 
-							if (otherUser && profile.nakshatraIdx !== undefined && otherUser.nakshatraIdx !== undefined) {
-								const compat = calculateCompatibility(
-									{ name: profile.name, nakshatraIdx: profile.nakshatraIdx, moonSignIdx: profile.moonSignIdx!, isManglik: profile.isManglik },
-									{ name: otherUser.name, nakshatraIdx: otherUser.nakshatraIdx, moonSignIdx: otherUser.moonSignIdx!, isManglik: otherUser.isManglik }
-								);
+						if (otherUser) {
+							// For rendering kootas in dashboard, we recalculate locally or could have saved them.
+							// Here we recalculate to show the breakdown.
+							const uLat = otherUser.lat ? parseFloat(otherUser.lat) : 28.6139;
+							const uLon = otherUser.lon ? parseFloat(otherUser.lon) : 77.2090;
+							const uData = calculateAstrology(otherUser.dob, otherUser.tob, uLat, uLon);
 
-								kootaHtml = `
-									<div class="koota-grid">
-										${compat.kootas.map(k => `
-											<div class="koota-item">
-												${k.name}: ${k.score}/${k.max}
-												<div class="koota-explanation">${KOOTA_INFO[k.name] || ""}</div>
-											</div>
-										`).join('')}
-									</div>
-								`;
-							}
+							const compat = calculateCompatibility(
+								{ name: profile.name, nakshatraIdx: astroData.panchang.nakshatraIdx, moonSignIdx: astroData.panchang.moonSignIdx, isManglik: profile.isManglik! },
+								{ name: otherUser.name, nakshatraIdx: uData.panchang.nakshatraIdx, moonSignIdx: uData.panchang.moonSignIdx, isManglik: uData.panchang.isManglik }
+							);
+
+							kootaHtml = `
+								<div class="koota-grid">
+									${compat.kootas.map(k => `
+										<div class="koota-item">
+											${k.name}: ${k.score}/${k.max}
+											<div class="koota-explanation">${KOOTA_INFO[k.name] || ""}</div>
+										</div>
+									`).join('')}
+								</div>
+							`;
 
 							const card = document.createElement('div');
 							card.className = 'match-card';
-							card.innerHTML = generateMatchCardHtml(m.name, m.category, m.score, "", kootaHtml);
+							card.innerHTML = generateMatchCardHtml(m.name, m.category, m.score, compat.description, kootaHtml);
 							matchesList.appendChild(card);
-						});
-					} else {
-						matchesList.innerHTML = '<p>No matches found yet. We will update your dashboard as more people join!</p>';
-					}
-
-					document.getElementById('dashboard-content')!.style.display = 'block';
+						}
+					});
 				} else {
-					document.getElementById('no-profile')!.style.display = 'block';
+					matchesList.innerHTML = '<p>No matches found yet. They will appear here as more people join!</p>';
 				}
-			});
+
+			} catch (error) {
+				console.error("Dashboard error:", error);
+				document.getElementById('loading')!.style.display = 'none';
+				document.getElementById('error-state')!.style.display = 'block';
+			}
+		});
 	</script>
 </Layout>
