@@ -2,7 +2,7 @@
 import Layout from '../layouts/Layout.astro';
 ---
 
-<Layout title="Cosmic Dashboard">
+<Layout title="Milan Moon - Dashboard">
 	<style is:global>
 		.dashboard-grid {
 			display: grid;
@@ -95,7 +95,7 @@ import Layout from '../layouts/Layout.astro';
 		}
 	</style>
 
-	<h1>Your Cosmic Dashboard</h1>
+	<h1>Your Milan Moon Dashboard</h1>
 
 	<div id="loading" class="loading-container">
 		<div class="loader"></div>
@@ -125,7 +125,7 @@ import Layout from '../layouts/Layout.astro';
 			</table>
 		</div>
 
-		<div class="section-title">Your Top Cosmic Matches</div>
+		<div class="section-title">Your Top Milan Moon Matches</div>
 		<div id="matches-list">
 			<!-- Matches injected here -->
 		</div>
@@ -137,13 +137,13 @@ import Layout from '../layouts/Layout.astro';
 	</div>
 
 	<div id="no-profile" style="display: none;" class="no-data">
-		<p>We couldn't find your cosmic profile. Please share your birth details to get started!</p>
+		<p>We couldn't find your Milan Moon profile. Please share your birth details to get started!</p>
 		<a href="/" class="btn">Create Profile</a>
 	</div>
 
 	<div id="error-state" style="display: none;" class="no-data">
 		<p style="color: #dc3545; font-weight: bold;">Error connecting to the stars.</p>
-		<p>We encountered a problem while fetching cosmic data. Please try again later.</p>
+		<p>We encountered a problem while fetching Milan Moon data. Please try again later.</p>
 	</div>
 
 	<script>
@@ -168,7 +168,7 @@ import Layout from '../layouts/Layout.astro';
 			const resetBtn = document.getElementById('resetProfileBtn') as HTMLButtonElement;
 
 			resetBtn?.addEventListener('click', async () => {
-				if (confirm('Are you sure you want to reset your cosmic profile? This will delete all your data.')) {
+				if (confirm('Are you sure you want to reset your Milan Moon profile? This will delete all your data.')) {
 					if (uid) await resetUserProfile(uid);
 					clearUserData();
 					window.location.href = '/';
@@ -198,19 +198,23 @@ import Layout from '../layouts/Layout.astro';
 						let uMoonSignIdx = user.moonSignIdx;
 						let uIsManglik = user.isManglik;
 
-						if (uNakIdx === undefined || uMoonSignIdx === undefined || uIsManglik === undefined) {
-							const uLat = user.lat ? parseFloat(user.lat) : 28.6139;
-							const uLon = user.lon ? parseFloat(user.lon) : 77.2090;
-							const uData = calculateAstrology(user.dob, user.tob, uLat, uLon);
-							uNakIdx = uData.panchang.nakshatraIdx;
-							uMoonSignIdx = uData.panchang.moonSignIdx;
-							uIsManglik = uData.panchang.isManglik;
+						if ((uNakIdx === undefined || uMoonSignIdx === undefined || uIsManglik === undefined) && user.dob && user.tob) {
+							try {
+								const uLat = user.lat ? parseFloat(user.lat) : 28.6139;
+								const uLon = user.lon ? parseFloat(user.lon) : 77.2090;
+								const uData = calculateAstrology(user.dob, user.tob, uLat, uLon);
+								uNakIdx = uData.panchang.nakshatraIdx;
+								uMoonSignIdx = uData.panchang.moonSignIdx;
+								uIsManglik = uData.panchang.isManglik;
+							} catch (e) {
+								console.warn(`Failed to calculate astrology for user ${user.uid}`, e);
+							}
 						}
 
 						const compat = calculateCompatibility(currentUserAstrology, {
 							name: user.name,
-							nakshatraIdx: uNakIdx,
-							moonSignIdx: uMoonSignIdx,
+							nakshatraIdx: uNakIdx!,
+							moonSignIdx: uMoonSignIdx!,
 							isManglik: uIsManglik
 						});
 
@@ -295,7 +299,7 @@ import Layout from '../layouts/Layout.astro';
 
 							const compat = calculateCompatibility(
 								{ name: profile.name, nakshatraIdx: astroData.panchang.nakshatraIdx, moonSignIdx: astroData.panchang.moonSignIdx, isManglik: profile.isManglik! },
-								{ name: otherUser.name, nakshatraIdx: uData.panchang.nakshatraIdx, moonSignIdx: uData.panchang.moonSignIdx, isManglik: uData.panchang.isManglik }
+								{ name: otherUser.name, nakshatraIdx: uNakIdx!, moonSignIdx: uMoonSignIdx!, isManglik: uIsManglik! }
 							);
 
 							kootaHtml = `
