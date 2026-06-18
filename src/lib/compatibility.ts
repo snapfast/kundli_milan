@@ -104,6 +104,19 @@ const YONI_COMPAT = [
 export function calculateCompatibility(user1: UserAstrology, user2: UserAstrology): CompatibilityResult {
     const kootas = [];
 
+    if (user1.moonSignIdx === undefined || user2.moonSignIdx === undefined ||
+        user1.nakshatraIdx === undefined || user2.nakshatraIdx === undefined ||
+        !RASI_PROPS[user1.moonSignIdx] || !RASI_PROPS[user2.moonSignIdx] ||
+        !NAKSHATRA_PROPS[user1.nakshatraIdx] || !NAKSHATRA_PROPS[user2.nakshatraIdx]) {
+        return {
+            score: 0,
+            maxScore: 36,
+            category: "Incomplete Data",
+            description: "Some astrological data is missing for one of the users.",
+            kootas: []
+        };
+    }
+
     // 1. Varna (1 point)
     const v1 = RASI_PROPS[user1.moonSignIdx].varna;
     const v2 = RASI_PROPS[user2.moonSignIdx].varna;
@@ -196,6 +209,9 @@ export function calculateCompatibility(user1: UserAstrology, user2: UserAstrolog
     } else if (totalScore >= 18) {
         category = "Friendly Alliance";
         description = "A solid foundation for friendship or cooperation. You have enough in common to enjoy each other's company regularly.";
+    } else if (totalScore >= 12) {
+        category = "Growth Potential";
+        description = "While there are some differences, there is enough common ground to build a relationship if both partners are willing to adapt and grow.";
     }
 
     // Creative Chemistry Overrides
@@ -205,6 +221,12 @@ export function calculateCompatibility(user1: UserAstrology, user2: UserAstrolog
     } else if (yoniScore === 4 && nadiScore === 8) {
         category = "Passionate Bond";
         description = "There is a strong physical and energetic attraction between you. Your vibes are highly complementary.";
+    } else if (bhakootScore === 7 && nadiScore === 8) {
+        category = "Destined Union";
+        description = "Strong cosmic protection surrounds this match. You are likely to experience prosperity and deep longevity together.";
+    } else if (maitriScore >= 4 && varnaScore === 1) {
+        category = "Social Synergy";
+        description = "You share similar worldviews and social standing, making for a very smooth and comfortable public life together.";
     }
 
     // Manglik Matching Logic
