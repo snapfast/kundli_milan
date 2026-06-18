@@ -3,6 +3,7 @@ export interface UserAstrology {
     name: string;
     nakshatraIdx: number;
     moonSignIdx: number;
+    isManglik?: boolean;
 }
 
 export interface CompatibilityResult {
@@ -57,15 +58,15 @@ const NAKSHATRA_PROPS = [
 // Lord: 0=Sun, 1=Moon, 2=Mars, 3=Mercury, 4=Jupiter, 5=Venus, 6=Saturn
 const RASI_PROPS = [
     { name: "Aries", varna: 1, lord: 2, vashya: 1 },
-    { name: "Taurus", varna: 2, lord: 5, vashya: 2 },
+    { name: "Taurus", varna: 2, lord: 5, vashya: 1 },
     { name: "Gemini", varna: 3, lord: 3, vashya: 0 },
     { name: "Cancer", varna: 0, lord: 1, vashya: 3 },
-    { name: "Leo", varna: 1, lord: 0, vashya: 1 },
+    { name: "Leo", varna: 1, lord: 0, vashya: 2 },
     { name: "Virgo", varna: 3, lord: 3, vashya: 0 },
     { name: "Libra", varna: 2, lord: 5, vashya: 0 },
     { name: "Scorpio", varna: 0, lord: 2, vashya: 4 },
     { name: "Sagittarius", varna: 1, lord: 4, vashya: 0 },
-    { name: "Capricorn", varna: 2, lord: 6, vashya: 4 },
+    { name: "Capricorn", varna: 2, lord: 6, vashya: 1 },
     { name: "Aquarius", varna: 3, lord: 6, vashya: 0 },
     { name: "Pisces", varna: 0, lord: 4, vashya: 3 }
 ];
@@ -120,9 +121,13 @@ export function calculateCompatibility(user1: UserAstrology, user2: UserAstrolog
     kootas.push({ name: "Vashya", score: vashyaScore, max: 2 });
 
     // 3. Tara (3 points)
+    // Vedic Tara: (Distance % 9). Distance 1 = Janma, 2 = Sampat, etc.
+    // Distance 1 means same nakshatra or 9/18 away. (idx2 - idx1) % 9 would be 0.
+    // So diff 1 corresponds to Distance 2, diff 3 to Distance 4, etc.
+    // Good Dists: 2, 4, 6, 8, 9. Diffs: 1, 3, 5, 7, 8.
     const diff1 = (user2.nakshatraIdx - user1.nakshatraIdx + 27) % 9;
     const diff2 = (user1.nakshatraIdx - user2.nakshatraIdx + 27) % 9;
-    const goodTara = [1, 2, 4, 6, 8, 0]; // Simplified
+    const goodTara = [1, 3, 5, 7, 8];
     let taraScore = 0;
     if (goodTara.includes(diff1) && goodTara.includes(diff2)) taraScore = 3;
     else if (goodTara.includes(diff1) || goodTara.includes(diff2)) taraScore = 1.5;
@@ -195,6 +200,20 @@ export function calculateCompatibility(user1: UserAstrology, user2: UserAstrolog
     } else if (yoniScore === 4 && nadiScore === 8) {
         category = "Passionate Bond";
         description = "There is a strong physical and energetic attraction between you. Your vibes are highly complementary.";
+    }
+
+    // Manglik Matching Logic
+    if (user1.isManglik !== undefined && user2.isManglik !== undefined) {
+        if (user1.isManglik && !user2.isManglik) {
+            category = "Complex Alignment";
+            description = "You have a Manglik Dosha while your partner does not. This can sometimes lead to imbalances in energy if not managed with patience.";
+        } else if (!user1.isManglik && user2.isManglik) {
+            category = "Complex Alignment";
+            description = "Your partner has a Manglik Dosha while you do not. This can sometimes lead to imbalances in energy if not managed with patience.";
+        } else if (user1.isManglik && user2.isManglik) {
+            category = "Powerful Synergy";
+            description = "Both of you are Manglik, which actually creates a balanced and high-energy partnership. You understand each other's intensity.";
+        }
     }
 
     return {

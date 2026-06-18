@@ -87,6 +87,15 @@ import Layout from '../layouts/Layout.astro';
 			import { getOrSetUserId, getCookie, setCookie, clearUserData } from '../lib/user';
 			import { fetchUsers, resetUserProfile } from '../lib/api';
 
+			// Immediate redirection if user details already exist
+			const urlParams = new URLSearchParams(window.location.search);
+			const isEditMode = urlParams.get('edit') === 'true';
+			const storedDetails = getCookie('user_details');
+
+			if (storedDetails && !isEditMode) {
+				window.location.href = '/dashboard';
+			}
+
 			const form = document.getElementById('detailsForm') as HTMLFormElement;
 			const resetBtn = document.getElementById('resetBtn') as HTMLButtonElement;
 			const locationInput = document.getElementById('location') as HTMLInputElement;

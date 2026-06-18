@@ -20,6 +20,7 @@ export interface PanchangData {
     moonSignIdx: number;
     sunrise: string;
     sunset: string;
+    isManglik: boolean;
 }
 
 export interface ChartData {
@@ -148,6 +149,11 @@ export function calculateAstrology(dob: string, tob: string, lat: number = 28.61
     const sunrise = Ast.SearchRiseSet(Ast.Body.Sun, observer, 1, time, -24);
     const sunset = Ast.SearchRiseSet(Ast.Body.Sun, observer, -1, time, 24);
 
+    // Calculate Manglik Dosha
+    // Mars (Mangal) in 1, 4, 7, 8, or 12 house from Ascendant
+    const mars = planets.find(p => p.name === "Mars");
+    const isManglik = mars ? [1, 4, 7, 8, 12].includes(mars.house) : false;
+
     const panchang: PanchangData = {
         tithi: TITHIS[tithiIdx],
         nakshatra: NAKSHATRAS[nakIdx],
@@ -159,7 +165,8 @@ export function calculateAstrology(dob: string, tob: string, lat: number = 28.61
         moonSign: RASIS[moonRasiIdx],
         moonSignIdx: moonRasiIdx,
         sunrise: formatTime(sunrise ? new Date(sunrise.date.getTime() + 5.5*60*60*1000) : null),
-        sunset: formatTime(sunset ? new Date(sunset.date.getTime() + 5.5*60*60*1000) : null)
+        sunset: formatTime(sunset ? new Date(sunset.date.getTime() + 5.5*60*60*1000) : null),
+        isManglik
     };
 
     return { planets, panchang };

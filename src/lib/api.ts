@@ -9,6 +9,7 @@ export interface UserProfile {
     location: string;
     nakshatraIdx?: number;
     moonSignIdx?: number;
+    isManglik?: boolean;
     matches?: {
         name: string;
         score: number;
