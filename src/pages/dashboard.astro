@@ -175,19 +175,23 @@ import Layout from '../layouts/Layout.astro';
 						let uMoonSignIdx = user.moonSignIdx;
 						let uIsManglik = user.isManglik;
 
-						if (uNakIdx === undefined || uMoonSignIdx === undefined || uIsManglik === undefined) {
-							const uLat = user.lat ? parseFloat(user.lat) : 28.6139;
-							const uLon = user.lon ? parseFloat(user.lon) : 77.2090;
-							const uData = calculateAstrology(user.dob, user.tob, uLat, uLon);
-							uNakIdx = uData.panchang.nakshatraIdx;
-							uMoonSignIdx = uData.panchang.moonSignIdx;
-							uIsManglik = uData.panchang.isManglik;
+						if ((uNakIdx === undefined || uMoonSignIdx === undefined || uIsManglik === undefined) && user.dob && user.tob) {
+							try {
+								const uLat = user.lat ? parseFloat(user.lat) : 28.6139;
+								const uLon = user.lon ? parseFloat(user.lon) : 77.2090;
+								const uData = calculateAstrology(user.dob, user.tob, uLat, uLon);
+								uNakIdx = uData.panchang.nakshatraIdx;
+								uMoonSignIdx = uData.panchang.moonSignIdx;
+								uIsManglik = uData.panchang.isManglik;
+							} catch (e) {
+								console.warn(`Failed to calculate astrology for user ${user.uid}`, e);
+							}
 						}
 
 						const compat = calculateCompatibility(currentUserAstrology, {
 							name: user.name,
-							nakshatraIdx: uNakIdx,
-							moonSignIdx: uMoonSignIdx,
+							nakshatraIdx: uNakIdx!,
+							moonSignIdx: uMoonSignIdx!,
 							isManglik: uIsManglik
 						});
 
@@ -261,13 +265,26 @@ import Layout from '../layouts/Layout.astro';
 						if (otherUser) {
 							// For rendering kootas in dashboard, we recalculate locally or could have saved them.
 							// Here we recalculate to show the breakdown.
-							const uLat = otherUser.lat ? parseFloat(otherUser.lat) : 28.6139;
-							const uLon = otherUser.lon ? parseFloat(otherUser.lon) : 77.2090;
-							const uData = calculateAstrology(otherUser.dob, otherUser.tob, uLat, uLon);
+							let uNakIdx = otherUser.nakshatraIdx;
+							let uMoonSignIdx = otherUser.moonSignIdx;
+							let uIsManglik = otherUser.isManglik;
+
+							if ((uNakIdx === undefined || uMoonSignIdx === undefined || uIsManglik === undefined) && otherUser.dob && otherUser.tob) {
+								try {
+									const uLat = otherUser.lat ? parseFloat(otherUser.lat) : 28.6139;
+									const uLon = otherUser.lon ? parseFloat(otherUser.lon) : 77.2090;
+									const uData = calculateAstrology(otherUser.dob, otherUser.tob, uLat, uLon);
+									uNakIdx = uData.panchang.nakshatraIdx;
+									uMoonSignIdx = uData.panchang.moonSignIdx;
+									uIsManglik = uData.panchang.isManglik;
+								} catch (e) {
+									console.warn(`Failed to recalculate astrology for match ${otherUser.uid}`, e);
+								}
+							}
 
 							const compat = calculateCompatibility(
 								{ name: profile.name, nakshatraIdx: astroData.panchang.nakshatraIdx, moonSignIdx: astroData.panchang.moonSignIdx, isManglik: profile.isManglik! },
-								{ name: otherUser.name, nakshatraIdx: uData.panchang.nakshatraIdx, moonSignIdx: uData.panchang.moonSignIdx, isManglik: uData.panchang.isManglik }
+								{ name: otherUser.name, nakshatraIdx: uNakIdx!, moonSignIdx: uMoonSignIdx!, isManglik: uIsManglik! }
 							);
 
 							kootaHtml = `
