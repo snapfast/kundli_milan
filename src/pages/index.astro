@@ -1,91 +1,44 @@
 ---
-import { getOrSetUserId } from '../lib/user';
+import Layout from '../layouts/Layout.astro';
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astrology Submission</title>
-		<style>
-			body {
-				font-family: sans-serif;
-				max-width: 600px;
-				margin: 2rem auto;
-				padding: 0 1rem;
-				line-height: 1.6;
-			}
-			form {
-				display: flex;
-				flex-direction: column;
-				gap: 1rem;
-				border: 1px solid #ccc;
-				padding: 1.5rem;
-				border-radius: 8px;
-			}
-			.field {
-				display: flex;
-				flex-direction: column;
-				position: relative;
-			}
-			label {
-				font-weight: bold;
-				margin-bottom: 0.25rem;
-			}
-			input, select {
-				padding: 0.5rem;
-				border: 1px solid #ccc;
-				border-radius: 4px;
-			}
-			button {
-				padding: 0.75rem;
-				background-color: #007bff;
-				color: white;
-				border: none;
-				border-radius: 4px;
-				cursor: pointer;
-				font-size: 1rem;
-			}
-			button:hover {
-				background-color: #0056b3;
-			}
-			#suggestions {
-				position: absolute;
-				top: 100%;
-				left: 0;
-				right: 0;
-				background: white;
-				border: 1px solid #ccc;
-				border-top: none;
-				z-index: 1000;
-				max-height: 200px;
-				overflow-y: auto;
-				display: none;
-			}
-			.suggestion-item {
-				padding: 0.5rem;
-				cursor: pointer;
-			}
-			.suggestion-item:hover {
-				background-color: #f0f0f0;
-			}
-			footer {
-				margin-top: 3rem;
-				font-size: 0.8rem;
-				color: #666;
-				text-align: center;
-			}
-		</style>
-	</head>
-	<body>
-		<nav style="margin-bottom: 2rem; display: flex; gap: 1rem;">
-			<a href="/">Home</a>
-			<a href="/dashboard" id="dashboardLink">Dashboard</a>
-		</nav>
+<Layout title="Astrology Submission">
+	<style>
+		#suggestions {
+			position: absolute;
+			top: 100%;
+			left: 0;
+			right: 0;
+			background: white;
+			border: 1px solid #ccc;
+			border-top: none;
+			z-index: 1000;
+			max-height: 200px;
+			overflow-y: auto;
+			display: none;
+			border-radius: 0 0 4px 4px;
+			box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+		}
+		.suggestion-item {
+			padding: 0.75rem;
+			cursor: pointer;
+			border-bottom: 1px solid #eee;
+		}
+		.suggestion-item:last-child {
+			border-bottom: none;
+		}
+		.suggestion-item:hover {
+			background-color: #f8f9fa;
+		}
+		footer {
+			margin-top: 3rem;
+			font-size: 0.8rem;
+			color: #666;
+			text-align: center;
+		}
+	</style>
 
-		<h1>Submit Your Details</h1>
+	<h1>Submit Your Details</h1>
 		<div id="redirecting" style="display: none; text-align: center; padding: 2rem;">
 			Redirecting to your dashboard...
 		</div>
@@ -125,12 +78,12 @@ import { getOrSetUserId } from '../lib/user';
 			</div>
 		</form>
 
-		<footer>
-			&copy; {new Date().getFullYear()} Vedic Astrology Matchmaker.
-			Location data &copy; <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a> contributors.
-		</footer>
+	<footer>
+		&copy; {new Date().getFullYear()} Vedic Astrology Matchmaker.
+		Location data &copy; <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a> contributors.
+	</footer>
 
-		<script>
+	<script>
 			import { getOrSetUserId, getCookie, setCookie, clearUserData } from '../lib/user';
 			import { fetchUsers, resetUserProfile } from '../lib/api';
 
@@ -186,6 +139,13 @@ import { getOrSetUserId } from '../lib/user';
 				if (existingUser && existingUser.name) { // Ensure they actually have a profile
 					form.style.display = 'none';
 					redirectingDiv.style.display = 'block';
+
+					// Hide the dashboard link since we are redirecting anyway
+					const dashboardLink = document.getElementById('dashboardLink');
+					if (dashboardLink) {
+						dashboardLink.style.display = 'none';
+					}
+
 					window.location.href = '/dashboard';
 				}
 			}
@@ -236,6 +196,8 @@ import { getOrSetUserId } from '../lib/user';
 						}
 					} catch (error) {
 						console.error('Error fetching locations:', error);
+						suggestionsContainer.innerHTML = '<div class="suggestion-item" style="color: #dc3545;">Error fetching locations. Try again.</div>';
+						suggestionsContainer.style.display = 'block';
 					}
 				}, 300);
 			});
@@ -260,6 +222,5 @@ import { getOrSetUserId } from '../lib/user';
 				setCookie('user_details', JSON.stringify(payload), 365);
 				window.location.href = '/kundli';
 			});
-		</script>
-	</body>
-</html>
+	</script>
+</Layout>
