@@ -1,165 +1,53 @@
 ---
+import Layout from '../layouts/Layout.astro';
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="viewport" content="width=device-width" />
-		<title>Your Kundli</title>
-		<style>
-			body {
-				font-family: sans-serif;
-				max-width: 800px;
-				margin: 2rem auto;
-				padding: 0 1rem;
-				line-height: 1.6;
-				background-color: #f9f9f9;
-			}
-			.container {
-				background: white;
-				padding: 2rem;
-				border-radius: 8px;
-				box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-			}
-			h1, h2 {
-				color: #333;
-				border-bottom: 2px solid #007bff;
-				padding-bottom: 0.5rem;
-			}
-			.details-grid {
-				display: grid;
-				grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-				gap: 1rem;
-				margin-bottom: 2rem;
-			}
-			.detail-item {
-				background: #eee;
-				padding: 1rem;
-				border-radius: 4px;
-			}
-			.detail-label {
-				font-weight: bold;
-				display: block;
-				font-size: 0.9rem;
-				color: #666;
-			}
-			.detail-value {
-				font-size: 1.1rem;
-				color: #000;
-			}
-			table {
-				width: 100%;
-				border-collapse: collapse;
-				margin-top: 1rem;
-			}
-			th, td {
-				text-align: left;
-				padding: 0.75rem;
-				border-bottom: 1px solid #ddd;
-			}
-			th {
-				background-color: #f2f2f2;
-			}
-			.matchmaking-notice {
-				margin-top: 2rem;
-				padding: 1rem;
-				background-color: #e7f3ff;
-				border-left: 5px solid #007bff;
-				border-radius: 4px;
-			}
-		</style>
+<Layout title="Your Kundli">
+	<style>
+		.details-grid {
+			display: grid;
+			grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+			gap: 1rem;
+			margin-bottom: 2rem;
+		}
+		.detail-item {
+			background: #eee;
+			padding: 1rem;
+			border-radius: 4px;
+		}
+		.detail-label {
+			font-weight: bold;
+			display: block;
+			font-size: 0.9rem;
+			color: #666;
+		}
+		.detail-value {
+			font-size: 1.1rem;
+			color: #000;
+		}
+		table {
+			width: 100%;
+			border-collapse: collapse;
+			margin-top: 1rem;
+		}
+		th, td {
+			text-align: left;
+			padding: 0.75rem;
+			border-bottom: 1px solid #ddd;
+		}
+		th {
+			background-color: #f2f2f2;
+		}
+		.matchmaking-notice {
+			margin-top: 2rem;
+			padding: 1rem;
+			background-color: #f4f0ff;
+			border-left: 5px solid #6c5ce7;
+			border-radius: 4px;
+		}
+	</style>
 
-		<style is:global>
-			.matches-section {
-				margin-top: 2rem;
-			}
-			.match-card {
-				background: #fff;
-				border: 1px solid #e1e4e8;
-				border-radius: 12px;
-				padding: 1.5rem;
-				margin-bottom: 1rem;
-				transition: transform 0.2s;
-				box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-			}
-			.match-card:hover {
-				transform: translateY(-5px);
-			}
-			.match-header {
-				display: flex;
-				justify-content: space-between;
-				align-items: center;
-				margin-bottom: 0.5rem;
-			}
-			.match-name {
-				font-size: 1.25rem;
-				font-weight: bold;
-				color: #2c3e50;
-			}
-			.match-category {
-				background: #6c5ce7;
-				color: white;
-				padding: 0.25rem 0.75rem;
-				border-radius: 20px;
-				font-size: 0.8rem;
-				font-weight: bold;
-			}
-			.match-score {
-				font-size: 1.5rem;
-				font-weight: bold;
-				color: #00b894;
-			}
-			.match-description {
-				font-style: italic;
-				color: #636e72;
-				font-size: 0.95rem;
-			}
-			.koota-grid {
-				display: grid;
-				grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-				gap: 0.5rem;
-				margin-top: 1rem;
-			}
-			.koota-item {
-				font-size: 0.8rem;
-				color: #2d3436;
-				background: #f1f2f6;
-				padding: 0.4rem;
-				border-radius: 4px;
-				text-align: center;
-				cursor: help;
-				position: relative;
-			}
-			.koota-item:hover .koota-explanation {
-				display: block;
-			}
-			.koota-explanation {
-				display: none;
-				position: absolute;
-				bottom: 100%;
-				left: 50%;
-				transform: translateX(-50%);
-				background: #333;
-				color: white;
-				padding: 0.5rem;
-				border-radius: 4px;
-				width: 200px;
-				z-index: 10;
-				font-size: 0.75rem;
-				text-align: left;
-				box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-			}
-		</style>
-	</head>
-	<body>
-		<nav style="margin-bottom: 2rem; display: flex; gap: 1rem;">
-			<a href="/">Home</a>
-			<a href="/dashboard">Dashboard</a>
-		</nav>
-
-		<div class="container">
-			<h1>Your Astrology Details</h1>
+	<h1>Your Astrology Details</h1>
 
 			<div id="loading">Calculating your Kundli...</div>
 
@@ -219,15 +107,17 @@
 				<div class="matchmaking-notice" id="matching-status">
 					<strong>Matchmaking System:</strong> Calculating your cosmic matches and saving your profile...
 				</div>
-			</div>
-		</div>
 
-		<script>
+				<a href="/dashboard" class="btn" style="display:inline-block; margin-top: 1.5rem;">View My Dashboard</a>
+			</div>
+
+	<script>
 			import { calculateAstrology } from '../lib/astrology';
 			import { calculateCompatibility } from '../lib/compatibility';
 			import { fetchUsers, saveUserProfile } from '../lib/api';
 			import { KOOTA_INFO } from '../lib/constants';
 			import { getCookie } from '../lib/user';
+			import { generateMatchCardHtml } from '../lib/ui';
 
 			window.addEventListener('load', async () => {
 				const stored = getCookie('user_details');
@@ -318,15 +208,7 @@
 					if (top3.length > 0) {
 						const matchesList = document.getElementById('matches-list')!;
 						top3.forEach(m => {
-							const card = document.createElement('div');
-							card.className = 'match-card';
-							card.innerHTML = `
-								<div class="match-header">
-									<span class="match-name">${m.user.name}</span>
-									<span class="match-category">${m.compat.category}</span>
-								</div>
-								<div class="match-score">${m.compat.score} / 36</div>
-								<div class="match-description">${m.compat.description}</div>
+							const kootaHtml = `
 								<div class="koota-grid">
 									${m.compat.kootas.map(k => `
 										<div class="koota-item">
@@ -336,6 +218,16 @@
 									`).join('')}
 								</div>
 							`;
+
+							const card = document.createElement('div');
+							card.className = 'match-card';
+							card.innerHTML = generateMatchCardHtml(
+								m.user.name,
+								m.compat.category,
+								m.compat.score,
+								m.compat.description,
+								kootaHtml
+							);
 							matchesList.appendChild(card);
 						});
 						document.getElementById('matches')!.style.display = 'block';
@@ -349,6 +241,5 @@
 					document.getElementById('loading')!.textContent = 'Error calculating Kundli. Please check your input.';
 				}
 			});
-		</script>
-	</body>
-</html>
+	</script>
+</Layout>
