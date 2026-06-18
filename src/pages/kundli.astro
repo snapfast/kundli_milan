@@ -142,7 +142,8 @@ import Layout from '../layouts/Layout.astro';
 					const currentUserAstrology = {
 						name: details.name,
 						nakshatraIdx: data.panchang.nakshatraIdx,
-						moonSignIdx: data.panchang.moonSignIdx
+						moonSignIdx: data.panchang.moonSignIdx,
+						isManglik: data.panchang.isManglik
 					};
 
 					document.getElementById('p-tithi')!.textContent = data.panchang.tithi;
@@ -173,17 +174,20 @@ import Layout from '../layouts/Layout.astro';
 					const resultsWithScores = filteredUsers.map(user => {
 						let uNakIdx = user.nakshatraIdx;
 						let uMoonSignIdx = user.moonSignIdx;
+						let uIsManglik = user.isManglik;
 
-						if (uNakIdx === undefined || uMoonSignIdx === undefined) {
+						if (uNakIdx === undefined || uMoonSignIdx === undefined || uIsManglik === undefined) {
 							const uData = calculateAstrology(user.dob, user.tob);
 							uNakIdx = uData.panchang.nakshatraIdx;
 							uMoonSignIdx = uData.panchang.moonSignIdx;
+							uIsManglik = uData.panchang.isManglik;
 						}
 
 						const compat = calculateCompatibility(currentUserAstrology, {
 							name: user.name,
 							nakshatraIdx: uNakIdx,
-							moonSignIdx: uMoonSignIdx
+							moonSignIdx: uMoonSignIdx,
+							isManglik: uIsManglik
 						});
 
 						return { user, compat };
@@ -196,6 +200,7 @@ import Layout from '../layouts/Layout.astro';
 						...details,
 						nakshatraIdx: data.panchang.nakshatraIdx,
 						moonSignIdx: data.panchang.moonSignIdx,
+						isManglik: data.panchang.isManglik,
 						matches: top3.map(m => ({
 							name: m.user.name,
 							score: m.compat.score,

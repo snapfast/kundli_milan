@@ -44,7 +44,8 @@ import Layout from '../layouts/Layout.astro';
 					<!-- Profile data injected here -->
 				</div>
 
-				<div style="margin-bottom: 2rem;">
+				<div style="margin-bottom: 2rem; display: flex; gap: 1rem;">
+					<a href="/?edit=true" class="btn">Edit My Profile</a>
 					<button id="resetProfileBtn" class="btn" style="background-color: #dc3545;">Reset My Profile</button>
 				</div>
 
@@ -117,6 +118,10 @@ import Layout from '../layouts/Layout.astro';
 							<span class="label">Gender</span>
 							<span class="value" style="text-transform: capitalize;">${profile.gender}</span>
 						</div>
+						<div class="summary-item">
+							<span class="label">Manglik Status</span>
+							<span class="value">${profile.isManglik ? 'Manglik' : 'Non-Manglik'}</span>
+						</div>
 					`;
 
 					const matchesList = document.getElementById('matches-list')!;
@@ -127,8 +132,8 @@ import Layout from '../layouts/Layout.astro';
 
 							if (otherUser && profile.nakshatraIdx !== undefined && otherUser.nakshatraIdx !== undefined) {
 								const compat = calculateCompatibility(
-									{ name: profile.name, nakshatraIdx: profile.nakshatraIdx, moonSignIdx: profile.moonSignIdx! },
-									{ name: otherUser.name, nakshatraIdx: otherUser.nakshatraIdx, moonSignIdx: otherUser.moonSignIdx! }
+									{ name: profile.name, nakshatraIdx: profile.nakshatraIdx, moonSignIdx: profile.moonSignIdx!, isManglik: profile.isManglik },
+									{ name: otherUser.name, nakshatraIdx: otherUser.nakshatraIdx, moonSignIdx: otherUser.moonSignIdx!, isManglik: otherUser.isManglik }
 								);
 
 								kootaHtml = `
