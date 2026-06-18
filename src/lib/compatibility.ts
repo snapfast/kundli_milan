@@ -1,4 +1,3 @@
-
 export interface UserAstrology {
     name: string;
     nakshatraIdx: number;
@@ -15,6 +14,11 @@ export interface CompatibilityResult {
         name: string;
         score: number;
         max: number;
+    }[];
+    doshas: {
+        name: string;
+        description: string;
+        isCancelled: boolean;
     }[];
 }
 
@@ -103,11 +107,8 @@ const YONI_COMPAT = [
 
 export function calculateCompatibility(user1: UserAstrology, user2: UserAstrology): CompatibilityResult {
     const kootas = [];
+    const doshas: { name: string; description: string; isCancelled: boolean }[] = [];
 
-    if (user1.moonSignIdx === undefined || user2.moonSignIdx === undefined ||
-        user1.nakshatraIdx === undefined || user2.nakshatraIdx === undefined ||
-        !RASI_PROPS[user1.moonSignIdx] || !RASI_PROPS[user2.moonSignIdx] ||
-        !NAKSHATRA_PROPS[user1.nakshatraIdx] || !NAKSHATRA_PROPS[user2.nakshatraIdx]) {
     // Defensive checks for valid indices
     const isValidRasi = (idx: number) => typeof idx === 'number' && !isNaN(idx) && idx >= 0 && idx < RASI_PROPS.length;
     const isValidNak = (idx: number) => typeof idx === 'number' && !isNaN(idx) && idx >= 0 && idx < NAKSHATRA_PROPS.length;
@@ -128,7 +129,8 @@ export function calculateCompatibility(user1: UserAstrology, user2: UserAstrolog
                 { name: "Gana", score: 0, max: 6 },
                 { name: "Bhakoot", score: 0, max: 7 },
                 { name: "Nadi", score: 0, max: 8 }
-            ]
+            ],
+            doshas: []
         };
     }
 
@@ -140,7 +142,6 @@ export function calculateCompatibility(user1: UserAstrology, user2: UserAstrolog
     kootas.push({ name: "Varna", score: varnaScore, max: 1 });
 
     // 2. Vashya (2 points)
-    // Vashya Groups: 0: Manushya, 1: Chatushpada, 2: Vanachara, 3: Jalachara, 4: Keeta
     const VASHYA_MATRIX = [
         [2, 1, 0, 1, 1], // Manushya
         [1, 2, 0, 1, 1], // Chatushpada
@@ -154,10 +155,6 @@ export function calculateCompatibility(user1: UserAstrology, user2: UserAstrolog
     kootas.push({ name: "Vashya", score: vashyaScore, max: 2 });
 
     // 3. Tara (3 points)
-    // Vedic Tara: (Distance % 9). Distance 1 = Janma, 2 = Sampat, etc.
-    // Distance 1 means same nakshatra or 9/18 away. (idx2 - idx1) % 9 would be 0.
-    // So diff 1 corresponds to Distance 2, diff 3 to Distance 4, etc.
-    // Good Dists: 2, 4, 6, 8, 9. Diffs: 1, 3, 5, 7, 8.
     const diff1 = (user2.nakshatraIdx - user1.nakshatraIdx + 27) % 9;
     const diff2 = (user1.nakshatraIdx - user2.nakshatraIdx + 27) % 9;
     const goodTara = [1, 3, 5, 7, 8];
@@ -170,6 +167,13 @@ export function calculateCompatibility(user1: UserAstrology, user2: UserAstrolog
     const y1 = NAKSHATRA_PROPS[user1.nakshatraIdx].yoni;
     const y2 = NAKSHATRA_PROPS[user2.nakshatraIdx].yoni;
     const yoniScore = YONI_COMPAT[y1][y2];
+    if (yoniScore === 0) {
+        doshas.push({
+            name: "Yoni Vairya",
+            description: "Natural enmity between your animal types can lead to instinctive friction.",
+            isCancelled: false
+        });
+    }
     kootas.push({ name: "Yoni", score: yoniScore, max: 4 });
 
     // 5. Maitri (5 points)
@@ -192,6 +196,14 @@ export function calculateCompatibility(user1: UserAstrology, user2: UserAstrolog
     if (g1 === g2) ganaScore = 6;
     else if ((g1 === 0 && g2 === 1) || (g1 === 1 && g2 === 0)) ganaScore = 5;
     else if ((g1 === 0 && g2 === 2) || (g1 === 2 && g2 === 0)) ganaScore = 1;
+
+    if (ganaScore === 0) {
+        doshas.push({
+            name: "Gana Dosha",
+            description: "Significant differences in temperament and character traits.",
+            isCancelled: false
+        });
+    }
     kootas.push({ name: "Gana", score: ganaScore, max: 6 });
 
     // 7. Bhakoot (7 points)
@@ -199,15 +211,49 @@ export function calculateCompatibility(user1: UserAstrology, user2: UserAstrolog
     let bhakootScore = 7;
     const badDiffs = [2, 5, 6, 8, 9, 12];
     if (badDiffs.includes(rDiff)) bhakootScore = 0;
-    // Exception for 7 (1/7) - usually good
     if (rDiff === 7) bhakootScore = 7;
+
+    if (bhakootScore === 0) {
+        let name = "Bhakoot Dosha";
+        if (rDiff === 2 || rDiff === 12) name = "Dwirdwadash Bhakoot";
+        if (rDiff === 5 || rDiff === 9) name = "Navpancham Bhakoot";
+        if (rDiff === 6 || rDiff === 8) name = "Shadashtak Bhakoot";
+
+        // Cancellation logic
+        const isCancelled = l1 === l2 || (f1 === 1 && f2 === 1);
+        if (isCancelled) bhakootScore = 7;
+
+        doshas.push({
+            name,
+            description: isCancelled ? "Cancelled due to friendly Rasi lords." : "May impact prosperity and relationship longevity.",
+            isCancelled
+        });
+    }
     kootas.push({ name: "Bhakoot", score: bhakootScore, max: 7 });
 
     // 8. Nadi (8 points)
     const n1 = NAKSHATRA_PROPS[user1.nakshatraIdx].nadi;
     const n2 = NAKSHATRA_PROPS[user2.nakshatraIdx].nadi;
     let nadiScore = 8;
-    if (n1 === n2) nadiScore = 0;
+
+    if (n1 === n2) {
+        nadiScore = 0;
+        let name = n1 === 2 ? "Antya Nadi Dosha" : "Nadi Dosha";
+
+        // Cancellation logic
+        const isCancelled = (user1.moonSignIdx === user2.moonSignIdx && user1.nakshatraIdx !== user2.nakshatraIdx) ||
+                            (user1.nakshatraIdx === user2.nakshatraIdx && user1.moonSignIdx !== user2.moonSignIdx);
+
+        if (isCancelled) {
+            nadiScore = 8;
+        }
+
+        doshas.push({
+            name,
+            description: isCancelled ? "Cancelled due to Nakshatra/Rasi variations." : "Relates to genetic compatibility and progeny vitality.",
+            isCancelled
+        });
+    }
     kootas.push({ name: "Nadi", score: nadiScore, max: 8 });
 
     const totalScore = kootas.reduce((acc, k) => acc + k.score, 0);
@@ -263,6 +309,7 @@ export function calculateCompatibility(user1: UserAstrology, user2: UserAstrolog
         maxScore: 36,
         category,
         description,
-        kootas
+        kootas,
+        doshas
     };
 }

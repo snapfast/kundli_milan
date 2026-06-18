@@ -1,6 +1,21 @@
-export function generateMatchCardHtml(name: string, category: string, score: number, description: string, kootaHtml: string): string {
+export function generateMatchCardHtml(name: string, category: string, score: number, description: string, kootaHtml: string, doshas: { name: string, description: string, isCancelled: boolean }[] = []): string {
     const percentage = (score / 36) * 100;
     const progressColor = score >= 28 ? '#00b894' : score >= 18 ? '#fdcb6e' : '#ff7675';
+
+    let doshaHtml = '';
+    if (doshas && doshas.length > 0) {
+        doshaHtml = `
+            <div class="dosha-container">
+                <div class="dosha-header">Dosha Alerts & Exceptions</div>
+                ${doshas.map(d => `
+                    <div class="dosha-item ${d.isCancelled ? 'cancelled' : 'active'}">
+                        <span class="dosha-name">${d.name} ${d.isCancelled ? '(Cancelled)' : ''}</span>
+                        <div class="dosha-description">${d.description}</div>
+                    </div>
+                `).join('')}
+            </div>
+        `;
+    }
 
     return `
         <div class="match-header">
@@ -14,6 +29,7 @@ export function generateMatchCardHtml(name: string, category: string, score: num
             </div>
         </div>
         ${description ? `<div class="match-description">${description}</div>` : ''}
+        ${doshaHtml}
         ${kootaHtml}
     `;
 }
