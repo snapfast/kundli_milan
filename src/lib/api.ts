@@ -1,17 +1,20 @@
 const BACKEND_URL = 'https://script.google.com/macros/s/AKfycbyOhkO-K9w-ErN47ZSYSfYqohMTU0VMi6ytTZKI_9lGprRKORxQ8zRDNXns7vM9dHS15g/exec';
 
 export interface UserProfile {
-    userId: string;
+    uid: string;
     name: string;
     email: string;
     dob: string;
     tob: string;
     gender: string;
     location: string;
+    lat?: string;
+    lon?: string;
     nakshatraIdx?: number;
     moonSignIdx?: number;
     isManglik?: boolean;
     matches?: {
+        uid: string;
         name: string;
         score: number;
         category: string;
@@ -27,14 +30,21 @@ export async function fetchUsers(): Promise<UserProfile[]> {
         const result = await response.json();
 
         // Handle both direct array and { status: 'success', data: [...] } formats
+        let data: any[] = [];
         if (Array.isArray(result)) {
-            return result as UserProfile[];
+            data = result;
         } else if (result && typeof result === 'object' && Array.isArray(result.data)) {
-            return result.data as UserProfile[];
+            data = result.data;
+        } else {
+            console.warn('API returned unexpected format:', result);
+            return [];
         }
 
-        console.warn('API returned unexpected format:', result);
-        return [];
+        // Map userId to uid if necessary from backend
+        return data.map((u: any) => ({
+            ...u,
+            uid: u.uid || u.userId || ''
+        })) as UserProfile[];
     } catch (error) {
         console.error('Error fetching users:', error);
         return [];
@@ -62,9 +72,9 @@ export async function saveUserProfile(profile: UserProfile): Promise<boolean> {
     }
 }
 
-export async function resetUserProfile(userId: string): Promise<boolean> {
+export async function resetUserProfile(uid: string): Promise<boolean> {
     return saveUserProfile({
-        userId,
+        uid,
         name: '',
         email: '',
         dob: '',

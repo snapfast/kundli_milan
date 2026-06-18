@@ -109,7 +109,7 @@ import Layout from '../layouts/Layout.astro';
 			const redirectingDiv = document.getElementById('redirecting') as HTMLDivElement;
 
 			// Ensure user ID is set on load
-			const userId = getOrSetUserId();
+			const uid = getOrSetUserId();
 
 			// Pre-fill form from cookies
 			function preFillForm() {
@@ -137,7 +137,7 @@ import Layout from '../layouts/Layout.astro';
 				const data = Object.fromEntries(formData.entries());
 				const payload = {
 					...data,
-					userId: getOrSetUserId()
+					uid: getOrSetUserId()
 				};
 				setCookie('user_details', JSON.stringify(payload), 365);
 			}
@@ -148,7 +148,7 @@ import Layout from '../layouts/Layout.astro';
 			// Check if user already exists and redirect to dashboard if so
 			async function checkExistingUser() {
 				const users = await fetchUsers();
-				const existingUser = users.find(u => u.userId === userId);
+				const existingUser = users.find(u => u.uid === uid);
 				if (existingUser && existingUser.name) { // Ensure they actually have a profile
 					form.style.display = 'none';
 					redirectingDiv.style.display = 'block';
@@ -229,7 +229,7 @@ import Layout from '../layouts/Layout.astro';
 
 				const payload = {
 					...data,
-					userId: getOrSetUserId()
+					uid: getOrSetUserId()
 				};
 
 				setCookie('user_details', JSON.stringify(payload), 365);

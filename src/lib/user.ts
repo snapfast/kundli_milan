@@ -3,12 +3,14 @@ import { v4 as uuidv4 } from 'uuid';
 export function getOrSetUserId() {
   if (typeof window === 'undefined') return null;
 
-  let userId = getCookie('user_id');
-  if (!userId) {
-    userId = uuidv4();
-    setCookie('user_id', userId, 365);
+  let uid = getCookie('uid') || getCookie('user_id'); // Migration check
+  if (!uid) {
+    uid = uuidv4();
+    setCookie('uid', uid, 365);
+  } else if (!getCookie('uid')) {
+    setCookie('uid', uid, 365); // Standardize to 'uid'
   }
-  return userId;
+  return uid;
 }
 
 export function setCookie(name: string, value: string, days: number) {
@@ -37,6 +39,7 @@ export function deleteCookie(name: string) {
 }
 
 export function clearUserData() {
+  deleteCookie('uid');
   deleteCookie('user_id');
   deleteCookie('user_details');
   localStorage.removeItem('user_details');
