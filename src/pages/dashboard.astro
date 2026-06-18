@@ -44,7 +44,8 @@ import Layout from '../layouts/Layout.astro';
 					<!-- Profile data injected here -->
 				</div>
 
-				<div style="margin-bottom: 2rem; display: flex; gap: 1rem;">
+				<div style="margin-bottom: 2rem; display: flex; gap: 1rem; flex-wrap: wrap;">
+					<a href="/kundli" class="btn">View My Kundli</a>
 					<a href="/?edit=true" class="btn">Edit My Profile</a>
 					<button id="resetProfileBtn" class="btn" style="background-color: #dc3545;">Reset My Profile</button>
 				</div>
@@ -73,12 +74,12 @@ import Layout from '../layouts/Layout.astro';
 			import { generateMatchCardHtml } from '../lib/ui';
 
 			window.addEventListener('load', async () => {
-				const userId = getOrSetUserId();
+				const uid = getOrSetUserId();
 				const resetBtn = document.getElementById('resetProfileBtn') as HTMLButtonElement;
 
 				resetBtn?.addEventListener('click', async () => {
 					if (confirm('Are you sure you want to reset your cosmic profile? This will delete all your data and you will start fresh.')) {
-						if (userId) await resetUserProfile(userId);
+						if (uid) await resetUserProfile(uid);
 						clearUserData();
 						window.location.href = '/';
 					}
@@ -89,7 +90,7 @@ import Layout from '../layouts/Layout.astro';
 
 				try {
 					users = await fetchUsers();
-					profile = users.find(u => u.userId === userId);
+					profile = users.find(u => u.uid === uid);
 				} catch (error) {
 					console.error("Error loading dashboard data:", error);
 					document.getElementById('loading')!.style.display = 'none';
@@ -131,7 +132,7 @@ import Layout from '../layouts/Layout.astro';
 					const matchesList = document.getElementById('matches-list')!;
 					if (profile.matches && profile.matches.length > 0) {
 						profile.matches.forEach((m: any) => {
-							const otherUser = users.find(u => u.name === m.name);
+							const otherUser = users.find(u => (m.uid && u.uid === m.uid) || (!m.uid && u.name === m.name));
 							let kootaHtml = '';
 
 							if (otherUser && profile.nakshatraIdx !== undefined && otherUser.nakshatraIdx !== undefined) {

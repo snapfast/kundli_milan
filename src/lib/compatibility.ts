@@ -112,12 +112,17 @@ export function calculateCompatibility(user1: UserAstrology, user2: UserAstrolog
     kootas.push({ name: "Varna", score: varnaScore, max: 1 });
 
     // 2. Vashya (2 points)
-    // Simplified: same vashya group = 2, friendly = 1, otherwise 0
+    // Vashya Groups: 0: Manushya, 1: Chatushpada, 2: Vanachara, 3: Jalachara, 4: Keeta
+    const VASHYA_MATRIX = [
+        [2, 1, 0, 1, 1], // Manushya
+        [1, 2, 0, 1, 1], // Chatushpada
+        [0, 0, 2, 0, 0], // Vanachara
+        [1, 1, 0, 2, 1], // Jalachara
+        [1, 1, 0, 1, 2]  // Keeta
+    ];
     const vas1 = RASI_PROPS[user1.moonSignIdx].vashya;
     const vas2 = RASI_PROPS[user2.moonSignIdx].vashya;
-    let vashyaScore = 0;
-    if (vas1 === vas2) vashyaScore = 2;
-    else if ((vas1 === 0 && vas2 === 1) || (vas1 === 1 && vas2 === 0)) vashyaScore = 1; // Example
+    const vashyaScore = VASHYA_MATRIX[vas1][vas2];
     kootas.push({ name: "Vashya", score: vashyaScore, max: 2 });
 
     // 3. Tara (3 points)

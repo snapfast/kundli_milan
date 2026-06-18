@@ -174,7 +174,7 @@ import Layout from '../layouts/Layout.astro';
 					document.getElementById('results')!.style.display = 'block';
 
 					const otherUsers = await fetchUsers();
-					const filteredUsers = otherUsers.filter(u => u.userId !== details.userId);
+					const filteredUsers = otherUsers.filter(u => u.uid !== details.uid);
 
 					const resultsWithScores = filteredUsers.map(user => {
 						let uNakIdx = user.nakshatraIdx;
@@ -182,7 +182,9 @@ import Layout from '../layouts/Layout.astro';
 						let uIsManglik = user.isManglik;
 
 						if (uNakIdx === undefined || uMoonSignIdx === undefined || uIsManglik === undefined) {
-							const uData = calculateAstrology(user.dob, user.tob);
+							const uLat = user.lat ? parseFloat(user.lat) : 28.6139;
+							const uLon = user.lon ? parseFloat(user.lon) : 77.2090;
+							const uData = calculateAstrology(user.dob, user.tob, uLat, uLon);
 							uNakIdx = uData.panchang.nakshatraIdx;
 							uMoonSignIdx = uData.panchang.moonSignIdx;
 							uIsManglik = uData.panchang.isManglik;
@@ -207,6 +209,7 @@ import Layout from '../layouts/Layout.astro';
 						moonSignIdx: data.panchang.moonSignIdx,
 						isManglik: data.panchang.isManglik,
 						matches: top3.map(m => ({
+							uid: m.user.uid,
 							name: m.user.name,
 							score: m.compat.score,
 							category: m.compat.category
