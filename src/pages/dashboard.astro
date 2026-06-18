@@ -78,6 +78,41 @@ import Layout from '../layouts/Layout.astro';
 			0% { transform: rotate(0deg); }
 			100% { transform: rotate(360deg); }
 		}
+		.dosha-container {
+			margin: 1rem 0;
+			padding: 0.8rem;
+			background: #fff5f5;
+			border-left: 4px solid #ff7675;
+			border-radius: 4px;
+		}
+		.dosha-header {
+			font-weight: bold;
+			color: #d63031;
+			font-size: 0.85rem;
+			text-transform: uppercase;
+			margin-bottom: 0.5rem;
+		}
+		.dosha-item {
+			margin-bottom: 0.5rem;
+		}
+		.dosha-item.cancelled {
+			border-left-color: #00b894;
+			background: #f0fff4;
+			opacity: 0.8;
+		}
+		.dosha-item.cancelled .dosha-name {
+			color: #00b894;
+			text-decoration: line-through;
+		}
+		.dosha-name {
+			font-weight: 600;
+			color: #2d3436;
+			font-size: 0.9rem;
+		}
+		.dosha-description {
+			font-size: 0.8rem;
+			color: #636e72;
+		}
 		.no-data {
 			text-align: center;
 			padding: 3rem;
@@ -299,7 +334,7 @@ import Layout from '../layouts/Layout.astro';
 
 							const compat = calculateCompatibility(
 								{ name: profile.name, nakshatraIdx: astroData.panchang.nakshatraIdx, moonSignIdx: astroData.panchang.moonSignIdx, isManglik: profile.isManglik! },
-								{ name: otherUser.name, nakshatraIdx: uNakIdx!, moonSignIdx: uMoonSignIdx!, isManglik: uIsManglik! }
+								{ name: otherUser.name, nakshatraIdx: uData.panchang.nakshatraIdx, moonSignIdx: uData.panchang.moonSignIdx, isManglik: uData.panchang.isManglik }
 							);
 
 							kootaHtml = `
@@ -315,7 +350,7 @@ import Layout from '../layouts/Layout.astro';
 
 							const card = document.createElement('div');
 							card.className = 'match-card';
-							card.innerHTML = generateMatchCardHtml(m.name, m.category, m.score, compat.description, kootaHtml);
+							card.innerHTML = generateMatchCardHtml(m.name, m.category, m.score, compat.description, kootaHtml, compat.doshas);
 							matchesList.appendChild(card);
 						}
 					});
