@@ -15,6 +15,7 @@ export interface PanchangData {
     yoga: string;
     karana: string;
     vara: string;
+    varaLord: string;
     sunSign: string;
     moonSign: string;
     moonSignIdx: number;
@@ -39,6 +40,7 @@ const RASIS = [
 ];
 
 const VARAS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+const VARA_LORDS = ["Sun", "Moon", "Mars", "Mercury", "Jupiter", "Venus", "Saturn"];
 
 const TITHIS = [
     "Pratipada", "Dwitiya", "Tritiya", "Chaturthi", "Panchami", "Shashti", "Saptami", "Ashtami", "Navami", "Dashami", "Ekadashi", "Dwadashi", "Trayodashi", "Chaturdashi", "Purnima",
@@ -73,11 +75,17 @@ function formatTime(date: Date | null): string {
 }
 
 export function calculateAstrology(dob: string, tob: string, lat: number = 28.6139, lon: number = 77.2090): ChartData {
+    if (!dob || !tob) {
+        throw new Error("Date of Birth and Time of Birth are required for astrology calculation.");
+    }
     const [year, month, day] = dob.split('-').map(Number);
     const [hour, minute] = tob.split(':').map(Number);
 
     // Assuming input is IST (UTC+5:30)
     const istDate = new Date(Date.UTC(year, month - 1, day, hour, minute));
+    if (isNaN(istDate.getTime())) {
+        throw new Error(`Invalid Date generated from ${dob} ${tob}`);
+    }
     const utcDate = new Date(istDate.getTime() - (5.5 * 60 * 60 * 1000));
     const time = Ast.MakeTime(utcDate);
     const ayanamsa = getLahiriAyanamsa(time);
@@ -150,17 +158,27 @@ export function calculateAstrology(dob: string, tob: string, lat: number = 28.61
     const sunset = Ast.SearchRiseSet(Ast.Body.Sun, observer, -1, time, 24);
 
     // Calculate Manglik Dosha
-    // Mars (Mangal) in 1, 4, 7, 8, or 12 house from Ascendant
-    const mars = planets.find(p => p.name === "Mars");
-    const isManglik = mars ? [1, 4, 7, 8, 12].includes(mars.house) : false;
+    // Mars (Mangal) in 1, 4, 7, 8, or 12 house from Ascendant (Lagna) or Moon (Chandra)
+    const marsPos = Ast.GeoVector(Ast.Body.Mars, time, true);
+    const marsEcl = Ast.Ecliptic(marsPos);
+    const siderealMarsLong = (marsEcl.elon - ayanamsa + 360) % 360;
+    const marsRasiIdx = Math.floor(siderealMarsLong / 30);
 
+    const houseFromLagna = ((marsRasiIdx - lagnaRasiIdx + 12) % 12) + 1;
+    const houseFromMoon = ((marsRasiIdx - moonRasiIdx + 12) % 12) + 1;
+
+    const manglikHouses = [1, 4, 7, 8, 12];
+    const isManglik = manglikHouses.includes(houseFromLagna) || manglikHouses.includes(houseFromMoon);
+
+    const dayIdx = istDate.getUTCDay();
     const panchang: PanchangData = {
         tithi: TITHIS[tithiIdx],
         nakshatra: NAKSHATRAS[nakIdx],
         nakshatraIdx: nakIdx,
         yoga: YOGAS[yogaIdx],
         karana: KARANAS[karanaIdx],
-        vara: VARAS[istDate.getUTCDay()],
+        vara: VARAS[dayIdx],
+        varaLord: VARA_LORDS[dayIdx],
         sunSign: RASIS[Math.floor(siderealSunLong / 30)],
         moonSign: RASIS[moonRasiIdx],
         moonSignIdx: moonRasiIdx,

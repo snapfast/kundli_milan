@@ -58,6 +58,26 @@ import Layout from '../layouts/Layout.astro';
 			color: #2d3436;
 			font-weight: 600;
 		}
+		.compact-table tr:hover {
+			background-color: #f1f2f6;
+		}
+		.loading-container {
+			text-align: center;
+			padding: 4rem 2rem;
+		}
+		.loader {
+			border: 4px solid #f3f3f3;
+			border-top: 4px solid #6c5ce7;
+			border-radius: 50%;
+			width: 40px;
+			height: 40px;
+			animation: spin 2s linear infinite;
+			margin: 0 auto 1rem;
+		}
+		@keyframes spin {
+			0% { transform: rotate(0deg); }
+			100% { transform: rotate(360deg); }
+		}
 		.no-data {
 			text-align: center;
 			padding: 3rem;
@@ -77,7 +97,10 @@ import Layout from '../layouts/Layout.astro';
 
 	<h1>Your Milan Moon Dashboard</h1>
 
-	<div id="loading">Syncing with Milan Moon...</div>
+	<div id="loading" class="loading-container">
+		<div class="loader"></div>
+		<p>Syncing with the stars and calculating cosmic alignments...</p>
+	</div>
 
 	<div id="dashboard-content" style="display: none;">
 		<div class="section-title">Profile & Panchang</div>
@@ -162,7 +185,7 @@ import Layout from '../layouts/Layout.astro';
 
 				// If profile doesn't exist on backend or missing key data, save it
 				if (!profile || !profile.matches || profile.matches.length === 0) {
-					const otherUsers = users.filter(u => u.uid !== uid);
+					const otherUsers = users.filter(u => u.uid !== uid && u.name && u.dob && u.tob);
 					const currentUserAstrology = {
 						name: details.name,
 						nakshatraIdx: astroData.panchang.nakshatraIdx,
@@ -230,8 +253,8 @@ import Layout from '../layouts/Layout.astro';
 					{ label: 'Location', value: profile.location },
 					{ label: 'Nakshatra', value: astroData.panchang.nakshatra },
 					{ label: 'Moon Sign', value: astroData.panchang.moonSign },
+					{ label: 'Day (Vara)', value: `${astroData.panchang.vara} (${astroData.panchang.varaLord})` },
 					{ label: 'Tithi', value: astroData.panchang.tithi },
-					{ label: 'Yoga', value: astroData.panchang.yoga },
 					{ label: 'Manglik', value: profile.isManglik ? 'Yes' : 'No' }
 				];
 
@@ -265,22 +288,14 @@ import Layout from '../layouts/Layout.astro';
 						if (otherUser) {
 							// For rendering kootas in dashboard, we recalculate locally or could have saved them.
 							// Here we recalculate to show the breakdown.
-							let uNakIdx = otherUser.nakshatraIdx;
-							let uMoonSignIdx = otherUser.moonSignIdx;
-							let uIsManglik = otherUser.isManglik;
+							const uLat = otherUser.lat ? parseFloat(otherUser.lat) : 28.6139;
+							const uLon = otherUser.lon ? parseFloat(otherUser.lon) : 77.2090;
 
-							if ((uNakIdx === undefined || uMoonSignIdx === undefined || uIsManglik === undefined) && otherUser.dob && otherUser.tob) {
-								try {
-									const uLat = otherUser.lat ? parseFloat(otherUser.lat) : 28.6139;
-									const uLon = otherUser.lon ? parseFloat(otherUser.lon) : 77.2090;
-									const uData = calculateAstrology(otherUser.dob, otherUser.tob, uLat, uLon);
-									uNakIdx = uData.panchang.nakshatraIdx;
-									uMoonSignIdx = uData.panchang.moonSignIdx;
-									uIsManglik = uData.panchang.isManglik;
-								} catch (e) {
-									console.warn(`Failed to recalculate astrology for match ${otherUser.uid}`, e);
-								}
-							}
+							// Ensure dob and tob are in correct format if they came back as ISO strings or something else from backend
+							const uDob = typeof otherUser.dob === 'string' && otherUser.dob.includes('T') ? otherUser.dob.split('T')[0] : otherUser.dob;
+							const uTob = typeof otherUser.tob === 'string' && otherUser.tob.includes('T') ? otherUser.tob.split('T')[1].substring(0, 5) : otherUser.tob;
+
+							const uData = calculateAstrology(uDob, uTob, uLat, uLon);
 
 							const compat = calculateCompatibility(
 								{ name: profile.name, nakshatraIdx: astroData.panchang.nakshatraIdx, moonSignIdx: astroData.panchang.moonSignIdx, isManglik: profile.isManglik! },

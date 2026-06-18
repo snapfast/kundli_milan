@@ -104,6 +104,10 @@ const YONI_COMPAT = [
 export function calculateCompatibility(user1: UserAstrology, user2: UserAstrology): CompatibilityResult {
     const kootas = [];
 
+    if (user1.moonSignIdx === undefined || user2.moonSignIdx === undefined ||
+        user1.nakshatraIdx === undefined || user2.nakshatraIdx === undefined ||
+        !RASI_PROPS[user1.moonSignIdx] || !RASI_PROPS[user2.moonSignIdx] ||
+        !NAKSHATRA_PROPS[user1.nakshatraIdx] || !NAKSHATRA_PROPS[user2.nakshatraIdx]) {
     // Defensive checks for valid indices
     const isValidRasi = (idx: number) => typeof idx === 'number' && !isNaN(idx) && idx >= 0 && idx < RASI_PROPS.length;
     const isValidNak = (idx: number) => typeof idx === 'number' && !isNaN(idx) && idx >= 0 && idx < NAKSHATRA_PROPS.length;
@@ -220,6 +224,9 @@ export function calculateCompatibility(user1: UserAstrology, user2: UserAstrolog
     } else if (totalScore >= 18) {
         category = "Friendly Alliance";
         description = "A solid foundation for friendship or cooperation. You have enough in common to enjoy each other's company regularly.";
+    } else if (totalScore >= 12) {
+        category = "Growth Potential";
+        description = "While there are some differences, there is enough common ground to build a relationship if both partners are willing to adapt and grow.";
     }
 
     // Creative Chemistry Overrides
@@ -229,6 +236,12 @@ export function calculateCompatibility(user1: UserAstrology, user2: UserAstrolog
     } else if (yoniScore === 4 && nadiScore === 8) {
         category = "Passionate Bond";
         description = "There is a strong physical and energetic attraction between you. Your vibes are highly complementary.";
+    } else if (bhakootScore === 7 && nadiScore === 8) {
+        category = "Destined Union";
+        description = "Strong cosmic protection surrounds this match. You are likely to experience prosperity and deep longevity together.";
+    } else if (maitriScore >= 4 && varnaScore === 1) {
+        category = "Social Synergy";
+        description = "You share similar worldviews and social standing, making for a very smooth and comfortable public life together.";
     }
 
     // Manglik Matching Logic
