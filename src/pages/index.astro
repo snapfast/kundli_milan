@@ -186,11 +186,6 @@ import Layout from '../layouts/Layout.astro';
 		</p>
 	</section>
 
-	<footer>
-		&copy; {new Date().getFullYear()} moonine.
-		Location data &copy; <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a> contributors.
-	</footer>
-
 	<script>
 			import { getOrSetUserId, getCookie, setCookie, clearUserData } from '../lib/user';
 			import { fetchUsers, resetUserProfile } from '../lib/api';
