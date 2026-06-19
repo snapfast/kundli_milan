@@ -23,7 +23,10 @@ export function generateMatchCardHtml(name: string, category: string, score: num
             <span class="match-category" style="background-color: ${progressColor}">${category}</span>
         </div>
         <div class="match-score-container">
-            <div class="match-score">${score} / 36</div>
+            <div class="match-score-header">
+                <div class="match-score-value">${score} <small class="match-score-max">/ 36</small></div>
+                <div class="match-percentage" style="color: ${progressColor}">${Math.round(percentage)}% Match</div>
+            </div>
             <div class="progress-bar-bg">
                 <div class="progress-bar-fill" style="width: ${percentage}%; background-color: ${progressColor};"></div>
             </div>
