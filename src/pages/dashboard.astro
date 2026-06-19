@@ -320,6 +320,7 @@ import Layout from '../layouts/Layout.astro';
 
 				const infoGrid = document.getElementById('profile-panchang')!;
 				const items = [
+					{ label: 'User ID', value: profile.uid },
 					{ label: 'Name', value: profile.name },
 					{ label: 'Born', value: `${profile.dob} ${profile.tob}` },
 					{ label: 'Location', value: profile.location },
@@ -400,7 +401,7 @@ import Layout from '../layouts/Layout.astro';
 
 							const card = document.createElement('div');
 							card.className = 'match-card';
-							card.innerHTML = generateMatchCardHtml(m.name, m.category, m.score, compat.description, kootaHtml, compat.doshas);
+							card.innerHTML = generateMatchCardHtml(m.uid, m.name, m.category, m.score, compat.description, kootaHtml, compat.doshas);
 							matchesList.appendChild(card);
 						}
 					});
