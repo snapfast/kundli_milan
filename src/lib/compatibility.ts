@@ -291,16 +291,16 @@ export function calculateCompatibility(user1: UserAstrology, user2: UserAstrolog
         description = "You share similar worldviews and social standing, making for a very smooth and comfortable public life together.";
     }
 
-    // Manglik Matching Logic (Both Moon and Lagan)
-    const m1 = !!(user1.isMoonManglik || user1.isLaganManglik);
-    const m2 = !!(user2.isMoonManglik || user2.isLaganManglik);
+    // Manglik Matching Logic (Lagan-based for calculations, Moon-based for representation)
+    const m1 = !!user1.isLaganManglik;
+    const m2 = !!user2.isLaganManglik;
 
     // Add partner's Manglik status to doshas for visibility on match cards
     if (user2.isMoonManglik) {
         doshas.push({
-            name: "Moon Manglik (Partner)",
-            description: "Partner has Mars in 1, 4, 7, 8, or 12 house from the Moon.",
-            isCancelled: m1 // Cancelled/Balanced if both are Manglik
+            name: "Moon Manglik* (Partner)",
+            description: "Partner has Mars in 1, 4, 7, 8, or 12 house from the Moon. (Informational only)",
+            isCancelled: !!user1.isMoonManglik // Representationally cancelled if both have it
         });
     }
     if (user2.isLaganManglik) {
@@ -311,7 +311,7 @@ export function calculateCompatibility(user1: UserAstrology, user2: UserAstrolog
         });
     }
 
-    if (user1.isMoonManglik !== undefined && user2.isMoonManglik !== undefined) {
+    if (user1.isLaganManglik !== undefined && user2.isLaganManglik !== undefined) {
         if (m1 && !m2) {
             category = "Complex Alignment";
             description = "You have a Manglik Dosha while your partner does not. This can sometimes lead to imbalances in energy if not managed with patience.";
