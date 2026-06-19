@@ -1,0 +1,66 @@
+---
+interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+  canonicalURL?: string;
+  type?: string;
+}
+
+const {
+  title = "Milan Moon - Free Vedic Astrology Matchmaking & Kundli Milan",
+  description = "Milan Moon offers free, accurate Vedic Astrology matchmaking using the traditional Ashta Koota (36-point) system. Find your soulmate with our Guna Milan calculator.",
+  image = "/favicon.svg",
+  canonicalURL = Astro.url.href,
+  type = "website",
+} = Astro.props;
+
+const siteName = "Milan Moon";
+---
+
+<!-- Primary Meta Tags -->
+<title>{title}</title>
+<meta name="title" content={title} />
+<meta name="description" content={description} />
+<link rel="canonical" href={canonicalURL} />
+
+<!-- Open Graph / Facebook -->
+<meta property="og:type" content={type} />
+<meta property="og:url" content={Astro.url.href} />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:image" content={new URL(image, Astro.url)} />
+<meta property="og:site_name" content={siteName} />
+
+<!-- Twitter -->
+<meta property="twitter:card" content="summary_large_image" />
+<meta property="twitter:url" content={Astro.url.href} />
+<meta property="twitter:title" content={title} />
+<meta property="twitter:description" content={description} />
+<meta property="twitter:image" content={new URL(image, Astro.url)} />
+
+<!-- JSON-LD Structured Data -->
+<script type="application/ld+json" is:inline set:html={JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": siteName,
+  "description": description,
+  "url": Astro.url.origin,
+  "applicationCategory": "AstrologyApplication",
+  "operatingSystem": "All",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  },
+  "author": {
+    "@type": "Organization",
+    "name": "Milan Moon Team"
+  }
+})} />
+
+<!-- Additional SEO Meta Tags -->
+<meta name="robots" content="index, follow" />
+<meta name="googlebot" content="index, follow" />
+<meta name="theme-color" content="#6c5ce7" />
+<meta name="keywords" content="vedic astrology, matchmaking, guna milan, ashta koota, kundli milan, free horoscope, astrology compatibility, zodiac signs, nakshatra, manglik dosha" />
