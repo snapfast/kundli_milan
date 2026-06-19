@@ -1,99 +1,187 @@
-var SHEET_NAME = "Users";
+// =========================================================================
+// CONFIGURATION
+// =========================================================================
+const CONFIG = {
+  // Replace this string with your actual Google Spreadsheet ID
+  SHEET_ID: '1ec2m5XCXeJrZhk78frakz4d_Dru8a5Yyeyqgo8cS7Lo',
 
-function doPost(e) {
-  var ss = SpreadsheetApp.getActiveSpreadsheet();
-  var sheet = ss.getSheetByName(SHEET_NAME) || ss.insertSheet(SHEET_NAME);
+  // The name of the tab inside your spreadsheet.
+  // The script will automatically create this sheet if it does not exist!
+  SHEET_NAME: 'Users'
+};
 
-  var headers = ["uid", "name", "email", "dob", "tob", "gender", "location", "lat", "lon", "nakshatraIdx", "moonSignIdx", "isManglik", "matches", "updatedAt"];
+// =========================================================================
+// UTILITY FUNCTIONS
+// =========================================================================
 
-  // Initialize headers if empty
-  if (sheet.getLastRow() === 0) {
-    sheet.appendRow(headers);
-  }
-
-  var data;
-  try {
-    data = JSON.parse(e.postData.contents);
-  } catch (err) {
-    return ContentService.createTextOutput(JSON.stringify({"status": "error", "message": "Invalid JSON"}))
-      .setMimeType(ContentService.MimeType.JSON);
-  }
-
-  var uid = data.uid;
-  if (!uid) {
-    return ContentService.createTextOutput(JSON.stringify({"status": "error", "message": "Missing uid"}))
-      .setMimeType(ContentService.MimeType.JSON);
-  }
-
-  var rows = sheet.getDataRange().getValues();
-  var uidColumnIndex = 0; // Assuming uid is in column A
-  var rowIndex = -1;
-
-  for (var i = 1; i < rows.length; i++) {
-    if (rows[i][uidColumnIndex] == uid) {
-      rowIndex = i + 1;
-      break;
-    }
-  }
-
-  var rowData = [
-    data.uid || "",
-    data.name || "",
-    data.email || "",
-    data.dob || "",
-    data.tob || "",
-    data.gender || "",
-    data.location || "",
-    data.lat || "",
-    data.lon || "",
-    data.nakshatraIdx !== undefined ? data.nakshatraIdx : "",
-    data.moonSignIdx !== undefined ? data.moonSignIdx : "",
-    data.isManglik !== undefined ? data.isManglik : "",
-    JSON.stringify(data.matches || []),
-    new Date()
-  ];
-
-  if (rowIndex > -1) {
-    // Update existing row
-    sheet.getRange(rowIndex, 1, 1, rowData.length).setValues([rowData]);
-  } else {
-    // Append new row
-    sheet.appendRow(rowData);
-  }
-
-  return ContentService.createTextOutput(JSON.stringify({"status": "success"}))
+/**
+ * Formats data into a structured JSON response for the API caller
+ */
+function jsonResponse(data) {
+  return ContentService
+    .createTextOutput(JSON.stringify(data))
     .setMimeType(ContentService.MimeType.JSON);
 }
 
-function doGet(e) {
-  var ss = SpreadsheetApp.getActiveSpreadsheet();
-  var sheet = ss.getSheetByName(SHEET_NAME);
+/**
+ * Fetches the target sheet. Dynamically creates it if it doesn't exist.
+ */
+function getSheet() {
+  const ss = SpreadsheetApp.openById(CONFIG.SHEET_ID);
+  return ss.getSheetByName(CONFIG.SHEET_NAME) || ss.insertSheet(CONFIG.SHEET_NAME);
+}
 
-  if (!sheet) {
-    return ContentService.createTextOutput(JSON.stringify({"status": "success", "data": [], "count": 0}))
-      .setMimeType(ContentService.MimeType.JSON);
+/**
+ * Safely parses the incoming JSON data from the request payload
+ */
+function parseJsonData(e) {
+  if (!e || !e.postData || !e.postData.contents) {
+    throw new Error('No post data or contents received');
+  }
+  return JSON.parse(e.postData.contents);
+}
+
+/**
+ * Ensures the target sheet has the baseline headers or dynamically appends new incoming keys.
+ */
+function getHeaders(sheet, incomingData) {
+  const lastColumn = sheet.getLastColumn();
+  const baselineHeaders = ["uid", "name", "email", "dob", "tob", "gender", "location", "lat", "lon", "nakshatraIdx", "moonSignIdx", "isMoonManglik", "isLaganManglik", "matches", "updatedAt"];
+
+  // Initialize completely empty sheet with baseline headers
+  if (lastColumn === 0) {
+    sheet.getRange(1, 1, 1, baselineHeaders.length).setValues([baselineHeaders]);
+    return baselineHeaders;
   }
 
-  var rows = sheet.getDataRange().getValues();
-  var headers = rows[0];
-  var data = [];
+  const existingHeaders = sheet.getRange(1, 1, 1, lastColumn).getValues()[0];
 
-  for (var i = 1; i < rows.length; i++) {
-    var obj = {};
-    for (var j = 0; j < headers.length; j++) {
-      var val = rows[i][j];
-      if (headers[j] === 'matches') {
-        try {
-          val = JSON.parse(val);
-        } catch (e) {
-          val = [];
-        }
+  // Dynamically catch any unexpected extra parameters passed in payload to prevent data loss
+  const incomingKeys = new Set(Object.keys(incomingData));
+  const newHeaders = Array.from(incomingKeys).filter(key => !existingHeaders.includes(key));
+
+  if (newHeaders.length > 0) {
+    const updatedHeaders = existingHeaders.concat(newHeaders);
+    sheet.getRange(1, lastColumn + 1, 1, newHeaders.length).setValues([newHeaders]);
+    return updatedHeaders;
+  }
+
+  return existingHeaders;
+}
+
+/**
+ * Converts JSON data object into a flat array matching header columns
+ */
+function jsonToRow(data, headers) {
+  return headers.map(header => {
+    if (header === 'updatedAt') return new Date();
+    if (header === 'matches') return JSON.stringify(data[header] || []);
+    return data[header] ?? '';
+  });
+}
+
+/**
+ * Formats spreadsheet row data back into clean JSON objects for GET requests
+ */
+function rowsToJson(values) {
+  if (values.length <= 1) return [];
+  const [headers, ...rows] = values;
+  return rows.map(row =>
+    headers.reduce((obj, header, i) => {
+      let val = row[i] ?? '';
+      // Parse stringified arrays back to standard JSON object structures
+      if (header === 'matches' && typeof val === 'string' && val !== '') {
+        try { val = JSON.parse(val); } catch(err) { val = []; }
       }
-      obj[headers[j]] = val;
-    }
-    data.push(obj);
-  }
+      obj[header] = val;
+      return obj;
+    }, {})
+  );
+}
 
-  return ContentService.createTextOutput(JSON.stringify({"status": "success", "data": data, "count": data.length}))
-    .setMimeType(ContentService.MimeType.JSON);
+// =========================================================================
+// MAIN API HANDLERS
+// =========================================================================
+
+/**
+ * Main POST handler - Creates or updates user data
+ */
+function doPost(e) {
+  try {
+    const data = parseJsonData(e);
+
+    if (!data.uid) {
+      throw new Error('Missing uid');
+    }
+
+    const sheet = getSheet();
+    const headers = getHeaders(sheet, data);
+    const rowData = jsonToRow(data, headers);
+
+    const lastRow = sheet.getLastRow();
+    let rowIndex = -1;
+
+    if (lastRow > 1) {
+      // Find uid column dynamically in case layout shifts
+      const uidIndex = headers.indexOf('uid');
+      const searchColumnIndex = uidIndex !== -1 ? uidIndex + 1 : 1;
+      const uids = sheet.getRange(1, searchColumnIndex, lastRow, 1).getValues().flat();
+
+      const foundIdx = uids.indexOf(data.uid);
+      if (foundIdx !== -1) {
+        rowIndex = foundIdx + 1; // 1-based index conversion
+      }
+    }
+
+    if (rowIndex > -1) {
+      // Update existing record safely
+      sheet.getRange(rowIndex, 1, 1, rowData.length).setValues([rowData]);
+      return jsonResponse({ status: 'success', message: 'User updated successfully' });
+    } else {
+      // Append brand new profile
+      const startRow = lastRow + 1;
+      sheet.getRange(startRow, 1, 1, rowData.length).setValues([rowData]);
+      return jsonResponse({ status: 'success', message: 'User registered successfully' });
+    }
+
+  } catch (error) {
+    return jsonResponse({
+      status: 'error',
+      message: error.message
+    });
+  }
+}
+
+/**
+ * Main GET handler - Retrieves all users
+ */
+function doGet(e) {
+  try {
+    const ss = SpreadsheetApp.openById(CONFIG.SHEET_ID);
+    const sheet = ss.getSheetByName(CONFIG.SHEET_NAME);
+
+    // If sheet doesn't exist or only has header row, return an empty array gracefully
+    if (!sheet || sheet.getLastRow() <= 1) {
+      return jsonResponse({
+        status: 'success',
+        data: [],
+        count: 0
+      });
+    }
+
+    const values = sheet.getRange(1, 1, sheet.getLastRow(), sheet.getLastColumn()).getValues();
+    const data = rowsToJson(values);
+
+    return jsonResponse({
+      status: 'success',
+      data: data,
+      count: data.length
+    });
+
+  } catch (error) {
+    return jsonResponse({
+      status: 'error',
+      message: error.message
+    });
+  }
 }

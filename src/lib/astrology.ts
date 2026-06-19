@@ -21,7 +21,8 @@ export interface PanchangData {
     moonSignIdx: number;
     sunrise: string;
     sunset: string;
-    isManglik: boolean;
+    isMoonManglik: boolean;
+    isLaganManglik: boolean;
 }
 
 export interface ChartData {
@@ -168,7 +169,8 @@ export function calculateAstrology(dob: string, tob: string, lat: number = 28.61
     const houseFromMoon = ((marsRasiIdx - moonRasiIdx + 12) % 12) + 1;
 
     const manglikHouses = [1, 4, 7, 8, 12];
-    const isManglik = manglikHouses.includes(houseFromLagna) || manglikHouses.includes(houseFromMoon);
+    const isLaganManglik = manglikHouses.includes(houseFromLagna);
+    const isMoonManglik = manglikHouses.includes(houseFromMoon);
 
     const dayIdx = istDate.getUTCDay();
     const panchang: PanchangData = {
@@ -184,7 +186,8 @@ export function calculateAstrology(dob: string, tob: string, lat: number = 28.61
         moonSignIdx: moonRasiIdx,
         sunrise: formatTime(sunrise ? new Date(sunrise.date.getTime() + 5.5*60*60*1000) : null),
         sunset: formatTime(sunset ? new Date(sunset.date.getTime() + 5.5*60*60*1000) : null),
-        isManglik
+        isMoonManglik,
+        isLaganManglik
     };
 
     return { planets, panchang };

@@ -2,7 +2,8 @@ export interface UserAstrology {
     name: string;
     nakshatraIdx: number;
     moonSignIdx: number;
-    isManglik?: boolean;
+    isMoonManglik?: boolean;
+    isLaganManglik?: boolean;
 }
 
 export interface CompatibilityResult {
@@ -290,15 +291,34 @@ export function calculateCompatibility(user1: UserAstrology, user2: UserAstrolog
         description = "You share similar worldviews and social standing, making for a very smooth and comfortable public life together.";
     }
 
-    // Manglik Matching Logic
-    if (user1.isManglik !== undefined && user2.isManglik !== undefined) {
-        if (user1.isManglik && !user2.isManglik) {
+    // Manglik Matching Logic (Both Moon and Lagan)
+    const m1 = !!(user1.isMoonManglik || user1.isLaganManglik);
+    const m2 = !!(user2.isMoonManglik || user2.isLaganManglik);
+
+    // Add partner's Manglik status to doshas for visibility on match cards
+    if (user2.isMoonManglik) {
+        doshas.push({
+            name: "Moon Manglik (Partner)",
+            description: "Partner has Mars in 1, 4, 7, 8, or 12 house from the Moon.",
+            isCancelled: m1 // Cancelled/Balanced if both are Manglik
+        });
+    }
+    if (user2.isLaganManglik) {
+        doshas.push({
+            name: "Lagan Manglik (Partner)",
+            description: "Partner has Mars in 1, 4, 7, 8, or 12 house from the Ascendant.",
+            isCancelled: m1
+        });
+    }
+
+    if (user1.isMoonManglik !== undefined && user2.isMoonManglik !== undefined) {
+        if (m1 && !m2) {
             category = "Complex Alignment";
             description = "You have a Manglik Dosha while your partner does not. This can sometimes lead to imbalances in energy if not managed with patience.";
-        } else if (!user1.isManglik && user2.isManglik) {
+        } else if (!m1 && m2) {
             category = "Complex Alignment";
             description = "Your partner has a Manglik Dosha while you do not. This can sometimes lead to imbalances in energy if not managed with patience.";
-        } else if (user1.isManglik && user2.isManglik) {
+        } else if (m1 && m2) {
             category = "Powerful Synergy";
             description = "Both of you are Manglik, which actually creates a balanced and high-energy partnership. You understand each other's intensity.";
         }
