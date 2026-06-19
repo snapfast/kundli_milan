@@ -16,34 +16,49 @@ const { title } = Astro.props;
 		<style is:global>
 			/* Base Styles */
 			body {
-				font-family: sans-serif;
-				max-width: 800px;
-				margin: 2rem auto;
-				padding: 0 1rem;
-				line-height: 1.6;
-				background-color: #f4f7f6;
+				font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+				max-width: 900px;
+				margin: 1rem auto;
+				padding: 0 0.5rem;
+				line-height: 1.4;
+				background-color: #f8f9fa;
+				font-size: 0.9rem;
 			}
 			.container {
 				background: white;
-				padding: 2rem;
-				border-radius: 12px;
-				box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+				padding: 1rem 1.5rem;
+				border-radius: 8px;
+				box-shadow: 0 2px 12px rgba(0,0,0,0.05);
 			}
 			h1, h2 {
 				color: #2c3e50;
 				border-bottom: 2px solid #6c5ce7;
-				padding-bottom: 0.5rem;
+				padding-bottom: 0.3rem;
+				margin-top: 0.5rem;
+				margin-bottom: 0.5rem;
+				font-size: 1.4rem;
 			}
 
 			/* Form & Buttons */
 			form {
 				display: flex;
 				flex-direction: column;
-				gap: 1rem;
+				gap: 0.75rem;
 				background: white;
-				padding: 1.5rem;
-				border-radius: 8px;
-				border: 1px solid #e1e4e8;
+				padding: 1rem;
+				border-radius: 6px;
+				border: 1px solid #e9ecef;
+			}
+			.form-row {
+				display: grid;
+				grid-template-columns: 1fr 1fr;
+				gap: 1rem;
+			}
+			@media (max-width: 600px) {
+				.form-row {
+					grid-template-columns: 1fr;
+					gap: 0.75rem;
+				}
 			}
 			.field {
 				display: flex;
@@ -51,27 +66,35 @@ const { title } = Astro.props;
 				position: relative;
 			}
 			label {
-				font-weight: bold;
-				margin-bottom: 0.25rem;
-				color: #333;
+				font-weight: 600;
+				margin-bottom: 0.2rem;
+				color: #495057;
+				font-size: 0.8rem;
 			}
 			input, select {
-				padding: 0.5rem;
-				border: 1px solid #ccc;
+				padding: 0.4rem 0.6rem;
+				border: 1px solid #ced4da;
 				border-radius: 4px;
+				font-size: 0.85rem;
+				transition: border-color 0.15s ease-in-out;
+			}
+			input:focus, select:focus {
+				border-color: #6c5ce7;
+				outline: none;
+				box-shadow: 0 0 0 2px rgba(108, 92, 231, 0.1);
 			}
 			button, .btn, .nav-link {
-				padding: 0.75rem 1.5rem;
+				padding: 0.5rem 1rem;
 				background-color: #6c5ce7;
 				color: white;
 				border: none;
-				border-radius: 6px;
+				border-radius: 4px;
 				cursor: pointer;
-				font-size: 1rem;
+				font-size: 0.9rem;
 				text-decoration: none;
 				display: inline-block;
 				text-align: center;
-				transition: background-color 0.2s, transform 0.1s;
+				transition: all 0.2s;
 			}
 			button:hover, .btn:hover, .nav-link:hover {
 				background-color: #5b4bc4;
@@ -90,52 +113,66 @@ const { title } = Astro.props;
 
 			/* Match Card Styles (Global) */
 			.matches-section {
-				margin-top: 2rem;
+				margin-top: 1.5rem;
 			}
 			.match-card {
 				background: #fff;
-				border: 1px solid #e1e4e8;
-				border-radius: 12px;
-				padding: 1.5rem;
-				margin-bottom: 1rem;
-				transition: transform 0.2s;
-				box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+				border: 1px solid #e9ecef;
+				border-radius: 8px;
+				padding: 1rem;
+				margin-bottom: 0.75rem;
+				transition: transform 0.2s, box-shadow 0.2s;
+				box-shadow: 0 2px 5px rgba(0,0,0,0.03);
 			}
 			.match-card:hover {
-				transform: translateY(-5px);
+				transform: translateY(-2px);
+				box-shadow: 0 4px 8px rgba(0,0,0,0.08);
 			}
 			.match-header {
 				display: flex;
 				justify-content: space-between;
 				align-items: center;
-				margin-bottom: 0.5rem;
+				margin-bottom: 0.4rem;
 			}
 			.match-name {
-				font-size: 1.25rem;
+				font-size: 1.1rem;
 				font-weight: bold;
 				color: #2c3e50;
 			}
 			.match-category {
 				background: #6c5ce7;
 				color: white;
-				padding: 0.25rem 0.75rem;
-				border-radius: 20px;
-				font-size: 0.8rem;
-				font-weight: bold;
+				padding: 0.15rem 0.6rem;
+				border-radius: 12px;
+				font-size: 0.75rem;
+				font-weight: 600;
 			}
 			.match-score-container {
-				margin: 1rem 0;
+				margin: 0.6rem 0;
 			}
-			.match-score {
-				font-size: 1.5rem;
+			.match-score-header {
+				display: flex;
+				justify-content: space-between;
+				align-items: baseline;
+				margin-bottom: 2px;
+			}
+			.match-score-value {
+				font-size: 1.2rem;
 				font-weight: bold;
 				color: #2c3e50;
-				margin-bottom: 0.25rem;
+			}
+			.match-score-max {
+				font-size: 0.7rem;
+				color: #6c757d;
+			}
+			.match-percentage {
+				font-size: 0.75rem;
+				font-weight: 600;
 			}
 			.progress-bar-bg {
-				background: #eee;
-				height: 10px;
-				border-radius: 5px;
+				background: #e9ecef;
+				height: 6px;
+				border-radius: 3px;
 				overflow: hidden;
 			}
 			.progress-bar-fill {
@@ -144,24 +181,26 @@ const { title } = Astro.props;
 			}
 			.match-description {
 				font-style: italic;
-				color: #636e72;
-				font-size: 0.95rem;
+				color: #6c757d;
+				font-size: 0.85rem;
+				margin-bottom: 0.5rem;
 			}
 			.koota-grid {
 				display: grid;
-				grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-				gap: 0.5rem;
-				margin-top: 1rem;
+				grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+				gap: 0.3rem;
+				margin-top: 0.75rem;
 			}
 			.koota-item {
-				font-size: 0.8rem;
-				color: #2d3436;
-				background: #f1f2f6;
-				padding: 0.4rem;
+				font-size: 0.75rem;
+				color: #495057;
+				background: #f8f9fa;
+				padding: 0.3rem;
 				border-radius: 4px;
 				text-align: center;
 				cursor: help;
 				position: relative;
+				border: 1px solid #e9ecef;
 			}
 			.koota-item:hover .koota-explanation {
 				display: block;
@@ -185,7 +224,7 @@ const { title } = Astro.props;
 		</style>
 	</head>
 	<body>
-		<nav style="margin-bottom: 2rem; display: flex; gap: 1rem; flex-wrap: wrap;">
+		<nav style="margin-bottom: 1rem; display: flex; gap: 0.75rem; flex-wrap: wrap;">
 			<a href="/" class="nav-link" id="nav-home">Home</a>
 			<a href="/dashboard" class="nav-link" id="nav-dashboard" style="display: none;">Dashboard</a>
 		</nav>

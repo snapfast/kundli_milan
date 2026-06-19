@@ -31,10 +31,21 @@ import Layout from '../layouts/Layout.astro';
 			background-color: #f8f9fa;
 		}
 		footer {
-			margin-top: 3rem;
-			font-size: 0.8rem;
-			color: #666;
+			margin-top: 2rem;
+			font-size: 0.75rem;
+			color: #6c757d;
 			text-align: center;
+		}
+		.form-actions {
+			display: flex;
+			gap: 0.75rem;
+			margin-top: 0.5rem;
+		}
+		.btn-submit {
+			flex: 2;
+		}
+		.btn-reset {
+			flex: 1;
 		}
 	</style>
 
@@ -44,41 +55,47 @@ import Layout from '../layouts/Layout.astro';
 		</div>
 
 		<form id="detailsForm">
-			<div class="field">
-				<label for="name">Full Name</label>
-				<input type="text" id="name" name="name" required minlength="2" maxlength="50" placeholder="Enter your full name" />
+			<div class="form-row">
+				<div class="field">
+					<label for="name">Full Name</label>
+					<input type="text" id="name" name="name" required minlength="2" maxlength="50" placeholder="Enter your full name" />
+				</div>
+				<div class="field">
+					<label for="email">Email Address</label>
+					<input type="email" id="email" name="email" required placeholder="your.email@example.com" />
+				</div>
 			</div>
-			<div class="field">
-				<label for="email">Email Address</label>
-				<input type="email" id="email" name="email" required placeholder="your.email@example.com" />
+			<div class="form-row">
+				<div class="field">
+					<label for="dob">Date of Birth</label>
+					<input type="date" id="dob" name="dob" required max={new Date().toISOString().split('T')[0]} />
+				</div>
+				<div class="field">
+					<label for="tob">Time of Birth</label>
+					<input type="time" id="tob" name="tob" required />
+				</div>
 			</div>
-			<div class="field">
-				<label for="dob">Date of Birth</label>
-				<input type="date" id="dob" name="dob" required max={new Date().toISOString().split('T')[0]} />
+			<div class="form-row">
+				<div class="field">
+					<label for="gender">Gender</label>
+					<select id="gender" name="gender" required>
+						<option value="">Select Gender</option>
+						<option value="male">Male</option>
+						<option value="female">Female</option>
+						<option value="other">Other</option>
+					</select>
+				</div>
+				<div class="field">
+					<label for="location">Location (City, Country)</label>
+					<input type="text" id="location" name="location" required placeholder="e.g. New Delhi, India" autocomplete="off" />
+					<div id="suggestions"></div>
+					<input type="hidden" id="lat" name="lat" />
+					<input type="hidden" id="lon" name="lon" />
+				</div>
 			</div>
-			<div class="field">
-				<label for="tob">Time of Birth</label>
-				<input type="time" id="tob" name="tob" required />
-			</div>
-			<div class="field">
-				<label for="gender">Gender</label>
-				<select id="gender" name="gender" required>
-					<option value="">Select Gender</option>
-					<option value="male">Male</option>
-					<option value="female">Female</option>
-					<option value="other">Other</option>
-				</select>
-			</div>
-			<div class="field">
-				<label for="location">Location (City, Country)</label>
-				<input type="text" id="location" name="location" required placeholder="e.g. New Delhi, India" autocomplete="off" />
-				<div id="suggestions"></div>
-				<input type="hidden" id="lat" name="lat" />
-				<input type="hidden" id="lon" name="lon" />
-			</div>
-			<div style="display: flex; gap: 1rem;">
-				<button type="submit" style="flex: 1;">Submit Details</button>
-				<button type="button" id="resetBtn" style="background-color: #dc3545; flex: 1;">Reset</button>
+			<div class="form-actions">
+				<button type="submit" class="btn-submit">Submit Details</button>
+				<button type="button" id="resetBtn" class="btn-reset btn-danger">Reset</button>
 			</div>
 		</form>
 
