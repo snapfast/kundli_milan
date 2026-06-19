@@ -1,4 +1,4 @@
-# User Stories - Milan Moon
+# User Stories - moonine
 
 ## Core Functionality
 
@@ -19,8 +19,8 @@
     *   The dashboard displays my name, email, birth details, and Manglik status.
     *   I have the option to edit my profile or reset it entirely.
 
-### 3. Milan Moon Matchmaking
-**As a user looking for a partner**, I want the system to compare my astrological profile with other users using the Ashta Koota (36-point) system, **so that** I can find people with the highest Milan Moon compatibility.
+### 3. moonine Matchmaking
+**As a user looking for a partner**, I want the system to compare my astrological profile with other users using the Ashta Koota (36-point) system, **so that** I can find people with the highest moonine compatibility.
 
 *   **Acceptance Criteria:**
     *   The system calculates compatibility based on Varna, Vashya, Tara, Yoni, Maitri, Gana, Bhakoot, and Nadi.

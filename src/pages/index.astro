@@ -2,7 +2,7 @@
 import Layout from '../layouts/Layout.astro';
 ---
 
-<Layout title="Milan Moon - Astrology Matchmaker">
+<Layout title="moonine - Astrology Matchmaker">
 	<style>
 		#suggestions {
 			position: absolute;
@@ -44,7 +44,45 @@ import Layout from '../layouts/Layout.astro';
 		.btn-reset {
 			flex: 1;
 		}
+		.visual-guide h2, .visual-guide h3 {
+			border-bottom: none;
+			text-align: center;
+			margin-top: 1rem;
+		}
+		.info-card {
+			background: #fff;
+			border: 1px solid #e2e8f0;
+			padding: 0.5rem 0.75rem;
+			border-radius: 6px;
+			text-align: center;
+		}
+		.info-label {
+			font-weight: 700;
+			font-size: 0.75rem;
+			text-transform: uppercase;
+			color: #6366f1;
+			margin-bottom: 0.25rem;
+		}
+		.compact-table {
+			width: 100%;
+			border-collapse: collapse;
+			font-size: 0.8rem;
+		}
+		.compact-table th, .compact-table td {
+			padding: 0.35rem 0.5rem;
+			text-align: left;
+			border-bottom: 1px solid #f1f5f9;
+		}
+		.compact-table th {
+			background-color: #f8fafc;
+			color: #475569;
+			font-weight: 700;
+		}
 	</style>
+
+	<div style="background: #eff6ff; border: 1px solid #bfdbfe; padding: 0.4rem; border-radius: 4px; text-align: center; margin-bottom: 1rem; font-size: 0.75rem; font-weight: 600; color: #1e40af;">
+		🎁 Limited Offer: Free for the first 10,000 users!
+	</div>
 
 	<h1>Submit Your Details</h1>
 		<div id="redirecting" style="display: none; text-align: center; padding: 2rem;">
@@ -96,46 +134,60 @@ import Layout from '../layouts/Layout.astro';
 			</div>
 		</form>
 
-	<section class="seo-content" style="margin-top: 4rem; border-top: 1px solid #eee; padding-top: 2rem;">
-		<h2>What is Milan Moon Vedic Astrology Matchmaking?</h2>
-		<p>
-			Milan Moon is a specialized platform designed to bring the ancient wisdom of Vedic Astrology (Jyotish) into the modern era. Our primary focus is <strong>Kundli Milan</strong>, the traditional practice of matching horoscopes to ensure a harmonious and prosperous partnership.
-		</p>
+	<section class="visual-guide" style="margin-top: 2rem; border-top: 1px solid #e2e8f0; padding-top: 1.5rem;">
+		<h2>Ancient Wisdom. Modern Match.</h2>
 
-		<h3>The Power of Guna Milan</h3>
-		<p>
-			At the heart of our matchmaking engine is the <strong>Ashta Koota</strong> system, often referred to as <strong>Guna Milan</strong>. This system evaluates compatibility based on eight different aspects (Kootas) of the partners' lives, derived from their Nakshatras (Birth Stars) and Rasis (Moon Signs).
-		</p>
+		<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 2rem;">
+			<div class="info-card">
+				<div class="info-label">Guna Milan</div>
+				<div class="info-value" style="font-size: 0.8rem;">36-point traditional Ashta Koota system for deep soul compatibility.</div>
+			</div>
+			<div class="info-card">
+				<div class="info-label">Dosha Analysis</div>
+				<div class="info-value" style="font-size: 0.8rem;">Smart detection of Manglik and Gana doshas with traditional cancellation rules.</div>
+			</div>
+			<div class="info-card">
+				<div class="info-label">High Precision</div>
+				<div class="info-value" style="font-size: 0.8rem;">Calculations powered by high-precision astronomical algorithms (Lahiri Ayanamsa).</div>
+			</div>
+		</div>
 
-		<p>The eight Kootas include:</p>
-		<ul>
-			<li><strong>Varna:</strong> Spiritual compatibility and ego.</li>
-			<li><strong>Vashya:</strong> Mutual attraction and dominance.</li>
-			<li><strong>Tara:</strong> Health and longevity.</li>
-			<li><strong>Yoni:</strong> Sexual compatibility and nature.</li>
-			<li><strong>Maitri:</strong> Psychological compatibility and friendship.</li>
-			<li><strong>Gana:</strong> Temperament and character.</li>
-			<li><strong>Bhakoot:</strong> Family and financial prosperity.</li>
-			<li><strong>Nadi:</strong> Progeny and genetic compatibility.</li>
-		</ul>
+		<h3>The 8 Pillars of Compatibility</h3>
+		<div style="overflow-x: auto;">
+			<table class="compact-table">
+				<thead>
+					<tr>
+						<th>Koota</th>
+						<th>Focus Area</th>
+						<th>Max</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr><td>Varna</td><td>Spiritual & Ego alignment</td><td>1</td></tr>
+					<tr><td>Vashya</td><td>Mutual attraction & Power balance</td><td>2</td></tr>
+					<tr><td>Tara</td><td>Health, Destiny & Longevity</td><td>3</td></tr>
+					<tr><td>Yoni</td><td>Biological & Intimate compatibility</td><td>4</td></tr>
+					<tr><td>Maitri</td><td>Friendship & Psychological bond</td><td>5</td></tr>
+					<tr><td>Gana</td><td>Temperament & Character matching</td><td>6</td></tr>
+					<tr><td>Bhakoot</td><td>Emotional & Financial prosperity</td><td>7</td></tr>
+					<tr><td>Nadi</td><td>Genetic health & Progeny</td><td>8</td></tr>
+				</tbody>
+				<tfoot>
+					<tr>
+						<th colspan="2" style="text-align: right;">Total Potential</th>
+						<th>36</th>
+					</tr>
+				</tfoot>
+			</table>
+		</div>
 
-		<h3>Why Choose Milan Moon?</h3>
-		<p>
-			Unlike generic dating apps, Milan Moon provides deep insights into the cosmic forces that influence relationships. Whether you're looking for a "Soul Connection" or "Destined Union," our algorithm calculates your unique compatibility score out of 36 points, helping you make informed decisions about your future.
-		</p>
-
-		<h3>Understanding Manglik Dosha</h3>
-		<p>
-			We also factor in <strong>Manglik Dosha</strong> (Kuja Dosha), a significant consideration in Vedic Astrology. Our system identifies Manglik status for both partners and applies traditional cancellation rules to provide a balanced and accurate compatibility report.
-		</p>
-
-		<p style="text-align: center; margin-top: 2rem;">
-			<a href="/astrology-guide" class="btn">Read Our Full Astrology Guide</a>
+		<p style="text-align: center; margin-top: 1.5rem;">
+			<a href="/astrology-guide" class="btn">Visual Astrology Guide &rarr;</a>
 		</p>
 	</section>
 
 	<footer>
-		&copy; {new Date().getFullYear()} Milan Moon.
+		&copy; {new Date().getFullYear()} moonine.
 		Location data &copy; <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a> contributors.
 	</footer>
 
