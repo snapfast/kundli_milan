@@ -1,0 +1,16 @@
+{
+  "name": "Milan Moon - Vedic Astrology Matchmaking",
+  "short_name": "Milan Moon",
+  "description": "Accurate Vedic Astrology matchmaking using the traditional Ashta Koota (36-point) system.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f4f7f6",
+  "theme_color": "#6c5ce7",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}
