@@ -1,4 +1,4 @@
-export function generateMatchCardHtml(name: string, category: string, score: number, description: string, kootaHtml: string, doshas: { name: string, description: string, isCancelled: boolean }[] = []): string {
+export function generateMatchCardHtml(uid: string, name: string, category: string, score: number, description: string, kootaHtml: string, doshas: { name: string, description: string, isCancelled: boolean }[] = []): string {
     const percentage = (score / 36) * 100;
     const progressColor = score >= 28 ? '#10b981' : score >= 18 ? '#f59e0b' : '#ef4444';
 
@@ -19,7 +19,10 @@ export function generateMatchCardHtml(name: string, category: string, score: num
 
     return `
         <div class="match-header">
-            <span class="match-name">${name}</span>
+            <div style="display: flex; flex-direction: column;">
+                <span class="match-name">${name}</span>
+                <span style="font-size: 0.65rem; color: #64748b; font-weight: 600;">ID: ${uid}</span>
+            </div>
             <span class="match-category" style="background-color: ${progressColor}">${category}</span>
         </div>
         <div class="match-score-container">
