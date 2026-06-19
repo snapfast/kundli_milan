@@ -1,8 +1,8 @@
-# 🌙 Milan Moon
+# 🌙 moonine
 
 ### *Ancient Vedic Wisdom meets Modern Matchmaking.*
 
-Milan Moon is a sophisticated Vedic Astrology (Jyotish) platform designed to bridge the gap between age-old celestial wisdom and contemporary relationship needs. Built with high-precision astronomical calculations, it provides a deep dive into your cosmic profile and finds your most compatible matches using the traditional Ashta Koota system.
+moonine is a sophisticated Vedic Astrology (Jyotish) platform designed to bridge the gap between age-old celestial wisdom and contemporary relationship needs. Built with high-precision astronomical calculations, it provides a deep dive into your cosmic profile and finds your most compatible matches using the traditional Ashta Koota system.
 
 ---
 
@@ -18,7 +18,7 @@ Milan Moon is a sophisticated Vedic Astrology (Jyotish) platform designed to bri
   A centralized hub for your astrological profile. View your Nakshatra, Moon Sign, Planetary Positions, and Panchang details at a glance.
 
 - **🎓 Educational Insights**
-  Don't just see a score—understand it. Milan Moon provides deep dives into astrological concepts, explaining how each factor influences your relationship.
+  Don't just see a score—understand it. moonine provides deep dives into astrological concepts, explaining how each factor influences your relationship.
 
 - **🔒 Privacy First**
   Your data is yours. We use local storage and secure backend upserts, ensuring your sensitive details like email remain private and never shared on public match cards.

@@ -19,44 +19,45 @@ const { title, description } = Astro.props;
 		<style is:global>
 			/* Base Styles */
 			body {
-				font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-				max-width: 900px;
-				margin: 1rem auto;
-				padding: 0 0.5rem;
-				line-height: 1.4;
-				background-color: #f8f9fa;
-				font-size: 0.9rem;
-				color: #212529;
+				font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+				max-width: 800px;
+				margin: 0.5rem auto;
+				padding: 0 0.25rem;
+				line-height: 1.35;
+				background-color: #fdfdfd;
+				font-size: 0.88rem;
+				color: #1a1a1a;
 			}
 			.container {
 				background: white;
-				padding: 1rem 1.5rem;
-				border-radius: 8px;
-				box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+				padding: 0.75rem 1rem;
+				border-radius: 6px;
+				box-shadow: 0 1px 3px rgba(0,0,0,0.08);
 			}
 			h1, h2 {
-				color: #2c3e50;
-				border-bottom: 2px solid #6c5ce7;
-				padding-bottom: 0.3rem;
-				margin-top: 0.5rem;
+				color: #0f172a;
+				border-bottom: 1.5px solid #6366f1;
+				padding-bottom: 0.2rem;
+				margin-top: 0.25rem;
 				margin-bottom: 0.5rem;
-				font-size: 1.4rem;
+				font-size: 1.25rem;
+				font-weight: 700;
 			}
 
 			/* Form & Buttons */
 			form {
 				display: flex;
 				flex-direction: column;
-				gap: 0.75rem;
-				background: white;
-				padding: 1rem;
-				border-radius: 6px;
-				border: 1px solid #e9ecef;
+				gap: 0.5rem;
+				background: #f8fafc;
+				padding: 0.75rem;
+				border-radius: 4px;
+				border: 1px solid #e2e8f0;
 			}
 			.form-row {
 				display: grid;
 				grid-template-columns: 1fr 1fr;
-				gap: 1rem;
+				gap: 0.75rem;
 			}
 			@media (max-width: 600px) {
 				.form-row {
@@ -71,34 +72,34 @@ const { title, description } = Astro.props;
 			}
 			label {
 				font-weight: 600;
-				margin-bottom: 0.2rem;
-				color: #212529;
-				font-size: 0.8rem;
+				margin-bottom: 0.15rem;
+				color: #334155;
+				font-size: 0.75rem;
 			}
 			input, select {
-				padding: 0.4rem 0.6rem;
-				border: 1px solid #ced4da;
+				padding: 0.35rem 0.5rem;
+				border: 1px solid #cbd5e1;
 				border-radius: 4px;
 				font-size: 0.85rem;
-				transition: border-color 0.15s ease-in-out;
+				transition: all 0.1s;
 			}
 			input:focus, select:focus {
-				border-color: #6c5ce7;
+				border-color: #6366f1;
 				outline: none;
-				box-shadow: 0 0 0 2px rgba(108, 92, 231, 0.1);
+				box-shadow: 0 0 0 1px #6366f1;
 			}
 			button, .btn, .nav-link {
-				padding: 0.5rem 1rem;
-				background-color: #6c5ce7;
+				padding: 0.4rem 0.75rem;
+				background-color: #6366f1;
 				color: white;
 				border: none;
 				border-radius: 4px;
 				cursor: pointer;
-				font-size: 0.9rem;
+				font-size: 0.85rem;
+				font-weight: 500;
 				text-decoration: none;
 				display: inline-block;
 				text-align: center;
-				transition: all 0.2s;
 			}
 			.nav-link.active {
 				background-color: #4834d4;
@@ -111,61 +112,62 @@ const { title, description } = Astro.props;
 
 			/* Match Card Styles (Global) */
 			.matches-section {
-				margin-top: 1.5rem;
+				margin-top: 1rem;
 			}
 			.match-card {
 				background: #fff;
-				border: 1px solid #e9ecef;
-				border-radius: 8px;
-				padding: 1rem;
-				margin-bottom: 0.75rem;
-				box-shadow: 0 2px 5px rgba(0,0,0,0.03);
+				border: 1px solid #e2e8f0;
+				border-radius: 6px;
+				padding: 0.75rem;
+				margin-bottom: 0.5rem;
+				box-shadow: 0 1px 2px rgba(0,0,0,0.02);
 			}
 			.match-header {
 				display: flex;
 				justify-content: space-between;
 				align-items: center;
-				margin-bottom: 0.4rem;
+				margin-bottom: 0.25rem;
 			}
 			.match-name {
-				font-size: 1.1rem;
-				font-weight: bold;
-				color: #2c3e50;
+				font-size: 1rem;
+				font-weight: 700;
+				color: #0f172a;
 			}
 			.match-category {
-				background: #6c5ce7;
+				background: #6366f1;
 				color: white;
-				padding: 0.15rem 0.6rem;
-				border-radius: 12px;
-				font-size: 0.75rem;
-				font-weight: 600;
+				padding: 0.1rem 0.4rem;
+				border-radius: 4px;
+				font-size: 0.7rem;
+				font-weight: 700;
+				text-transform: uppercase;
 			}
 			.match-score-container {
-				margin: 0.6rem 0;
+				margin: 0.4rem 0;
 			}
 			.match-score-header {
 				display: flex;
 				justify-content: space-between;
 				align-items: baseline;
-				margin-bottom: 2px;
+				margin-bottom: 1px;
 			}
 			.match-score-value {
-				font-size: 1.2rem;
-				font-weight: bold;
-				color: #2c3e50;
+				font-size: 1rem;
+				font-weight: 800;
+				color: #0f172a;
 			}
 			.match-score-max {
-				font-size: 0.7rem;
-				color: #444;
+				font-size: 0.65rem;
+				color: #64748b;
 			}
 			.match-percentage {
-				font-size: 0.75rem;
-				font-weight: 600;
+				font-size: 0.7rem;
+				font-weight: 700;
 			}
 			.progress-bar-bg {
-				background: #e9ecef;
-				height: 6px;
-				border-radius: 3px;
+				background: #f1f5f9;
+				height: 5px;
+				border-radius: 2.5px;
 				overflow: hidden;
 			}
 			.progress-bar-fill {
@@ -174,39 +176,43 @@ const { title, description } = Astro.props;
 			}
 			.match-description {
 				font-style: italic;
-				color: #444;
-				font-size: 0.85rem;
-				margin-bottom: 0.5rem;
+				color: #475569;
+				font-size: 0.8rem;
+				margin-bottom: 0.4rem;
 			}
 			.koota-grid {
 				display: grid;
-				grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-				gap: 0.3rem;
-				margin-top: 0.75rem;
+				grid-template-columns: repeat(4, 1fr);
+				gap: 0.25rem;
+				margin-top: 0.5rem;
+			}
+			@media (max-width: 500px) {
+				.koota-grid {
+					grid-template-columns: repeat(2, 1fr);
+				}
 			}
 			.koota-item {
-				font-size: 0.75rem;
-				color: #212529;
-				background: #f8f9fa;
-				padding: 0.3rem;
-				border-radius: 4px;
+				font-size: 0.7rem;
+				color: #1e293b;
+				background: #f8fafc;
+				padding: 0.25rem;
+				border-radius: 3px;
 				text-align: center;
-				position: relative;
-				border: 1px solid #e9ecef;
+				border: 1px solid #e2e8f0;
 			}
 			.koota-explanation {
 				display: block;
-				margin-top: 0.2rem;
-				color: #444;
-				font-size: 0.65rem;
+				margin-top: 0.15rem;
+				color: #64748b;
+				font-size: 0.6rem;
 				text-align: left;
-				border-top: 1px solid #eee;
-				padding-top: 0.2rem;
+				border-top: 1px solid #f1f5f9;
+				padding-top: 0.15rem;
 			}
 		</style>
 	</head>
 	<body>
-		<nav style="margin-bottom: 1rem; display: flex; gap: 0.75rem; flex-wrap: wrap;">
+		<nav style="margin-bottom: 0.75rem; display: flex; gap: 0.5rem; flex-wrap: wrap; justify-content: center;">
 			<a href="/" class="nav-link" id="nav-home">Home</a>
 			<a href="/dashboard" class="nav-link" id="nav-dashboard" style="display: none;">Dashboard</a>
 		</nav>
