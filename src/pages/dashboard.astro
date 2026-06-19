@@ -253,22 +253,25 @@ import Layout from '../layouts/Layout.astro';
 						name: details.name,
 						nakshatraIdx: astroData.panchang.nakshatraIdx,
 						moonSignIdx: astroData.panchang.moonSignIdx,
-						isManglik: astroData.panchang.isManglik
+						isMoonManglik: astroData.panchang.isMoonManglik,
+						isLaganManglik: astroData.panchang.isLaganManglik
 					};
 
 					const resultsWithScores = otherUsers.map(user => {
 						let uNakIdx = user.nakshatraIdx;
 						let uMoonSignIdx = user.moonSignIdx;
-						let uIsManglik = user.isManglik;
+						let uIsMoonManglik = user.isMoonManglik;
+						let uIsLaganManglik = user.isLaganManglik;
 
-						if ((uNakIdx === undefined || uMoonSignIdx === undefined || uIsManglik === undefined) && user.dob && user.tob) {
+						if ((uNakIdx === undefined || uMoonSignIdx === undefined || uIsMoonManglik === undefined) && user.dob && user.tob) {
 							try {
 								const uLat = user.lat ? parseFloat(user.lat) : 28.6139;
 								const uLon = user.lon ? parseFloat(user.lon) : 77.2090;
 								const uData = calculateAstrology(user.dob, user.tob, uLat, uLon);
 								uNakIdx = uData.panchang.nakshatraIdx;
 								uMoonSignIdx = uData.panchang.moonSignIdx;
-								uIsManglik = uData.panchang.isManglik;
+								uIsMoonManglik = uData.panchang.isMoonManglik;
+								uIsLaganManglik = uData.panchang.isLaganManglik;
 							} catch (e) {
 								console.warn(`Failed to calculate astrology for user ${user.uid}`, e);
 							}
@@ -278,7 +281,8 @@ import Layout from '../layouts/Layout.astro';
 							name: user.name,
 							nakshatraIdx: uNakIdx!,
 							moonSignIdx: uMoonSignIdx!,
-							isManglik: uIsManglik
+							isMoonManglik: uIsMoonManglik,
+							isLaganManglik: uIsLaganManglik
 						});
 
 						return { user, compat };
@@ -292,7 +296,8 @@ import Layout from '../layouts/Layout.astro';
 						uid: uid,
 						nakshatraIdx: astroData.panchang.nakshatraIdx,
 						moonSignIdx: astroData.panchang.moonSignIdx,
-						isManglik: astroData.panchang.isManglik,
+						isMoonManglik: astroData.panchang.isMoonManglik,
+						isLaganManglik: astroData.panchang.isLaganManglik,
 						matches: top3.map(m => ({
 							uid: m.user.uid,
 							name: m.user.name,
@@ -322,7 +327,8 @@ import Layout from '../layouts/Layout.astro';
 					{ label: 'Moon Sign', value: astroData.panchang.moonSign },
 					{ label: 'Day (Vara)', value: `${astroData.panchang.vara} (${astroData.panchang.varaLord})` },
 					{ label: 'Tithi', value: astroData.panchang.tithi },
-					{ label: 'Manglik', value: profile.isManglik ? 'Yes' : 'No' }
+					{ label: 'Moon Manglik', value: profile.isMoonManglik ? 'Yes' : 'No' },
+					{ label: 'Lagan Manglik', value: profile.isLaganManglik ? 'Yes' : 'No' }
 				];
 
 				infoGrid.innerHTML = items.map(i => `
@@ -365,8 +371,20 @@ import Layout from '../layouts/Layout.astro';
 							const uData = calculateAstrology(uDob, uTob, uLat, uLon);
 
 							const compat = calculateCompatibility(
-								{ name: profile.name, nakshatraIdx: astroData.panchang.nakshatraIdx, moonSignIdx: astroData.panchang.moonSignIdx, isManglik: profile.isManglik! },
-								{ name: otherUser.name, nakshatraIdx: uData.panchang.nakshatraIdx, moonSignIdx: uData.panchang.moonSignIdx, isManglik: uData.panchang.isManglik }
+								{
+									name: profile.name,
+									nakshatraIdx: astroData.panchang.nakshatraIdx,
+									moonSignIdx: astroData.panchang.moonSignIdx,
+									isMoonManglik: profile.isMoonManglik,
+									isLaganManglik: profile.isLaganManglik
+								},
+								{
+									name: otherUser.name,
+									nakshatraIdx: uData.panchang.nakshatraIdx,
+									moonSignIdx: uData.panchang.moonSignIdx,
+									isMoonManglik: uData.panchang.isMoonManglik,
+									isLaganManglik: uData.panchang.isLaganManglik
+								}
 							);
 
 							kootaHtml = `

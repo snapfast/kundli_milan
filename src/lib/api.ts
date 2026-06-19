@@ -12,7 +12,8 @@ export interface UserProfile {
     lon?: string;
     nakshatraIdx?: number;
     moonSignIdx?: number;
-    isManglik?: boolean;
+    isMoonManglik?: boolean;
+    isLaganManglik?: boolean;
     matches?: {
         uid: string;
         name: string;
