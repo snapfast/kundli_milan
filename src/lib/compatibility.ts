@@ -176,16 +176,17 @@ export function calculateCompatibility(user1: UserAstrology, user2: UserAstrolog
     kootas.push({ name: "Varna", score: varnaScore, max: 1 });
 
     // 2. Vashya (2 points)
+    // Groom Row, Bride Column
     const VASHYA_MATRIX = [
-        [2, 1, 0, 1, 1], // Manushya
-        [1, 2, 0, 1, 1], // Chatushpada
-        [0, 0, 2, 0, 0], // Vanachara
-        [1, 1, 0, 2, 1], // Jalachara
-        [1, 1, 0, 1, 2]  // Keeta
+        [2, 2, 0, 2, 1], // Boy Manushya
+        [1, 2, 1, 1, 1], // Boy Chatushpada
+        [0, 0, 2, 0, 0], // Boy Vanachara
+        [1, 1, 0, 2, 1], // Boy Jalachara
+        [1, 1, 0, 1, 2]  // Boy Keeta
     ];
-    const vas1 = RASI_PROPS[user1.moonSignIdx].vashya;
-    const vas2 = RASI_PROPS[user2.moonSignIdx].vashya;
-    const vashyaScore = VASHYA_MATRIX[vas1][vas2];
+    const vasBoy = RASI_PROPS[boy.moonSignIdx].vashya;
+    const vasGirl = RASI_PROPS[girl.moonSignIdx].vashya;
+    const vashyaScore = VASHYA_MATRIX[vasBoy][vasGirl];
     kootas.push({ name: "Vashya", score: vashyaScore, max: 2 });
 
     // 3. Tara (3 points)
@@ -224,19 +225,33 @@ export function calculateCompatibility(user1: UserAstrology, user2: UserAstrolog
     kootas.push({ name: "Maitri", score: maitriScore, max: 5 });
 
     // 6. Gana (6 points)
-    const g1 = NAKSHATRA_PROPS[user1.nakshatraIdx].gana;
-    const g2 = NAKSHATRA_PROPS[user2.nakshatraIdx].gana;
-    let ganaScore = 0;
-    if (g1 === g2) ganaScore = 6;
-    else if ((g1 === 0 && g2 === 1) || (g1 === 1 && g2 === 0)) ganaScore = 5;
-    else if ((g1 === 0 && g2 === 2) || (g1 === 2 && g2 === 0)) ganaScore = 1;
+    // 0 = Deva, 1 = Manushya, 2 = Rakshasa
+    // Groom Row, Bride Column
+    const GANA_MATRIX = [
+        [6, 6, 0], // Boy Deva
+        [5, 6, 0], // Boy Manushya
+        [1, 0, 6]  // Boy Rakshasa
+    ];
+    const gBoy = NAKSHATRA_PROPS[boy.nakshatraIdx].gana;
+    const gGirl = NAKSHATRA_PROPS[girl.nakshatraIdx].gana;
+    let ganaScore = GANA_MATRIX[gBoy][gGirl];
 
-    if (ganaScore === 0) {
-        doshas.push({
-            name: "Gana Dosha",
-            description: "Significant differences in temperament and character traits.",
-            isCancelled: false
-        });
+    if (ganaScore < 6) {
+        // Cancellation logic
+        const isCancelled = (l1 === l2 || (f1 === 1 && f2 === 1)) ||
+                            (user1.moonSignIdx === user2.moonSignIdx && user1.nakshatraIdx !== user2.nakshatraIdx);
+
+        if (isCancelled) {
+            ganaScore = 6;
+        }
+
+        if (ganaScore === 0 || isCancelled) {
+            doshas.push({
+                name: "Gana Dosha",
+                description: isCancelled ? "Cancelled due to friendly Rasi lords or same Rasi." : "Significant differences in temperament and character traits.",
+                isCancelled
+            });
+        }
     }
     kootas.push({ name: "Gana", score: ganaScore, max: 6 });
 
@@ -255,7 +270,9 @@ export function calculateCompatibility(user1: UserAstrology, user2: UserAstrolog
 
         // Cancellation logic
         const isCancelled = l1 === l2 || (f1 === 1 && f2 === 1);
-        // Note: Even if cancelled, Bhakoot score remains 0, but the malefic effect is nullified.
+        if (isCancelled) {
+            bhakootScore = 7;
+        }
 
         doshas.push({
             name,
