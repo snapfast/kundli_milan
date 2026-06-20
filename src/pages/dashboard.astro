@@ -265,7 +265,8 @@ import Layout from '../layouts/Layout.astro';
 						nakshatraIdx: astroData.panchang.nakshatraIdx,
 						moonSignIdx: astroData.panchang.moonSignIdx,
 						isMoonManglik: astroData.panchang.isMoonManglik,
-						isLaganManglik: astroData.panchang.isLaganManglik
+						isLaganManglik: astroData.panchang.isLaganManglik,
+						gender: details.gender
 					};
 
 					const resultsWithScores = otherUsers.map(user => {
@@ -293,7 +294,8 @@ import Layout from '../layouts/Layout.astro';
 							nakshatraIdx: uNakIdx!,
 							moonSignIdx: uMoonSignIdx!,
 							isMoonManglik: uIsMoonManglik,
-							isLaganManglik: uIsLaganManglik
+							isLaganManglik: uIsLaganManglik,
+							gender: user.gender
 						});
 
 						return { user, compat };
@@ -388,14 +390,16 @@ import Layout from '../layouts/Layout.astro';
 									nakshatraIdx: astroData.panchang.nakshatraIdx,
 									moonSignIdx: astroData.panchang.moonSignIdx,
 									isMoonManglik: profile.isMoonManglik,
-									isLaganManglik: profile.isLaganManglik
+									isLaganManglik: profile.isLaganManglik,
+									gender: profile.gender
 								},
 								{
 									name: otherUser.name,
 									nakshatraIdx: uData.panchang.nakshatraIdx,
 									moonSignIdx: uData.panchang.moonSignIdx,
 									isMoonManglik: uData.panchang.isMoonManglik,
-									isLaganManglik: uData.panchang.isLaganManglik
+									isLaganManglik: uData.panchang.isLaganManglik,
+									gender: otherUser.gender
 								}
 							);
 
