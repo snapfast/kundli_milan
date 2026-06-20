@@ -89,13 +89,26 @@ const scenario1Expected: ExpectedScores = {
     }
 };
 
-// Scenario 2: Aditi & Karan (Representative)
-const aditi = { name: "Aditi", dob: "1992-08-12", tob: "08:30", lat: 12.9716, lon: 77.5946 };
-const karan = { name: "Karan", dob: "1990-11-25", tob: "23:15", lat: 18.5204, lon: 73.8567 };
+// Scenario 2: Shweta & Rahul (Verified against User Table)
+const shweta = { name: "Shweta", dob: "1995-08-07", tob: "08:01", lat: 25.7358, lon: 86.9792 };
+
+const scenario2Expected: ExpectedScores = {
+    total: 22.5,
+    kootas: {
+        "Varna": 0,
+        "Vashya": 1,
+        "Tara": 1.5,
+        "Yoni": 2,
+        "Maitri": 3,
+        "Gana": 0,
+        "Bhakoot": 7,
+        "Nadi": 8
+    }
+};
 
 try {
     runTest("Scenario 1: Kamini & Rahul", kamini, rahul, scenario1Expected);
-    runTest("Scenario 2: Aditi & Karan", aditi, karan);
+    runTest("Scenario 2: Shweta & Rahul", shweta, rahul, scenario2Expected);
 } catch (e) {
     console.error("Test execution failed:", e);
     process.exit(1);
