@@ -74,14 +74,22 @@ export async function saveUserProfile(profile: UserProfile): Promise<boolean> {
 }
 
 export async function resetUserProfile(uid: string): Promise<boolean> {
-    return saveUserProfile({
-        uid,
-        name: '',
-        email: '',
-        dob: '',
-        tob: '',
-        gender: '',
-        location: '',
-        matches: []
-    });
+    try {
+        const response = await fetch(BACKEND_URL, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                uid,
+                action: 'delete'
+            }),
+        });
+        console.log('User profile deletion request sent to backend');
+        return true;
+    } catch (error) {
+        console.error('Critical error during profile deletion:', error);
+        return false;
+    }
 }
