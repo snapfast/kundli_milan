@@ -1,4 +1,7 @@
-import * as Ast from 'astronomy-engine';
+import * as AstModule from 'astronomy-engine';
+
+// Workaround for ESM/CJS interop in various environments (tsx, vite, etc.)
+const Ast = (AstModule as any).default || AstModule;
 
 export interface PlanetData {
     name: string;
