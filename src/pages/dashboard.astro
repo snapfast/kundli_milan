@@ -6,7 +6,7 @@ import Layout from '../layouts/Layout.astro';
 	<style is:global>
 		.dashboard-grid {
 			display: grid;
-			grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+			grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
 			gap: 0.5rem;
 			margin-bottom: 1rem;
 		}
@@ -31,7 +31,8 @@ import Layout from '../layouts/Layout.astro';
 			font-size: 0.8rem;
 			color: #0f172a;
 			font-weight: 500;
-			word-break: break-all;
+			word-break: normal;
+			overflow-wrap: break-word;
 			line-height: 1.1;
 		}
 		.section-title {
@@ -205,6 +206,16 @@ import Layout from '../layouts/Layout.astro';
 			const details = JSON.parse(stored);
 			const resetBtn = document.getElementById('resetProfileBtn') as HTMLButtonElement;
 
+			function formatTime12h(t24: string): string {
+				if (!t24) return "";
+				const [h24, m] = t24.split(':');
+				let h = parseInt(h24);
+				const ampm = h >= 12 ? 'PM' : 'AM';
+				h = h % 12;
+				if (h === 0) h = 12;
+				return `${h.toString().padStart(2, '0')}:${m} ${ampm}`;
+			}
+
 			resetBtn?.addEventListener('click', async () => {
 				if (confirm('Are you sure you want to reset your moonine profile? This will delete all your data.')) {
 					if (uid) await resetUserProfile(uid);
@@ -322,7 +333,7 @@ import Layout from '../layouts/Layout.astro';
 				const items = [
 					{ label: 'User ID', value: profile.uid },
 					{ label: 'Name', value: profile.name },
-					{ label: 'Born', value: `${profile.dob} ${profile.tob}` },
+					{ label: 'Born', value: `${profile.dob} ${formatTime12h(profile.tob)}` },
 					{ label: 'Location', value: profile.location },
 					{ label: 'Nakshatra', value: astroData.panchang.nakshatra },
 					{ label: 'Moon Sign', value: astroData.panchang.moonSign },
