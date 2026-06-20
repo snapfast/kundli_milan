@@ -4,6 +4,7 @@ export interface UserAstrology {
     moonSignIdx: number;
     isMoonManglik?: boolean;
     isLaganManglik?: boolean;
+    gender?: string;
 }
 
 export interface CompatibilityResult {
@@ -135,11 +136,43 @@ export function calculateCompatibility(user1: UserAstrology, user2: UserAstrolog
         };
     }
 
+    // Determine Boy and Girl for Varna calculation
+    let boy = user1;
+    let girl = user2;
+
+    const gender1 = user1.gender?.toLowerCase() || '';
+    const gender2 = user2.gender?.toLowerCase() || '';
+
+    if (gender1 === 'male' && gender2 !== 'male') {
+        boy = user1;
+        girl = user2;
+    } else if (gender2 === 'male' && gender1 !== 'male') {
+        boy = user2;
+        girl = user1;
+    } else if (gender1 === 'female' && gender2 !== 'female') {
+        boy = user2;
+        girl = user1;
+    } else if (gender2 === 'female' && gender1 !== 'female') {
+        boy = user1;
+        girl = user2;
+    } else {
+        // Fallback for same gender or unknown: sort by name to ensure symmetry
+        if (user1.name > user2.name) {
+            boy = user1;
+            girl = user2;
+        } else {
+            boy = user2;
+            girl = user1;
+        }
+    }
+
     // 1. Varna (1 point)
-    const v1 = RASI_PROPS[user1.moonSignIdx].varna;
-    const v2 = RASI_PROPS[user2.moonSignIdx].varna;
+    // 0 = Brahmin, 1 = Kshatriya, 2 = Vaishya, 3 = Shudra
+    // Score 1 point if Boy's Varna is higher than or equal to Girl's Varna (i.e. lower or equal number)
+    const vBoy = RASI_PROPS[boy.moonSignIdx].varna;
+    const vGirl = RASI_PROPS[girl.moonSignIdx].varna;
     let varnaScore = 0;
-    if (v1 >= v2) varnaScore = 1;
+    if (vBoy <= vGirl) varnaScore = 1;
     kootas.push({ name: "Varna", score: varnaScore, max: 1 });
 
     // 2. Vashya (2 points)
@@ -222,7 +255,7 @@ export function calculateCompatibility(user1: UserAstrology, user2: UserAstrolog
 
         // Cancellation logic
         const isCancelled = l1 === l2 || (f1 === 1 && f2 === 1);
-        if (isCancelled) bhakootScore = 7;
+        // Note: Even if cancelled, Bhakoot score remains 0, but the malefic effect is nullified.
 
         doshas.push({
             name,
