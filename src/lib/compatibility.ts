@@ -2,7 +2,6 @@ export interface UserAstrology {
     name: string;
     nakshatraIdx: number;
     moonSignIdx: number;
-    isMoonManglik?: boolean;
     isLaganManglik?: boolean;
     gender?: string;
 }
@@ -324,18 +323,11 @@ export function calculateCompatibility(user1: UserAstrology, user2: UserAstrolog
         description = "You share similar worldviews and social standing, making for a very smooth and comfortable public life together.";
     }
 
-    // Manglik Matching Logic (Lagan-based for calculations, Moon-based for representation)
+    // Manglik Matching Logic (Lagan-based for calculations)
     const m1 = !!user1.isLaganManglik;
     const m2 = !!user2.isLaganManglik;
 
     // Add partner's Manglik status to doshas for visibility on match cards
-    if (user2.isMoonManglik) {
-        doshas.push({
-            name: "Moon Manglik* (Partner)",
-            description: "Partner has Mars in 1, 4, 7, 8, or 12 house from the Moon. (Informational only)",
-            isCancelled: !!user1.isMoonManglik // Representationally cancelled if both have it
-        });
-    }
     if (user2.isLaganManglik) {
         doshas.push({
             name: "Lagan Manglik (Partner)",
