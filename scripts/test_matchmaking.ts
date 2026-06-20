@@ -1,22 +1,23 @@
-import * as Ast from 'astronomy-engine';
+import * as AstModule from 'astronomy-engine';
 import { calculateAstrology } from '../src/lib/astrology';
 import { calculateCompatibility } from '../src/lib/compatibility';
 
-// Workaround for astronomy-engine ESM/CJS interop in tsx
-const Astronomy = (Ast as any).default || Ast;
+// Workaround for ESM/CJS interop in various environments (tsx, vite, etc.)
+const Ast = (AstModule as any).default || AstModule;
 
-function runTest(label: string, person1: any, person2: any) {
+interface ExpectedScores {
+    total: number;
+    kootas: Record<string, number>;
+}
+
+function runTest(label: string, person1: any, person2: any, expected?: ExpectedScores) {
     console.log(`--- ${label} ---`);
-
-    // We need to inject the workaround if necessary, but calculateAstrology already uses Ast.
-    // However, if calculateAstrology uses Ast internally and it fails, we have a problem.
-    // Let's see if we can just fix the import in calculateAstrology to be more robust or if it was just a tsx issue.
 
     const astro1 = calculateAstrology(person1.dob, person1.tob, person1.lat, person1.lon);
     const astro2 = calculateAstrology(person2.dob, person2.tob, person2.lat, person2.lon);
 
-    console.log(`${person1.name}: Nakshatra=${astro1.panchang.nakshatra}, MoonSign=${astro1.panchang.moonSign}, LaganManglik=${astro1.panchang.isLaganManglik}, MoonManglik=${astro1.panchang.isMoonManglik}`);
-    console.log(`${person2.name}: Nakshatra=${astro2.panchang.nakshatra}, MoonSign=${astro2.panchang.moonSign}, LaganManglik=${astro2.panchang.isLaganManglik}, MoonManglik=${astro2.panchang.isMoonManglik}`);
+    console.log(`${person1.name}: Nakshatra=${astro1.panchang.nakshatra}, MoonSign=${astro1.panchang.moonSign}`);
+    console.log(`${person2.name}: Nakshatra=${astro2.panchang.nakshatra}, MoonSign=${astro2.panchang.moonSign}`);
 
     const user1 = {
         name: person1.name,
@@ -38,34 +39,62 @@ function runTest(label: string, person1: any, person2: any) {
 
     console.log(`\nCompatibility Result: ${result.category}`);
     console.log(`Score: ${result.score}/${result.maxScore}`);
-    console.log(`Description: ${result.description}`);
 
     console.log("\nKoota Breakdown:");
     result.kootas.forEach(k => {
         console.log(`- ${k.name}: ${k.score}/${k.max}`);
     });
 
-    if (result.doshas.length > 0) {
-        console.log("\nDosha Alerts:");
-        result.doshas.forEach(d => {
-            console.log(`- ${d.name}${d.isCancelled ? " (Cancelled)" : ""}: ${d.description}`);
-        });
-    } else {
-        console.log("\nNo Dosha detected.");
+    if (expected) {
+        console.log("\n--- Verification ---");
+        let passed = true;
+        if (result.score !== expected.total) {
+            console.error(`❌ Total score mismatch: Expected ${expected.total}, Got ${result.score}`);
+            passed = false;
+        }
+
+        for (const [name, score] of Object.entries(expected.kootas)) {
+            const koota = result.kootas.find(k => k.name === name);
+            if (!koota || koota.score !== score) {
+                console.error(`❌ Koota ${name} mismatch: Expected ${score}, Got ${koota?.score}`);
+                passed = false;
+            }
+        }
+
+        if (passed) {
+            console.log("✅ Verification Passed!");
+        } else {
+            console.error("❌ Verification Failed!");
+            process.exit(1);
+        }
     }
     console.log("\n");
 }
 
-// Scenario 1: Kamini & Rahul (Provided)
+// Scenario 1: Kamini & Rahul (Verified against User Table)
 const kamini = { name: "Kamini", dob: "1995-10-06", tob: "18:00", lat: 31.2167, lon: 76.1333 };
 const rahul = { name: "Rahul", dob: "1993-11-02", tob: "13:10", lat: 31.3850, lon: 76.3750 };
+
+const scenario1Expected: ExpectedScores = {
+    total: 31.5,
+    kootas: {
+        "Varna": 1,
+        "Vashya": 1,
+        "Tara": 1.5,
+        "Yoni": 2,
+        "Maitri": 5,
+        "Gana": 6,
+        "Bhakoot": 7,
+        "Nadi": 8
+    }
+};
 
 // Scenario 2: Aditi & Karan (Representative)
 const aditi = { name: "Aditi", dob: "1992-08-12", tob: "08:30", lat: 12.9716, lon: 77.5946 };
 const karan = { name: "Karan", dob: "1990-11-25", tob: "23:15", lat: 18.5204, lon: 73.8567 };
 
 try {
-    runTest("Scenario 1: Kamini & Rahul", kamini, rahul);
+    runTest("Scenario 1: Kamini & Rahul", kamini, rahul, scenario1Expected);
     runTest("Scenario 2: Aditi & Karan", aditi, karan);
 } catch (e) {
     console.error("Test execution failed:", e);
