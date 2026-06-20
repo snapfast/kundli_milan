@@ -107,7 +107,19 @@ import Layout from '../layouts/Layout.astro';
 				</div>
 				<div class="field">
 					<label for="tob">Time of Birth</label>
-					<input type="time" id="tob" name="tob" required />
+					<div style="display: flex; gap: 0.25rem;">
+						<select id="tob_hour" required style="flex: 1;">
+							<option value="">Hour</option>
+						</select>
+						<select id="tob_min" required style="flex: 1;">
+							<option value="">Min</option>
+						</select>
+						<select id="tob_ampm" required style="flex: 1;">
+							<option value="AM">AM</option>
+							<option value="PM">PM</option>
+						</select>
+					</div>
+					<input type="hidden" id="tob" name="tob" required />
 				</div>
 			</div>
 			<div class="form-row">
@@ -207,6 +219,38 @@ import Layout from '../layouts/Layout.astro';
 			const lonInput = document.getElementById('lon') as HTMLInputElement;
 			const redirectingDiv = document.getElementById('redirecting') as HTMLDivElement;
 
+			const tobHour = document.getElementById('tob_hour') as HTMLSelectElement;
+			const tobMin = document.getElementById('tob_min') as HTMLSelectElement;
+			const tobAmPm = document.getElementById('tob_ampm') as HTMLSelectElement;
+			const tobHidden = document.getElementById('tob') as HTMLInputElement;
+
+			// Populate Hour and Min dropdowns
+			for (let i = 1; i <= 12; i++) {
+				const val = i.toString().padStart(2, '0');
+				const opt = new Option(val, val);
+				tobHour.add(opt);
+			}
+			for (let i = 0; i < 60; i++) {
+				const val = i.toString().padStart(2, '0');
+				const opt = new Option(val, val);
+				tobMin.add(opt);
+			}
+
+			function syncTime() {
+				const h = tobHour.value;
+				const m = tobMin.value;
+				const ap = tobAmPm.value;
+				if (h && m && ap) {
+					let h24 = parseInt(h);
+					if (ap === 'PM' && h24 < 12) h24 += 12;
+					if (ap === 'AM' && h24 === 12) h24 = 0;
+					tobHidden.value = `${h24.toString().padStart(2, '0')}:${m}`;
+					autoSave();
+				}
+			}
+
+			[tobHour, tobMin, tobAmPm].forEach(el => el.addEventListener('change', syncTime));
+
 			// Ensure user ID is set on load
 			const uid = getOrSetUserId();
 
@@ -223,6 +267,19 @@ import Layout from '../layouts/Layout.astro';
 								element.value = details[field];
 							}
 						});
+
+						// Sync the AM/PM dropdowns
+						if (details.tob) {
+							const [h24, min] = details.tob.split(':');
+							let h12 = parseInt(h24);
+							const ampm = h12 >= 12 ? 'PM' : 'AM';
+							h12 = h12 % 12;
+							if (h12 === 0) h12 = 12;
+
+							tobHour.value = h12.toString().padStart(2, '0');
+							tobMin.value = min;
+							tobAmPm.value = ampm;
+						}
 					} catch (e) {
 						console.error('Error parsing user_details cookie:', e);
 					}
