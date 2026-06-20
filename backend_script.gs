@@ -115,6 +115,28 @@ function doPost(e) {
     }
 
     const sheet = getSheet();
+
+    // Handle Deletion
+    if (data.action === 'delete') {
+      const lastRow = sheet.getLastRow();
+      if (lastRow <= 1) {
+        return jsonResponse({ status: 'success', message: 'Sheet is empty' });
+      }
+
+      const headers = sheet.getRange(1, 1, 1, sheet.getLastColumn()).getValues()[0];
+      const uidIndex = headers.indexOf('uid');
+      const searchColumnIndex = uidIndex !== -1 ? uidIndex + 1 : 1;
+      const uids = sheet.getRange(1, searchColumnIndex, lastRow, 1).getValues().flat();
+
+      const foundIdx = uids.indexOf(data.uid);
+      if (foundIdx > 0) { // 0 is header row
+        sheet.deleteRow(foundIdx + 1);
+        return jsonResponse({ status: 'success', message: 'User deleted successfully' });
+      }
+      return jsonResponse({ status: 'success', message: 'User not found or is header' });
+    }
+
+    // Handle Upsert
     const headers = getHeaders(sheet, data);
     const rowData = jsonToRow(data, headers);
 
@@ -128,12 +150,12 @@ function doPost(e) {
       const uids = sheet.getRange(1, searchColumnIndex, lastRow, 1).getValues().flat();
 
       const foundIdx = uids.indexOf(data.uid);
-      if (foundIdx !== -1) {
+      if (foundIdx > 0) { // 0 is header row
         rowIndex = foundIdx + 1; // 1-based index conversion
       }
     }
 
-    if (rowIndex > -1) {
+    if (rowIndex > 1) { // Ensure we never overwrite header
       // Update existing record safely
       sheet.getRange(rowIndex, 1, 1, rowData.length).setValues([rowData]);
       return jsonResponse({ status: 'success', message: 'User updated successfully' });
