@@ -1,6 +1,6 @@
 export function generateMatchCardHtml(uid: string, name: string, category: string, score: number, description: string, kootaHtml: string, doshas: { name: string, description: string, isCancelled: boolean }[] = []): string {
     const percentage = (score / 36) * 100;
-    const progressColor = score >= 28 ? '#10b981' : score >= 18 ? '#f59e0b' : '#ef4444';
+    const progressColor = score >= 21 ? '#10b981' : score >= 18 ? '#f59e0b' : '#ef4444';
 
     let doshaHtml = '';
     if (doshas && doshas.length > 0) {
