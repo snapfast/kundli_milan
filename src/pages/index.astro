@@ -89,7 +89,7 @@ import Layout from '../layouts/Layout.astro';
 			Redirecting to your dashboard...
 		</div>
 
-		<form id="detailsForm">
+		<form id="detailsForm" novalidate>
 			<div class="form-row">
 				<div class="field">
 					<label for="name">Full Name</label>
@@ -119,7 +119,7 @@ import Layout from '../layouts/Layout.astro';
 							<option value="PM">PM</option>
 						</select>
 					</div>
-					<input type="hidden" id="tob" name="tob" required />
+					<input type="hidden" id="tob" name="tob" />
 				</div>
 			</div>
 			<div class="form-row">
@@ -212,6 +212,10 @@ import Layout from '../layouts/Layout.astro';
 			}
 
 			const form = document.getElementById('detailsForm') as HTMLFormElement;
+			const nameInput = document.getElementById('name') as HTMLInputElement;
+			const emailInput = document.getElementById('email') as HTMLInputElement;
+			const dobInput = document.getElementById('dob') as HTMLInputElement;
+			const genderInput = document.getElementById('gender') as HTMLSelectElement;
 			const resetBtn = document.getElementById('resetBtn') as HTMLButtonElement;
 			const locationInput = document.getElementById('location') as HTMLInputElement;
 			const suggestionsContainer = document.getElementById('suggestions') as HTMLDivElement;
@@ -387,6 +391,50 @@ import Layout from '../layouts/Layout.astro';
 			form?.addEventListener('submit', async (e) => {
 				e.preventDefault();
 
+				if (!nameInput.value || nameInput.value.length < 2) {
+					alert('Please enter your full name (at least 2 characters).');
+					nameInput.focus();
+					return;
+				}
+
+				const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+				if (!emailInput.value || !emailRegex.test(emailInput.value)) {
+					alert('Please enter a valid email address.');
+					emailInput.focus();
+					return;
+				}
+
+				if (!dobInput.value) {
+					alert('Please select your Date of Birth.');
+					dobInput.focus();
+					return;
+				}
+
+				// Manual validation for fields that might fail silently or need specific selection
+				if (!tobHidden.value) {
+					alert('Please select your complete Time of Birth.');
+					tobHour.focus();
+					return;
+				}
+
+				if (!genderInput.value) {
+					alert('Please select your Gender.');
+					genderInput.focus();
+					return;
+				}
+
+				if (!locationInput.value) {
+					alert('Please enter your birth location.');
+					locationInput.focus();
+					return;
+				}
+
+				if (!latInput.value || !lonInput.value) {
+					alert('Please select a location from the suggestions list to get accurate coordinates.');
+					locationInput.focus();
+					return;
+				}
+
 				const formData = new FormData(form);
 				const data = Object.fromEntries(formData.entries());
 				const uid = getOrSetUserId();
@@ -401,7 +449,6 @@ import Layout from '../layouts/Layout.astro';
 
 				// Show loading state on button
 				const submitBtn = form.querySelector('button[type="submit"]') as HTMLButtonElement;
-				const originalText = submitBtn.textContent;
 				submitBtn.disabled = true;
 				submitBtn.textContent = 'Saving...';
 
@@ -410,10 +457,12 @@ import Layout from '../layouts/Layout.astro';
 					const { saveUserProfile } = await import('../lib/api');
 					const { calculateAstrology } = await import('../lib/astrology');
 
+					const dataPayload = payload as any;
+
 					// Calculate basic astrology for the user to store it
-					const lat = payload.lat ? parseFloat(payload.lat as string) : 28.6139;
-					const lon = payload.lon ? parseFloat(payload.lon as string) : 77.2090;
-					const astroData = calculateAstrology(payload.dob as string, payload.tob as string, lat, lon);
+					const lat = dataPayload.lat ? parseFloat(dataPayload.lat as string) : 28.6139;
+					const lon = dataPayload.lon ? parseFloat(dataPayload.lon as string) : 77.2090;
+					const astroData = calculateAstrology(dataPayload.dob as string, dataPayload.tob as string, lat, lon);
 
 					const profileToSave = {
 						...payload,
