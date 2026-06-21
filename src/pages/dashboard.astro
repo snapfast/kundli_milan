@@ -217,7 +217,7 @@ import Layout from '../layouts/Layout.astro';
 			}
 
 			resetBtn?.addEventListener('click', async () => {
-				if (confirm('Are you sure you want to reset your moonine profile? This will delete all your data.')) {
+				if (confirm('Are you sure you want to reset your moonine profile? Please note that we do not keep your data after a reset. It will be permanently deleted from our systems as well as your local device.')) {
 					if (uid) await resetUserProfile(uid);
 					clearUserData();
 					window.location.href = '/';
