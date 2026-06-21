@@ -46,7 +46,7 @@ function parseJsonData(e) {
  */
 function getHeaders(sheet, incomingData) {
   const lastColumn = sheet.getLastColumn();
-  const baselineHeaders = ["uid", "name", "email", "dob", "tob", "gender", "location", "lat", "lon", "nakshatraIdx", "moonSignIdx", "isMoonManglik", "isLaganManglik", "matches", "updatedAt"];
+  const baselineHeaders = ["uid", "name", "email", "dob", "tob", "gender", "location", "lat", "lon", "currentLocation", "currentLat", "currentLon", "nakshatraIdx", "moonSignIdx", "isMoonManglik", "isLaganManglik", "matches", "nearest", "updatedAt"];
 
   // Initialize completely empty sheet with baseline headers
   if (lastColumn === 0) {
@@ -76,6 +76,7 @@ function jsonToRow(data, headers) {
   return headers.map(header => {
     if (header === 'updatedAt') return new Date();
     if (header === 'matches') return JSON.stringify(data[header] || []);
+    if (header === 'nearest') return JSON.stringify(data[header] || []);
     return data[header] ?? '';
   });
 }
@@ -90,7 +91,7 @@ function rowsToJson(values) {
     headers.reduce((obj, header, i) => {
       let val = row[i] ?? '';
       // Parse stringified arrays back to standard JSON object structures
-      if (header === 'matches' && typeof val === 'string' && val !== '') {
+      if ((header === 'matches' || header === 'nearest') && typeof val === 'string' && val !== '') {
         try { val = JSON.parse(val); } catch(err) { val = []; }
       }
       obj[header] = val;
