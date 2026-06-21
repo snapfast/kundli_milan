@@ -241,16 +241,38 @@ const { title, description } = Astro.props;
 			</div>
 		</div>
 
+		<div id="eula-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background-color: rgba(0, 0, 0, 0.8); z-index: 10000; justify-content: center; align-items: center; padding: 1rem; box-sizing: border-box;">
+			<div style="background: white; border-radius: 8px; padding: 1.5rem; max-width: 600px; max-height: 90vh; overflow-y: auto; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);">
+				<h2 style="margin-top: 0; margin-bottom: 1rem; border-bottom: 2px solid #6366f1; padding-bottom: 0.5rem;">End User License Agreement (EULA)</h2>
+				<div style="font-size: 0.9rem; color: #334155; line-height: 1.5; margin-bottom: 1.5rem;">
+					<p>Please read and accept the following terms before using our platform:</p>
+					<ul style="padding-left: 1.2rem; margin-bottom: 1rem;">
+						<li style="margin-bottom: 0.5rem;"><strong>Consent to Share Information:</strong> You consent to provide and share your information on this public platform.</li>
+						<li style="margin-bottom: 0.5rem;"><strong>Contact Details:</strong> Information entered by the user is shared with other users based on a small amount paid as a token of interest in the person. Once you provide your information, the same information may be made available to other users after the confirmation of payment.</li>
+						<li style="margin-bottom: 0.5rem;"><strong>Privacy & Security:</strong> All information remains private between the requesting parties. Information and payment communications are handled through secure email.</li>
+						<li style="margin-bottom: 0.5rem;"><strong>Limitation of Liability:</strong> This platform is purely for information sharing. We will not be responsible for any miscommunication, misunderstanding, or disputes that may arise. We only provide contact information. We are not liable for any legal situations arising from the use of this service.</li>
+					</ul>
+					<p>By clicking "I Agree", you acknowledge that you have read, understood, and agreed to these terms.</p>
+				</div>
+				<div style="text-align: right;">
+					<button id="accept-eula" class="btn" style="padding: 0.5rem 1.5rem; font-size: 1rem;">I Agree</button>
+				</div>
+			</div>
+		</div>
+
 		<footer style="margin-top: 2rem; font-size: 0.75rem; color: #64748b; text-align: center; border-top: 1px solid #e2e8f0; padding-top: 1rem;">
 			<p style="margin-bottom: 0.5rem; color: #1e293b; font-weight: 500;">
 				To get contact details, send the <b>User ID</b> of the person to <a href="#" id="show-qr-link" style="color: #6366f1; text-decoration: none; margin-right: 0.25rem;">show qr</a>&nbsp;<a href="mailto:rahulbaliastrology@gmail.com" style="color: #6366f1; text-decoration: none;">rahulbaliastrology@gmail.com</a>.
 				<br />
 				Each contact detail costs 100 rupees via UPI.
 			</p>
-			<p>
+			<p style="margin-bottom: 0.75rem;">
 				&copy; {new Date().getFullYear()} moonine v{packageJson.version}.
 				Location data &copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" style="color: #64748b;">OpenStreetMap</a> contributors.
 			</p>
+			<div style="font-size: 0.65rem; color: #94a3b8; max-width: 90%; margin: 0 auto; line-height: 1.4;">
+				<strong>Disclaimer:</strong> We will not be responsible for any miscommunication or misunderstanding. We only provide contact information. Information entered by the user is shared to other users based on a small amount as a token of interest in the person. As one user provides his/her information, the same information is available to other users after the confirmation of payment. All information remains private; information and payment both are communicated through secure email. This platform is for information sharing only, which you consent to provide on a public platform. We are not liable for any legal situations arising from the use of this service.
+			</div>
 		</footer>
 
 		<script>
@@ -316,6 +338,22 @@ const { title, description } = Astro.props;
 					if (e.target === qrModal) {
 						qrModal.style.display = 'none';
 					}
+				});
+			}
+
+			// EULA Modal Logic
+			const eulaModal = document.getElementById('eula-modal');
+			const acceptEulaBtn = document.getElementById('accept-eula');
+
+			if (eulaModal && acceptEulaBtn) {
+				const eulaAccepted = localStorage.getItem('eula_accepted');
+				if (!eulaAccepted) {
+					eulaModal.style.display = 'flex';
+				}
+
+				acceptEulaBtn.addEventListener('click', () => {
+					localStorage.setItem('eula_accepted', 'true');
+					eulaModal.style.display = 'none';
 				});
 			}
 		</script>
