@@ -169,6 +169,13 @@ import Layout from '../layouts/Layout.astro';
 			<!-- Matches injected here -->
 		</div>
 
+		<div id="nearest-section" style="display: none;">
+			<div class="section-title">Top 10 Nearest People</div>
+			<div id="nearest-list">
+				<!-- Nearest matches injected here -->
+			</div>
+		</div>
+
 		<div class="btn-group">
 			<a href="/?edit=true" class="btn btn-sm">Edit My Profile</a>
 			<button id="resetProfileBtn" class="btn btn-sm btn-danger">Reset My Profile</button>
@@ -192,6 +199,24 @@ import Layout from '../layouts/Layout.astro';
 		import { calculateCompatibility } from '../lib/compatibility';
 		import { KOOTA_INFO } from '../lib/constants';
 		import { generateMatchCardHtml } from '../lib/ui';
+
+		// Haversine distance formula in kilometers
+		function getDistanceFromLatLonInKm(lat1: number, lon1: number, lat2: number, lon2: number) {
+			const R = 6371; // Radius of the earth in km
+			const dLat = deg2rad(lat2 - lat1);
+			const dLon = deg2rad(lon2 - lon1);
+			const a =
+				Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+				Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) *
+				Math.sin(dLon / 2) * Math.sin(dLon / 2);
+			const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+			const d = R * c; // Distance in km
+			return d;
+		}
+
+		function deg2rad(deg: number) {
+			return deg * (Math.PI / 180);
+		}
 
 		window.addEventListener('load', async () => {
 			const uid = getOrSetUserId();
@@ -248,11 +273,17 @@ import Layout from '../layouts/Layout.astro';
 						profile.name !== details.name ||
 						profile.dob !== details.dob ||
 						profile.tob !== details.tob ||
-						profile.location !== details.location;
+						profile.location !== details.location ||
+						profile.currentLocation !== details.currentLocation ||
+						profile.currentLat !== details.currentLat ||
+						profile.currentLon !== details.currentLon;
 
 					const matchesMissing = !hasMatches && otherUsersCount > 0;
 
-					if (detailsChanged || matchesMissing) {
+					// Check if nearest is missing but user has location set
+					const nearestMissing = (!profile.nearest || profile.nearest.length === 0) && (details.currentLat && details.currentLon) && otherUsersCount > 0;
+
+					if (detailsChanged || matchesMissing || nearestMissing) {
 						needsUpdate = true;
 					}
 				}
@@ -268,6 +299,11 @@ import Layout from '../layouts/Layout.astro';
 						isLaganManglik: astroData.panchang.isLaganManglik,
 						gender: details.gender
 					};
+
+					// Determine if user has a current location for "nearest" feature
+					const hasCurrentLocation = details.currentLat && details.currentLon;
+					const myLat = hasCurrentLocation ? parseFloat(details.currentLat) : undefined;
+					const myLon = hasCurrentLocation ? parseFloat(details.currentLon) : undefined;
 
 					const resultsWithScores = otherUsers.map(user => {
 						let uNakIdx = user.nakshatraIdx;
@@ -298,11 +334,29 @@ import Layout from '../layouts/Layout.astro';
 							gender: user.gender
 						});
 
-						return { user, compat };
+						// Calculate distance if both users have locations
+						let distance = undefined;
+						if (hasCurrentLocation) {
+							// Use target user's current location, fallback to birth location
+							let tLat = user.currentLat ? parseFloat(user.currentLat) : (user.lat ? parseFloat(user.lat) : undefined);
+							let tLon = user.currentLon ? parseFloat(user.currentLon) : (user.lon ? parseFloat(user.lon) : undefined);
+							if (tLat !== undefined && tLon !== undefined && myLat !== undefined && myLon !== undefined) {
+								distance = getDistanceFromLatLonInKm(myLat, myLon, tLat, tLon);
+							}
+						}
+
+						return { user, compat, distance };
 					});
 
 					resultsWithScores.sort((a, b) => b.compat.score - a.compat.score);
 					const top10 = resultsWithScores.slice(0, 10);
+
+					let top10Nearest: any[] = [];
+					if (hasCurrentLocation) {
+						const withDistance = resultsWithScores.filter(r => r.distance !== undefined);
+						withDistance.sort((a, b) => a.distance! - b.distance!);
+						top10Nearest = withDistance.slice(0, 10);
+					}
 
 					const updatedProfile: UserProfile = {
 						...details,
@@ -317,6 +371,17 @@ import Layout from '../layouts/Layout.astro';
 							score: m.compat.score,
 							category: m.compat.category,
 							description: m.compat.description,
+							maxScore: m.compat.maxScore,
+							kootas: m.compat.kootas,
+							doshas: m.compat.doshas
+						})),
+						nearest: top10Nearest.map(m => ({
+							uid: m.user.uid,
+							name: m.user.name,
+							score: m.compat.score,
+							category: m.compat.category,
+							description: m.compat.description,
+							distance: m.distance,
 							maxScore: m.compat.maxScore,
 							kootas: m.compat.kootas,
 							doshas: m.compat.doshas
@@ -358,6 +423,7 @@ import Layout from '../layouts/Layout.astro';
 				`).join('');
 
 				const tbody = document.querySelector('#planets-table tbody')!;
+				tbody.innerHTML = ''; // clear before appending
 				astroData.planets.forEach(p => {
 					const tr = document.createElement('tr');
 					tr.innerHTML = `
@@ -370,100 +436,129 @@ import Layout from '../layouts/Layout.astro';
 				});
 
 				const matchesList = document.getElementById('matches-list')!;
-				if (profile.matches && profile.matches.length > 0) {
-					profile.matches.forEach((m: any) => {
-						const otherUser = users.find(u => u.uid === m.uid);
-						let kootaHtml = '';
+				matchesList.innerHTML = '';
 
-						if (otherUser) {
-							let compat = {
-								kootas: m.kootas || [],
-								doshas: m.doshas || [],
-								description: m.description || '',
-								score: m.score || 0,
-								maxScore: m.maxScore || 36
-							};
+				function renderMatches(listContainer: HTMLElement, matchesData: any[], showDistance: boolean = false) {
+					if (matchesData && matchesData.length > 0) {
+						matchesData.forEach((m: any) => {
+							const otherUser = users.find(u => u.uid === m.uid);
+							let kootaHtml = '';
 
-							// Fallback if kootas weren't saved in the backend
-							if (!m.kootas || m.kootas.length === 0) {
-								const uLat = otherUser.lat ? parseFloat(otherUser.lat) : 28.6139;
-								const uLon = otherUser.lon ? parseFloat(otherUser.lon) : 77.2090;
+							if (otherUser) {
+								let compat = {
+									kootas: m.kootas || [],
+									doshas: m.doshas || [],
+									description: m.description || '',
+									score: m.score || 0,
+									maxScore: m.maxScore || 36
+								};
 
-								// Ensure dob and tob are in correct format if they came back as ISO strings or something else from backend
-								const uDob = typeof otherUser.dob === 'string' && otherUser.dob.includes('T') ? otherUser.dob.split('T')[0] : otherUser.dob;
-								const uTob = typeof otherUser.tob === 'string' && otherUser.tob.includes('T') ? otherUser.tob.split('T')[1].substring(0, 5) : otherUser.tob;
+								// Fallback if kootas weren't saved in the backend
+								if (!m.kootas || m.kootas.length === 0) {
+									const uLat = otherUser.lat ? parseFloat(otherUser.lat) : 28.6139;
+									const uLon = otherUser.lon ? parseFloat(otherUser.lon) : 77.2090;
 
-								const uData = calculateAstrology(uDob, uTob, uLat, uLon);
+									// Ensure dob and tob are in correct format if they came back as ISO strings or something else from backend
+									const uDob = typeof otherUser.dob === 'string' && otherUser.dob.includes('T') ? otherUser.dob.split('T')[0] : otherUser.dob;
+									const uTob = typeof otherUser.tob === 'string' && otherUser.tob.includes('T') ? otherUser.tob.split('T')[1].substring(0, 5) : otherUser.tob;
 
-								// Prioritize pre-calculated indices from profile for consistency
-								compat = calculateCompatibility(
-									{
-										name: profile.name,
-										nakshatraIdx: profile.nakshatraIdx ?? astroData.panchang.nakshatraIdx,
-										moonSignIdx: profile.moonSignIdx ?? astroData.panchang.moonSignIdx,
-										isMoonManglik: profile.isMoonManglik ?? astroData.panchang.isMoonManglik,
-										isLaganManglik: profile.isLaganManglik ?? astroData.panchang.isLaganManglik,
-										gender: profile.gender
-									},
-									{
-										name: otherUser.name,
-										nakshatraIdx: otherUser.nakshatraIdx ?? uData.panchang.nakshatraIdx,
-										moonSignIdx: otherUser.moonSignIdx ?? uData.panchang.moonSignIdx,
-										isMoonManglik: otherUser.isMoonManglik ?? uData.panchang.isMoonManglik,
-										isLaganManglik: otherUser.isLaganManglik ?? uData.panchang.isLaganManglik,
-										gender: otherUser.gender
-									}
-								);
-							}
+									const uData = calculateAstrology(uDob, uTob, uLat, uLon);
 
-							kootaHtml = `
-								<div style="overflow-x: auto; margin-top: 0.5rem;">
-									<table class="compact-table" style="font-size: 0.65rem;">
-										<thead>
-											<tr>
-												<th>#</th>
-												<th>Guna</th>
-												<th>Girl</th>
-												<th>Boy</th>
-												<th>Obtained</th>
-												<th>Max</th>
-												<th>Area of Life</th>
-											</tr>
-										</thead>
-										<tbody>
-											${compat.kootas.map((k: any, idx: number) => `
+									// Prioritize pre-calculated indices from profile for consistency
+									compat = calculateCompatibility(
+										{
+											name: profile.name,
+											nakshatraIdx: profile.nakshatraIdx ?? astroData.panchang.nakshatraIdx,
+											moonSignIdx: profile.moonSignIdx ?? astroData.panchang.moonSignIdx,
+											isMoonManglik: profile.isMoonManglik ?? astroData.panchang.isMoonManglik,
+											isLaganManglik: profile.isLaganManglik ?? astroData.panchang.isLaganManglik,
+											gender: profile.gender
+										},
+										{
+											name: otherUser.name,
+											nakshatraIdx: otherUser.nakshatraIdx ?? uData.panchang.nakshatraIdx,
+											moonSignIdx: otherUser.moonSignIdx ?? uData.panchang.moonSignIdx,
+											isMoonManglik: otherUser.isMoonManglik ?? uData.panchang.isMoonManglik,
+											isLaganManglik: otherUser.isLaganManglik ?? uData.panchang.isLaganManglik,
+											gender: otherUser.gender
+										}
+									);
+								}
+
+								kootaHtml = `
+									<div style="overflow-x: auto; margin-top: 0.5rem;">
+										<table class="compact-table" style="font-size: 0.65rem;">
+											<thead>
 												<tr>
-													<td>${idx + 1}</td>
-													<td>${k.name}</td>
-													<td>${k.girlValue}</td>
-													<td>${k.boyValue}</td>
-													<td>${k.score}</td>
-													<td>${k.max}</td>
-													<td>${k.areaOfLife}</td>
+													<th>#</th>
+													<th>Guna</th>
+													<th>Girl</th>
+													<th>Boy</th>
+													<th>Obtained</th>
+													<th>Max</th>
+													<th>Area of Life</th>
 												</tr>
-											`).join('')}
-										</tbody>
-										<tfoot>
-											<tr style="background: #f8fafc; font-weight: 800;">
-												<td colspan="4" style="text-align: right;">Total Guna Milan Points</td>
-												<td>${compat.score}</td>
-												<td>${compat.maxScore}</td>
-												<td></td>
-											</tr>
-										</tfoot>
-									</table>
-								</div>
-							`;
+											</thead>
+											<tbody>
+												${compat.kootas.map((k: any, idx: number) => `
+													<tr>
+														<td>${idx + 1}</td>
+														<td>${k.name}</td>
+														<td>${k.girlValue}</td>
+														<td>${k.boyValue}</td>
+														<td>${k.score}</td>
+														<td>${k.max}</td>
+														<td>${k.areaOfLife}</td>
+													</tr>
+												`).join('')}
+											</tbody>
+											<tfoot>
+												<tr style="background: #f8fafc; font-weight: 800;">
+													<td colspan="4" style="text-align: right;">Total Guna Milan Points</td>
+													<td>${compat.score}</td>
+													<td>${compat.maxScore}</td>
+													<td></td>
+												</tr>
+											</tfoot>
+										</table>
+									</div>
+								`;
 
-							const card = document.createElement('div');
-							card.className = 'match-card';
-							card.innerHTML = generateMatchCardHtml(m.uid, m.name, m.category, m.score, compat.description, kootaHtml, compat.doshas);
-							matchesList.appendChild(card);
-						}
-					});
+								const distanceHtml = showDistance && m.distance !== undefined ?
+									`<div style="font-size: 0.8rem; color: #64748b; margin-top: 0.5rem; font-weight: 600;">📍 Approx. ${Math.round(m.distance)} km away</div>` : '';
+
+								const card = document.createElement('div');
+								card.className = 'match-card';
+								card.innerHTML = distanceHtml + generateMatchCardHtml(m.uid, m.name, m.category, m.score, compat.description, kootaHtml, compat.doshas);
+								listContainer.appendChild(card);
+							}
+						});
+					} else {
+						listContainer.innerHTML = '<p>No matches found yet. They will appear here as more people join!</p>';
+					}
+				}
+
+				if (profile.matches) {
+					renderMatches(matchesList, profile.matches);
 				} else {
 					matchesList.innerHTML = '<p>No matches found yet. They will appear here as more people join!</p>';
 				}
+
+				const nearestSection = document.getElementById('nearest-section')!;
+				const nearestList = document.getElementById('nearest-list')!;
+				nearestList.innerHTML = '';
+
+				if (profile.currentLat && profile.currentLon) {
+					nearestSection.style.display = 'block';
+					if (profile.nearest) {
+						renderMatches(nearestList, profile.nearest, true);
+					} else {
+						nearestList.innerHTML = '<p>No people found nearby yet.</p>';
+					}
+				} else {
+					nearestSection.style.display = 'none';
+				}
+
 
 			} catch (error) {
 				console.error("Dashboard error:", error);
