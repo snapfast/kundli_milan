@@ -1,71 +1,78 @@
 # 🌙 moonine
 
-### *Ancient Vedic Wisdom meets Modern Matchmaking.*
+### *Find Your Soul Connection through Ancient Vedic Wisdom.*
 
-moonine is a sophisticated Vedic Astrology (Jyotish) platform designed to bridge the gap between age-old celestial wisdom and contemporary relationship needs. Built with high-precision astronomical calculations, it provides a deep dive into your cosmic profile and finds your most compatible matches using the traditional Ashta Koota system.
-
----
-
-## 🚀 Key Features
-
-- **✨ Precision Guna Milan (36-Point System)**
-  Experience the most accurate compatibility matching based on the 8 Kootas: Varna, Vashya, Tara, Yoni, Maitri, Gana, Bhakoot, and Nadi.
-
-- **🛡️ Dosha Analysis & Exceptions**
-  Automated detection of Manglik Dosha, Nadi Dosha, and Bhakoot Dosha, including traditional cancellation rules (Pariharas) for a nuanced understanding of your destiny.
-
-- **📊 Personalized Cosmic Dashboard**
-  A centralized hub for your astrological profile. View your Nakshatra, Moon Sign, Planetary Positions, and Panchang details at a glance.
-
-- **🎓 Educational Insights**
-  Don't just see a score—understand it. moonine provides deep dives into astrological concepts, explaining how each factor influences your relationship.
-
-- **🔒 Privacy First**
-  Your data is yours. We use local storage and secure backend upserts, ensuring your sensitive details like email remain private and never shared on public match cards.
+**moonine** is more than just a matchmaking app. It is a bridge between the timeless celestial insights of Vedic Astrology (Jyotish) and the needs of modern relationships. By utilizing high-precision astronomical data and the traditional 36-point Ashta Koota system, we help you discover matches that aren't just compatible on paper, but aligned in spirit.
 
 ---
 
-## 🛠️ Built With
+## ✨ Why moonine?
 
-- **[Astro](https://astro.build/)** - The web framework for content-driven websites.
-- **[TypeScript](https://www.typescriptlang.org/)** - For robust, type-safe development.
-- **[Astronomy Engine](https://github.com/cosinekitty/astronomy)** - High-precision planetary position calculations.
-- **Google Apps Script** - A lightweight, serverless backend for profile management.
+- **🎯 Precision Matching**
+  Our 36-point Guna Milan system goes beyond surface-level interests, analyzing 8 distinct dimensions of compatibility to find your most harmonious matches.
+- **🛡️ Deeper Insights, Fewer Surprises**
+  Automated detection of Manglik and Nadi Doshas—complete with traditional cancellation rules—provides a nuanced understanding of potential challenges and strengths.
+- **📊 Your Personal Cosmic Dashboard**
+  Get instant access to your unique Nakshatra, Moon Sign, and planetary positions. Understand your cosmic DNA at a glance.
+- **🔒 Privacy You Can Trust**
+  Your journey is personal. We never share your email or sensitive birth details on public match cards. Your data stays yours.
+- **🎓 Learn as You Match**
+  We believe in empowerment through knowledge. moonine explains the *why* behind every score, turning ancient wisdom into actionable insights.
 
 ---
 
-## 👨‍💻 Getting Started
+## 🎁 Exclusive Limited Offer
 
-### Prerequisites
-- Node.js (v22.12.0 or higher)
+To celebrate our launch, **moonine is completely free for the first 100 users!** Join now to secure your spot and start your journey toward a more conscious and celestial relationship.
 
-### Setup
-1. Clone the repository
-2. Install dependencies:
+---
+
+## 🏛️ The 8 Pillars of Compatibility
+
+Our matching engine analyzes the traditional **Ashta Koota**, ensuring a comprehensive assessment of your union:
+
+1.  **Varna:** Spiritual & Ego alignment.
+2.  **Vashya:** Mutual attraction & Power balance.
+3.  **Tara:** Health, Destiny & Longevity.
+4.  **Yoni:** Biological & Intimate compatibility.
+5.  **Maitri:** Friendship & Psychological bond.
+6.  **Gana:** Temperament & Character matching.
+7.  **Bhakoot:** Emotional & Financial prosperity.
+8.  **Nadi:** Genetic health & Progeny.
+
+---
+
+## 🌐 Live Demo
+
+Experience the magic today: **[moonine.netlify.app](https://moonine.netlify.app/)**
+
+---
+
+## 🛠️ Developer Information
+
+This project is built with a focus on high performance and precision. For detailed requirements, see [USER_STORIES.md](./USER_STORIES.md).
+
+### Built With
+- **[Astro](https://astro.build/)** - High-performance web framework.
+- **[TypeScript](https://www.typescriptlang.org/)** - Robust, type-safe logic.
+- **[Astronomy Engine](https://github.com/cosinekitty/astronomy)** - High-precision planetary calculations.
+- **Google Apps Script** - Lightweight, serverless profile management.
+
+### Getting Started
+1. **Prerequisites:** Node.js (v22.12.0 or higher)
+2. **Setup:**
    ```bash
    npm install
    ```
-3. Start the development server:
+3. **Run Development:**
    ```bash
    npm run dev
    ```
-4. Build for production:
+4. **Build for Production:**
    ```bash
    npm run build
    ```
 
 ---
 
-## 🌐 Live Demo
-
-Experience the magic at [moonine.netlify.app](https://moonine.netlify.app/)
-
----
-
-## 📜 User Stories
-
-For a detailed look at the project requirements and user journeys, check out [USER_STORIES.md](./USER_STORIES.md).
-
----
-
-*Made with ❤️ for the curious souls.*
+*Made with ❤️ for the curious souls seeking celestial alignment.*
