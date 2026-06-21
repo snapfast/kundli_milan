@@ -15,6 +15,9 @@ export interface CompatibilityResult {
         name: string;
         score: number;
         max: number;
+        areaOfLife: string;
+        girlValue: string;
+        boyValue: string;
     }[];
     doshas: {
         name: string;
@@ -28,12 +31,20 @@ export interface CompatibilityResult {
 // Yoni: 0 = Ashwa, 1 = Gaja, 2 = Mesha, 3 = Sarpa, 4 = Shwan, 5 = Marjar, 6 = Mushak, 7 = Gau, 8 = Mahish, 9 = Vyagrah, 10 = Mrig, 11 = Vanar, 12 = Nakul, 13 = Singh
 // Nadi: 0 = Adi, 1 = Madhya, 2 = Antya
 
+const VARNA_NAMES = ["Brahmin", "Kshatriya", "Vaishya", "Shudra"];
+const VASHYA_NAMES = ["Manava", "Chatushpada", "Vanachara", "Jalachara", "Keeta"];
+const GANA_NAMES = ["Devata", "Manushya", "Rakshasa"];
+const NADI_NAMES = ["Adi", "Madhya", "Antya"];
+const LORD_NAMES = ["Sun", "Moon", "Mars", "Mercury", "Jupiter", "Venus", "Saturn"];
+const YONI_NAMES = ["Ashwa", "Gaja", "Mesha", "Sarpa", "Shwan", "Marjar", "Mushak", "Gau", "Mahish", "Vyagrah", "Mrig", "Vanar", "Nakul", "Singh"];
+const RASI_NAMES_SANSKRIT = ["Mesha", "Vrishabha", "Mithuna", "Karka", "Simha", "Kanya", "Tula", "Vrishchika", "Dhanu", "Makara", "Kumbha", "Meena"];
+
 const NAKSHATRA_PROPS = [
     { name: "Ashwini", gana: 0, yoni: 0, nadi: 0 },
     { name: "Bharani", gana: 1, yoni: 1, nadi: 1 },
     { name: "Krittika", gana: 2, yoni: 2, nadi: 2 },
     { name: "Rohini", gana: 1, yoni: 3, nadi: 2 },
-    { name: "Mrigashira", gana: 0, yoni: 3, nadi: 1 },
+    { name: "Mrigashirsha", gana: 0, yoni: 3, nadi: 1 },
     { name: "Ardra", gana: 1, yoni: 4, nadi: 0 },
     { name: "Punarvasu", gana: 0, yoni: 5, nadi: 0 },
     { name: "Pushya", gana: 0, yoni: 2, nadi: 1 },
@@ -122,14 +133,14 @@ export function calculateCompatibility(user1: UserAstrology, user2: UserAstrolog
             category: "Incomplete Data",
             description: "Some cosmic details are missing for this pairing, making it impossible to calculate a precise match.",
             kootas: [
-                { name: "Varna", score: 0, max: 1 },
-                { name: "Vashya", score: 0, max: 2 },
-                { name: "Tara", score: 0, max: 3 },
-                { name: "Yoni", score: 0, max: 4 },
-                { name: "Maitri", score: 0, max: 5 },
-                { name: "Gana", score: 0, max: 6 },
-                { name: "Bhakoot", score: 0, max: 7 },
-                { name: "Nadi", score: 0, max: 8 }
+                { name: "Varna Koot", score: 0, max: 1, areaOfLife: "Aptitude", girlValue: "-", boyValue: "-" },
+                { name: "Vasya Koot", score: 0, max: 2, areaOfLife: "Amenability", girlValue: "-", boyValue: "-" },
+                { name: "Tara Koot", score: 0, max: 3, areaOfLife: "Compassion", girlValue: "-", boyValue: "-" },
+                { name: "Yoni Koot", score: 0, max: 4, areaOfLife: "Chemistry", girlValue: "-", boyValue: "-" },
+                { name: "Graha Maitri", score: 0, max: 5, areaOfLife: "Affection", girlValue: "-", boyValue: "-" },
+                { name: "Gana Koot", score: 0, max: 6, areaOfLife: "Temperament", girlValue: "-", boyValue: "-" },
+                { name: "Bhakoot Koot", score: 0, max: 7, areaOfLife: "Love", girlValue: "-", boyValue: "-" },
+                { name: "Nadi Koot", score: 0, max: 8, areaOfLife: "Progeny", girlValue: "-", boyValue: "-" }
             ],
             doshas: []
         };
@@ -165,16 +176,23 @@ export function calculateCompatibility(user1: UserAstrology, user2: UserAstrolog
         }
     }
 
-    // 1. Varna (1 point)
+    // 1. Varna Koot (1 point)
     // 0 = Brahmin, 1 = Kshatriya, 2 = Vaishya, 3 = Shudra
     // Score 1 point if Boy's Varna is higher than or equal to Girl's Varna (i.e. lower or equal number)
     const vBoy = RASI_PROPS[boy.moonSignIdx].varna;
     const vGirl = RASI_PROPS[girl.moonSignIdx].varna;
     let varnaScore = 0;
     if (vBoy <= vGirl) varnaScore = 1;
-    kootas.push({ name: "Varna", score: varnaScore, max: 1 });
+    kootas.push({
+        name: "Varna Koot",
+        score: varnaScore,
+        max: 1,
+        areaOfLife: "Aptitude",
+        girlValue: VARNA_NAMES[vGirl],
+        boyValue: VARNA_NAMES[vBoy]
+    });
 
-    // 2. Vashya (2 points)
+    // 2. Vasya Koot (2 points)
     // Groom Row, Bride Column
     const VASHYA_MATRIX = [
         [2, 2, 0, 2, 1], // Boy Manushya
@@ -186,18 +204,32 @@ export function calculateCompatibility(user1: UserAstrology, user2: UserAstrolog
     const vasBoy = RASI_PROPS[boy.moonSignIdx].vashya;
     const vasGirl = RASI_PROPS[girl.moonSignIdx].vashya;
     const vashyaScore = VASHYA_MATRIX[vasBoy][vasGirl];
-    kootas.push({ name: "Vashya", score: vashyaScore, max: 2 });
+    kootas.push({
+        name: "Vasya Koot",
+        score: vashyaScore,
+        max: 2,
+        areaOfLife: "Amenability",
+        girlValue: VASHYA_NAMES[vasGirl],
+        boyValue: VASHYA_NAMES[vasBoy]
+    });
 
-    // 3. Tara (3 points)
+    // 3. Tara Koot (3 points)
     const diff1 = (user2.nakshatraIdx - user1.nakshatraIdx + 27) % 9;
     const diff2 = (user1.nakshatraIdx - user2.nakshatraIdx + 27) % 9;
     const goodTara = [1, 3, 5, 7, 8];
     let taraScore = 0;
     if (goodTara.includes(diff1) && goodTara.includes(diff2)) taraScore = 3;
     else if (goodTara.includes(diff1) || goodTara.includes(diff2)) taraScore = 1.5;
-    kootas.push({ name: "Tara", score: taraScore, max: 3 });
+    kootas.push({
+        name: "Tara Koot",
+        score: taraScore,
+        max: 3,
+        areaOfLife: "Compassion",
+        girlValue: NAKSHATRA_PROPS[girl.nakshatraIdx].name,
+        boyValue: NAKSHATRA_PROPS[boy.nakshatraIdx].name
+    });
 
-    // 4. Yoni (4 points)
+    // 4. Yoni Koot (4 points)
     const y1 = NAKSHATRA_PROPS[user1.nakshatraIdx].yoni;
     const y2 = NAKSHATRA_PROPS[user2.nakshatraIdx].yoni;
     const yoniScore = YONI_COMPAT[y1][y2];
@@ -208,9 +240,18 @@ export function calculateCompatibility(user1: UserAstrology, user2: UserAstrolog
             isCancelled: false
         });
     }
-    kootas.push({ name: "Yoni", score: yoniScore, max: 4 });
+    const yGirl = NAKSHATRA_PROPS[girl.nakshatraIdx].yoni;
+    const yBoy = NAKSHATRA_PROPS[boy.nakshatraIdx].yoni;
+    kootas.push({
+        name: "Yoni Koot",
+        score: yoniScore,
+        max: 4,
+        areaOfLife: "Chemistry",
+        girlValue: YONI_NAMES[yGirl],
+        boyValue: YONI_NAMES[yBoy]
+    });
 
-    // 5. Maitri (5 points)
+    // 5. Graha Maitri (5 points)
     const l1 = RASI_PROPS[user1.moonSignIdx].lord;
     const l2 = RASI_PROPS[user2.moonSignIdx].lord;
     let maitriScore = 0;
@@ -221,9 +262,19 @@ export function calculateCompatibility(user1: UserAstrology, user2: UserAstrolog
     else if (f1 === 0 && f2 === 0) maitriScore = 3;
     else if ((f1 === 1 && f2 === -1) || (f1 === -1 && f2 === 1)) maitriScore = 1;
     else if ((f1 === 0 && f2 === -1) || (f1 === -1 && f2 === 0)) maitriScore = 0.5;
-    kootas.push({ name: "Maitri", score: maitriScore, max: 5 });
 
-    // 6. Gana (6 points)
+    const lGirl = RASI_PROPS[girl.moonSignIdx].lord;
+    const lBoy = RASI_PROPS[boy.moonSignIdx].lord;
+    kootas.push({
+        name: "Graha Maitri",
+        score: maitriScore,
+        max: 5,
+        areaOfLife: "Affection",
+        girlValue: LORD_NAMES[lGirl],
+        boyValue: LORD_NAMES[lBoy]
+    });
+
+    // 6. Gana Koot (6 points)
     // 0 = Deva, 1 = Manushya, 2 = Rakshasa
     // Groom Row, Bride Column
     const GANA_MATRIX = [
@@ -248,9 +299,16 @@ export function calculateCompatibility(user1: UserAstrology, user2: UserAstrolog
             });
         }
     }
-    kootas.push({ name: "Gana", score: ganaScore, max: 6 });
+    kootas.push({
+        name: "Gana Koot",
+        score: ganaScore,
+        max: 6,
+        areaOfLife: "Temperament",
+        girlValue: GANA_NAMES[gGirl],
+        boyValue: GANA_NAMES[gBoy]
+    });
 
-    // 7. Bhakoot (7 points)
+    // 7. Bhakoot Koot (7 points)
     const rDiff = (user2.moonSignIdx - user1.moonSignIdx + 12) % 12 + 1;
     let bhakootScore = 7;
     const badDiffs = [2, 5, 6, 8, 9, 12];
@@ -272,9 +330,16 @@ export function calculateCompatibility(user1: UserAstrology, user2: UserAstrolog
             isCancelled
         });
     }
-    kootas.push({ name: "Bhakoot", score: bhakootScore, max: 7 });
+    kootas.push({
+        name: "Bhakoot Koot",
+        score: bhakootScore,
+        max: 7,
+        areaOfLife: "Love",
+        girlValue: RASI_NAMES_SANSKRIT[girl.moonSignIdx],
+        boyValue: RASI_NAMES_SANSKRIT[boy.moonSignIdx]
+    });
 
-    // 8. Nadi (8 points)
+    // 8. Nadi Koot (8 points)
     const n1 = NAKSHATRA_PROPS[user1.nakshatraIdx].nadi;
     const n2 = NAKSHATRA_PROPS[user2.nakshatraIdx].nadi;
     let nadiScore = 8;
@@ -293,7 +358,16 @@ export function calculateCompatibility(user1: UserAstrology, user2: UserAstrolog
             isCancelled
         });
     }
-    kootas.push({ name: "Nadi", score: nadiScore, max: 8 });
+    const nGirl = NAKSHATRA_PROPS[girl.nakshatraIdx].nadi;
+    const nBoy = NAKSHATRA_PROPS[boy.nakshatraIdx].nadi;
+    kootas.push({
+        name: "Nadi Koot",
+        score: nadiScore,
+        max: 8,
+        areaOfLife: "Progeny",
+        girlValue: NADI_NAMES[nGirl],
+        boyValue: NADI_NAMES[nBoy]
+    });
 
     const totalScore = kootas.reduce((acc, k) => acc + k.score, 0);
 

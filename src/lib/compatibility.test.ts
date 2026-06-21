@@ -38,7 +38,7 @@ describe('Ultimate Compatibility Regression Test', () => {
 
         // Verify Nakshatras
         expect(astroRahul.panchang.nakshatra).toBe("Rohini");
-        expect(astroKamini.panchang.nakshatra).toBe("Mrigashira");
+        expect(astroKamini.panchang.nakshatra).toBe("Mrigashirsha");
 
         const userRahul = {
             name: rahul.name,
@@ -64,14 +64,14 @@ describe('Ultimate Compatibility Regression Test', () => {
 
         // Assert Individual Koota Points
         const kootas = result.kootas;
-        expect(kootas.find(k => k.name === "Varna")?.score).toBe(1);
-        expect(kootas.find(k => k.name === "Vashya")?.score).toBe(1);
-        expect(kootas.find(k => k.name === "Tara")?.score).toBe(3);
-        expect(kootas.find(k => k.name === "Yoni")?.score).toBe(4);
-        expect(kootas.find(k => k.name === "Maitri")?.score).toBe(5);
-        expect(kootas.find(k => k.name === "Gana")?.score).toBe(5);
-        expect(kootas.find(k => k.name === "Bhakoot")?.score).toBe(0);
-        expect(kootas.find(k => k.name === "Nadi")?.score).toBe(8);
+        expect(kootas.find(k => k.name === "Varna Koot")?.score).toBe(1);
+        expect(kootas.find(k => k.name === "Vasya Koot")?.score).toBe(1);
+        expect(kootas.find(k => k.name === "Tara Koot")?.score).toBe(3);
+        expect(kootas.find(k => k.name === "Yoni Koot")?.score).toBe(4);
+        expect(kootas.find(k => k.name === "Graha Maitri")?.score).toBe(5);
+        expect(kootas.find(k => k.name === "Gana Koot")?.score).toBe(5);
+        expect(kootas.find(k => k.name === "Bhakoot Koot")?.score).toBe(0);
+        expect(kootas.find(k => k.name === "Nadi Koot")?.score).toBe(8);
 
         // Verify Dosha Cancellations (should exist but not add points)
         expect(result.doshas.some(d => d.name === "Gana Dosha" && d.isCancelled)).toBe(true);
