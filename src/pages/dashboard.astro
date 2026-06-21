@@ -302,7 +302,7 @@ import Layout from '../layouts/Layout.astro';
 					});
 
 					resultsWithScores.sort((a, b) => b.compat.score - a.compat.score);
-					const top3 = resultsWithScores.slice(0, 3);
+					const top10 = resultsWithScores.slice(0, 10);
 
 					const updatedProfile: UserProfile = {
 						...details,
@@ -311,7 +311,7 @@ import Layout from '../layouts/Layout.astro';
 						moonSignIdx: astroData.panchang.moonSignIdx,
 						isMoonManglik: astroData.panchang.isMoonManglik,
 						isLaganManglik: astroData.panchang.isLaganManglik,
-						matches: top3.map(m => ({
+						matches: top10.map(m => ({
 							uid: m.user.uid,
 							name: m.user.name,
 							score: m.compat.score,
