@@ -315,7 +315,11 @@ import Layout from '../layouts/Layout.astro';
 							uid: m.user.uid,
 							name: m.user.name,
 							score: m.compat.score,
-							category: m.compat.category
+							category: m.compat.category,
+							description: m.compat.description,
+							maxScore: m.compat.maxScore,
+							kootas: m.compat.kootas,
+							doshas: m.compat.doshas
 						}))
 					};
 
@@ -372,36 +376,45 @@ import Layout from '../layouts/Layout.astro';
 						let kootaHtml = '';
 
 						if (otherUser) {
-							// For rendering kootas in dashboard, we recalculate locally or could have saved them.
-							// Here we recalculate to show the breakdown.
-							const uLat = otherUser.lat ? parseFloat(otherUser.lat) : 28.6139;
-							const uLon = otherUser.lon ? parseFloat(otherUser.lon) : 77.2090;
+							let compat = {
+								kootas: m.kootas || [],
+								doshas: m.doshas || [],
+								description: m.description || '',
+								score: m.score || 0,
+								maxScore: m.maxScore || 36
+							};
 
-							// Ensure dob and tob are in correct format if they came back as ISO strings or something else from backend
-							const uDob = typeof otherUser.dob === 'string' && otherUser.dob.includes('T') ? otherUser.dob.split('T')[0] : otherUser.dob;
-							const uTob = typeof otherUser.tob === 'string' && otherUser.tob.includes('T') ? otherUser.tob.split('T')[1].substring(0, 5) : otherUser.tob;
+							// Fallback if kootas weren't saved in the backend
+							if (!m.kootas || m.kootas.length === 0) {
+								const uLat = otherUser.lat ? parseFloat(otherUser.lat) : 28.6139;
+								const uLon = otherUser.lon ? parseFloat(otherUser.lon) : 77.2090;
 
-							const uData = calculateAstrology(uDob, uTob, uLat, uLon);
+								// Ensure dob and tob are in correct format if they came back as ISO strings or something else from backend
+								const uDob = typeof otherUser.dob === 'string' && otherUser.dob.includes('T') ? otherUser.dob.split('T')[0] : otherUser.dob;
+								const uTob = typeof otherUser.tob === 'string' && otherUser.tob.includes('T') ? otherUser.tob.split('T')[1].substring(0, 5) : otherUser.tob;
 
-							// Prioritize pre-calculated indices from profile for consistency
-							const compat = calculateCompatibility(
-								{
-									name: profile.name,
-									nakshatraIdx: profile.nakshatraIdx ?? astroData.panchang.nakshatraIdx,
-									moonSignIdx: profile.moonSignIdx ?? astroData.panchang.moonSignIdx,
-									isMoonManglik: profile.isMoonManglik ?? astroData.panchang.isMoonManglik,
-									isLaganManglik: profile.isLaganManglik ?? astroData.panchang.isLaganManglik,
-									gender: profile.gender
-								},
-								{
-									name: otherUser.name,
-									nakshatraIdx: otherUser.nakshatraIdx ?? uData.panchang.nakshatraIdx,
-									moonSignIdx: otherUser.moonSignIdx ?? uData.panchang.moonSignIdx,
-									isMoonManglik: otherUser.isMoonManglik ?? uData.panchang.isMoonManglik,
-									isLaganManglik: otherUser.isLaganManglik ?? uData.panchang.isLaganManglik,
-									gender: otherUser.gender
-								}
-							);
+								const uData = calculateAstrology(uDob, uTob, uLat, uLon);
+
+								// Prioritize pre-calculated indices from profile for consistency
+								compat = calculateCompatibility(
+									{
+										name: profile.name,
+										nakshatraIdx: profile.nakshatraIdx ?? astroData.panchang.nakshatraIdx,
+										moonSignIdx: profile.moonSignIdx ?? astroData.panchang.moonSignIdx,
+										isMoonManglik: profile.isMoonManglik ?? astroData.panchang.isMoonManglik,
+										isLaganManglik: profile.isLaganManglik ?? astroData.panchang.isLaganManglik,
+										gender: profile.gender
+									},
+									{
+										name: otherUser.name,
+										nakshatraIdx: otherUser.nakshatraIdx ?? uData.panchang.nakshatraIdx,
+										moonSignIdx: otherUser.moonSignIdx ?? uData.panchang.moonSignIdx,
+										isMoonManglik: otherUser.isMoonManglik ?? uData.panchang.isMoonManglik,
+										isLaganManglik: otherUser.isLaganManglik ?? uData.panchang.isLaganManglik,
+										gender: otherUser.gender
+									}
+								);
+							}
 
 							kootaHtml = `
 								<div style="overflow-x: auto; margin-top: 0.5rem;">
@@ -418,7 +431,7 @@ import Layout from '../layouts/Layout.astro';
 											</tr>
 										</thead>
 										<tbody>
-											${compat.kootas.map((k, idx) => `
+											${compat.kootas.map((k: any, idx: number) => `
 												<tr>
 													<td>${idx + 1}</td>
 													<td>${k.name}</td>

@@ -19,6 +19,21 @@ export interface UserProfile {
         name: string;
         score: number;
         category: string;
+        description?: string;
+        maxScore?: number;
+        kootas?: {
+            name: string;
+            score: number;
+            max: number;
+            areaOfLife: string;
+            girlValue: string;
+            boyValue: string;
+        }[];
+        doshas?: {
+            name: string;
+            description: string;
+            isCancelled: boolean;
+        }[];
     }[];
 }
 
