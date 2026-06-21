@@ -233,7 +233,7 @@ import Layout from '../layouts/Layout.astro';
 				const astroData = calculateAstrology(details.dob, details.tob, lat, lon);
 
 				// Determine if we need to update the backend
-				const otherUsersCount = users.filter(u => u.uid !== uid && u.name && u.gender && u.gender !== details.gender).length;
+				const otherUsersCount = users.filter(u => u.uid !== uid && u.name).length;
 				const hasMatches = profile && profile.matches && profile.matches.length > 0;
 
 				// We should update if:
@@ -259,7 +259,7 @@ import Layout from '../layouts/Layout.astro';
 
 				if (needsUpdate) {
 					console.log('Updating profile and matches on backend...');
-					const otherUsers = users.filter(u => u.uid !== uid && u.name && u.dob && u.tob && u.gender && u.gender !== details.gender);
+					const otherUsers = users.filter(u => u.uid !== uid && u.name && u.dob && u.tob);
 					const currentUserAstrology = {
 						name: details.name,
 						nakshatraIdx: astroData.panchang.nakshatraIdx,
