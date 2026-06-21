@@ -407,7 +407,7 @@ export function calculateCompatibility(user1: UserAstrology, user2: UserAstrolog
     if (user2.isLaganManglik) {
         doshas.push({
             name: "Lagan Manglik (Partner)",
-            description: "Partner has Mars in 1, 4, 7, 8, or 12 house from the Ascendant.",
+            description: "Please consult an astrologer before proceeding.",
             isCancelled: m1
         });
     }
