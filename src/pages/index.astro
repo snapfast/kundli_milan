@@ -133,11 +133,20 @@ import Layout from '../layouts/Layout.astro';
 					</select>
 				</div>
 				<div class="field">
-					<label for="location">Location (City, Country)</label>
+					<label for="location">Birth Location (City, Country)</label>
 					<input type="text" id="location" name="location" required placeholder="e.g. New Delhi, India" autocomplete="off" />
 					<div id="suggestions"></div>
 					<input type="hidden" id="lat" name="lat" />
 					<input type="hidden" id="lon" name="lon" />
+				</div>
+			</div>
+			<div class="form-row">
+				<div class="field">
+					<label for="currentLocation">Current Location (Optional)</label>
+					<input type="text" id="currentLocation" name="currentLocation" placeholder="e.g. Mumbai, India" autocomplete="off" />
+					<div id="currentSuggestions"></div>
+					<input type="hidden" id="currentLat" name="currentLat" />
+					<input type="hidden" id="currentLon" name="currentLon" />
 				</div>
 			</div>
 			<div class="form-actions">
@@ -221,6 +230,10 @@ import Layout from '../layouts/Layout.astro';
 			const suggestionsContainer = document.getElementById('suggestions') as HTMLDivElement;
 			const latInput = document.getElementById('lat') as HTMLInputElement;
 			const lonInput = document.getElementById('lon') as HTMLInputElement;
+			const currentLocationInput = document.getElementById('currentLocation') as HTMLInputElement;
+			const currentSuggestionsContainer = document.getElementById('currentSuggestions') as HTMLDivElement;
+			const currentLatInput = document.getElementById('currentLat') as HTMLInputElement;
+			const currentLonInput = document.getElementById('currentLon') as HTMLInputElement;
 			const redirectingDiv = document.getElementById('redirecting') as HTMLDivElement;
 
 			const tobHour = document.getElementById('tob_hour') as HTMLSelectElement;
@@ -264,7 +277,7 @@ import Layout from '../layouts/Layout.astro';
 				if (stored) {
 					try {
 						const details = JSON.parse(stored);
-						const fields = ['name', 'email', 'dob', 'tob', 'gender', 'location', 'lat', 'lon'];
+						const fields = ['name', 'email', 'dob', 'tob', 'gender', 'location', 'lat', 'lon', 'currentLocation', 'currentLat', 'currentLon'];
 						fields.forEach(field => {
 							const element = document.getElementById(field) as HTMLInputElement | HTMLSelectElement;
 							if (element && details[field]) {
@@ -333,60 +346,65 @@ import Layout from '../layouts/Layout.astro';
 				}
 			});
 
-			// Location Autocomplete
-			let timeout: ReturnType<typeof setTimeout>;
-			locationInput?.addEventListener('input', () => {
-				clearTimeout(timeout);
-				const query = locationInput.value;
-				if (query.length < 3) {
-					suggestionsContainer.style.display = 'none';
-					return;
-				}
-
-				timeout = setTimeout(async () => {
-					try {
-						suggestionsContainer.innerHTML = '<div class="suggestion-item" style="color: #666;">Searching locations...</div>';
-						suggestionsContainer.style.display = 'block';
-
-						const response = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&limit=5`);
-
-						if (!response.ok) throw new Error('Network response was not ok');
-
-						const data = await response.json();
-
-						suggestionsContainer.innerHTML = '';
-						if (data.length > 0) {
-							data.forEach((item: any) => {
-								const div = document.createElement('div');
-								div.className = 'suggestion-item';
-								div.textContent = item.display_name;
-								div.addEventListener('click', () => {
-									locationInput.value = item.display_name;
-									latInput.value = item.lat;
-									lonInput.value = item.lon;
-									suggestionsContainer.style.display = 'none';
-									autoSave(); // Ensure lat/lon are saved
-								});
-								suggestionsContainer.appendChild(div);
-							});
-							suggestionsContainer.style.display = 'block';
-						} else {
-							suggestionsContainer.innerHTML = '<div class="suggestion-item" style="color: #dc3545;">No locations found. Try a different city.</div>';
-							suggestionsContainer.style.display = 'block';
-						}
-					} catch (error) {
-						console.error('Error fetching locations:', error);
-						suggestionsContainer.innerHTML = '<div class="suggestion-item" style="color: #dc3545;">Error connecting to location service. Please type manually or try again.</div>';
-						suggestionsContainer.style.display = 'block';
+			// Location Autocomplete Setup Function
+			function setupAutocomplete(inputEl: HTMLInputElement, suggestionsEl: HTMLDivElement, latEl: HTMLInputElement, lonEl: HTMLInputElement) {
+				let timeout: ReturnType<typeof setTimeout>;
+				inputEl?.addEventListener('input', () => {
+					clearTimeout(timeout);
+					const query = inputEl.value;
+					if (query.length < 3) {
+						suggestionsEl.style.display = 'none';
+						return;
 					}
-				}, 300);
-			});
 
-			document.addEventListener('click', (e) => {
-				if (e.target !== locationInput) {
-					suggestionsContainer.style.display = 'none';
-				}
-			});
+					timeout = setTimeout(async () => {
+						try {
+							suggestionsEl.innerHTML = '<div class="suggestion-item" style="color: #666;">Searching locations...</div>';
+							suggestionsEl.style.display = 'block';
+
+							const response = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&limit=5`);
+
+							if (!response.ok) throw new Error('Network response was not ok');
+
+							const data = await response.json();
+
+							suggestionsEl.innerHTML = '';
+							if (data.length > 0) {
+								data.forEach((item: any) => {
+									const div = document.createElement('div');
+									div.className = 'suggestion-item';
+									div.textContent = item.display_name;
+									div.addEventListener('click', () => {
+										inputEl.value = item.display_name;
+										latEl.value = item.lat;
+										lonEl.value = item.lon;
+										suggestionsEl.style.display = 'none';
+										autoSave(); // Ensure lat/lon are saved
+									});
+									suggestionsEl.appendChild(div);
+								});
+								suggestionsEl.style.display = 'block';
+							} else {
+								suggestionsEl.innerHTML = '<div class="suggestion-item" style="color: #dc3545;">No locations found. Try a different city.</div>';
+								suggestionsEl.style.display = 'block';
+							}
+						} catch (error) {
+							console.error('Error fetching locations:', error);
+							suggestionsEl.innerHTML = '<div class="suggestion-item" style="color: #dc3545;">Error connecting to location service. Please type manually or try again.</div>';
+							suggestionsEl.style.display = 'block';
+						}
+					}, 300);
+				});
+
+				document.addEventListener('click', (e) => {
+					if (e.target !== inputEl) {
+						suggestionsEl.style.display = 'none';
+					}
+				});
+			}
+
+			setupAutocomplete(locationInput, suggestionsContainer, latInput, lonInput);
+			setupAutocomplete(currentLocationInput, currentSuggestionsContainer, currentLatInput, currentLonInput);
 
 			form?.addEventListener('submit', async (e) => {
 				e.preventDefault();
@@ -426,6 +444,12 @@ import Layout from '../layouts/Layout.astro';
 				if (!locationInput.value) {
 					alert('Please enter your birth location.');
 					locationInput.focus();
+					return;
+				}
+
+				if (currentLocationInput.value && (!currentLatInput.value || !currentLonInput.value)) {
+					alert('Please select your current location from the suggestions list to get accurate coordinates.');
+					currentLocationInput.focus();
 					return;
 				}
 

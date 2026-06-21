@@ -10,6 +10,9 @@ export interface UserProfile {
     location: string;
     lat?: string;
     lon?: string;
+    currentLocation?: string;
+    currentLat?: string;
+    currentLon?: string;
     nakshatraIdx?: number;
     moonSignIdx?: number;
     isMoonManglik?: boolean;
@@ -20,6 +23,28 @@ export interface UserProfile {
         score: number;
         category: string;
         description?: string;
+        maxScore?: number;
+        kootas?: {
+            name: string;
+            score: number;
+            max: number;
+            areaOfLife: string;
+            girlValue: string;
+            boyValue: string;
+        }[];
+        doshas?: {
+            name: string;
+            description: string;
+            isCancelled: boolean;
+        }[];
+    }[];
+    nearest?: {
+        uid: string;
+        name: string;
+        score: number;
+        category: string;
+        description?: string;
+        distance: number;
         maxScore?: number;
         kootas?: {
             name: string;
@@ -66,7 +91,10 @@ export async function fetchUsers(): Promise<UserProfile[]> {
             isMoonManglik: String(u.isMoonManglik).toLowerCase() === 'true',
             isLaganManglik: String(u.isLaganManglik).toLowerCase() === 'true',
             lat: u.lat !== undefined ? String(u.lat) : undefined,
-            lon: u.lon !== undefined ? String(u.lon) : undefined
+            lon: u.lon !== undefined ? String(u.lon) : undefined,
+            currentLocation: u.currentLocation !== undefined ? String(u.currentLocation) : undefined,
+            currentLat: u.currentLat !== undefined ? String(u.currentLat) : undefined,
+            currentLon: u.currentLon !== undefined ? String(u.currentLon) : undefined
         })) as UserProfile[];
     } catch (error) {
         console.error('Error fetching users:', error);
