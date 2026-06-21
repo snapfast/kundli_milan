@@ -24,43 +24,27 @@ const { title, description } = Astro.props;
 				margin: 0.5rem auto;
 				padding: 0 0.25rem;
 				line-height: 1.35;
-				background-color: #fffef0;
+				background-color: #fffdf0;
+				background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M50 50c-10-10-20 0-20 10 0 10 10 20 20 10 10-10 20 0 20-10 0-10-10-20-20-10zm0 0c10 10 0 20-10 20-10 0-20-10-10-20 10-10 0-20 10-20 10 0 20 10 10 20zm0 0c-10 10-20 0-20-10 0-10 10-20 20-10 10 10 20 0 20 10 0 10-10 20-20 10zm0 0c10-10 0-20-10-20-10 0-20 10-10 20 10 10 0 20 10 20 10 0 20-10 10-20z' fill='%23facc15' fill-opacity='0.08'/%3E%3C/svg%3E");
 				font-size: 0.88rem;
-				color: #000000;
+				color: #000;
 			}
 			.container {
-				background: #fffdf0;
-				padding: 1.5rem;
-				border-radius: 8px;
-				box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+				background: white;
+				padding: 0.75rem 1rem;
+				border-radius: 6px;
+				box-shadow: 0 1px 3px rgba(0,0,0,0.08);
 				position: relative;
-				border: 1px solid #fde68a;
-				overflow: hidden;
+				border: 1px solid #fef9c3;
 			}
-			.floral-corner {
-				position: absolute;
-				width: 80px;
-				height: 80px;
-				background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M0 0 c 50 0 100 50 100 100 M 0 0 c 0 50 50 100 100 100 M 20 0 Q 20 20 0 20 M 0 40 Q 40 40 40 0 M 60 0 Q 60 60 0 60 M 0 80 Q 80 80 80 0' fill='none' stroke='%23fde68a' stroke-width='2'/%3E%3Ccircle cx='10' cy='10' r='3' fill='%23fde68a'/%3E%3Ccircle cx='30' cy='30' r='2' fill='%23fde68a'/%3E%3C/svg%3E");
-				background-size: contain;
-				background-repeat: no-repeat;
-				pointer-events: none;
-				opacity: 0.6;
-			}
-			.top-left { top: 0; left: 0; }
-			.top-right { top: 0; right: 0; transform: rotate(90deg); }
-			.bottom-left { bottom: 0; left: 0; transform: rotate(270deg); }
-			.bottom-right { bottom: 0; right: 0; transform: rotate(180deg); }
-
 			h1, h2 {
-				color: #000000;
-				border-bottom: 2px solid #facc15;
-				padding-bottom: 0.3rem;
-				margin-top: 0.5rem;
-				margin-bottom: 0.75rem;
-				font-size: 1.35rem;
-				font-weight: 800;
-				text-align: center;
+				color: #000;
+				border-bottom: 1.5px solid #6366f1;
+				padding-bottom: 0.2rem;
+				margin-top: 0.25rem;
+				margin-bottom: 0.5rem;
+				font-size: 1.25rem;
+				font-weight: 700;
 			}
 
 			/* Form & Buttons */
@@ -68,10 +52,10 @@ const { title, description } = Astro.props;
 				display: flex;
 				flex-direction: column;
 				gap: 0.5rem;
-				background: #fffcf0;
-				padding: 1rem;
-				border-radius: 6px;
-				border: 1px solid #fde68a;
+				background: #fffdf0;
+				padding: 0.75rem;
+				border-radius: 4px;
+				border: 1px solid #fde047;
 			}
 			.form-row {
 				display: grid;
@@ -92,7 +76,7 @@ const { title, description } = Astro.props;
 			label {
 				font-weight: 600;
 				margin-bottom: 0.15rem;
-				color: #000000;
+				color: #000;
 				font-size: 0.75rem;
 			}
 			input, select {
@@ -103,26 +87,25 @@ const { title, description } = Astro.props;
 				transition: all 0.1s;
 			}
 			input:focus, select:focus {
-				border-color: #facc15;
+				border-color: #6366f1;
 				outline: none;
-				box-shadow: 0 0 0 1px #facc15;
+				box-shadow: 0 0 0 1px #6366f1;
 			}
 			button, .btn, .nav-link {
-				padding: 0.5rem 1rem;
-				background-color: #facc15;
-				color: #000000;
-				border: 1px solid #eab308;
-				border-radius: 6px;
+				padding: 0.4rem 0.75rem;
+				background-color: #6366f1;
+				color: white;
+				border: none;
+				border-radius: 4px;
 				cursor: pointer;
 				font-size: 0.85rem;
-				font-weight: 600;
+				font-weight: 500;
 				text-decoration: none;
 				display: inline-block;
 				text-align: center;
-				transition: all 0.2s;
 			}
 			.nav-link.active {
-				background-color: #eab308;
+				background-color: #4834d4;
 				box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
 				transform: translateY(1px);
 			}
@@ -135,8 +118,8 @@ const { title, description } = Astro.props;
 				margin-top: 1rem;
 			}
 			.match-card {
-				background: #fff;
-				border: 1px solid #e2e8f0;
+				background: #fffdf0;
+				border: 1px solid #fde047;
 				border-radius: 6px;
 				padding: 0.75rem;
 				margin-bottom: 0.5rem;
@@ -151,17 +134,16 @@ const { title, description } = Astro.props;
 			.match-name {
 				font-size: 1rem;
 				font-weight: 700;
-				color: #000000;
+				color: #000;
 			}
 			.match-category {
-				background: #000000;
-				color: #facc15;
+				background: #6366f1;
+				color: white;
 				padding: 0.1rem 0.4rem;
 				border-radius: 4px;
 				font-size: 0.7rem;
 				font-weight: 700;
 				text-transform: uppercase;
-				border: 1px solid #facc15;
 			}
 			.match-score-container {
 				margin: 0.4rem 0;
@@ -175,11 +157,11 @@ const { title, description } = Astro.props;
 			.match-score-value {
 				font-size: 1rem;
 				font-weight: 800;
-				color: #000000;
+				color: #000;
 			}
 			.match-score-max {
 				font-size: 0.65rem;
-				color: #333333;
+				color: #64748b;
 			}
 			.match-percentage {
 				font-size: 0.7rem;
@@ -197,7 +179,7 @@ const { title, description } = Astro.props;
 			}
 			.match-description {
 				font-style: italic;
-				color: #000000;
+				color: #475569;
 				font-size: 0.8rem;
 				margin-bottom: 0.4rem;
 			}
@@ -214,20 +196,20 @@ const { title, description } = Astro.props;
 			}
 			.koota-item {
 				font-size: 0.7rem;
-				color: #000000;
+				color: #000;
 				background: #fffdf0;
 				padding: 0.25rem;
 				border-radius: 3px;
 				text-align: center;
-				border: 1px solid #fde68a;
+				border: 1px solid #fde047;
 			}
 			.koota-explanation {
 				display: block;
 				margin-top: 0.15rem;
-				color: #333333;
+				color: #64748b;
 				font-size: 0.6rem;
 				text-align: left;
-				border-top: 1px solid #fde68a;
+				border-top: 1px solid #f1f5f9;
 				padding-top: 0.15rem;
 			}
 		</style>
@@ -240,15 +222,11 @@ const { title, description } = Astro.props;
 		</nav>
 
 		<div class="container">
-			<div class="floral-corner top-left"></div>
-			<div class="floral-corner top-right"></div>
-			<div class="floral-corner bottom-left"></div>
-			<div class="floral-corner bottom-right"></div>
 			<slot />
 		</div>
 
-		<footer style="margin-top: 2rem; font-size: 0.75rem; color: #000000; text-align: center; border-top: 2px solid #facc15; padding-top: 1rem; background: #fffdf0; border-radius: 8px 8px 0 0; position: relative; overflow: hidden;">
-			<div style="display: flex; justify-content: center; align-items: center; gap: 1rem; margin-bottom: 0.5rem;">
+		<footer style="margin-top: 2rem; font-size: 0.75rem; color: #64748b; text-align: center; border-top: 1px solid #e2e8f0; padding-top: 1rem;">
+			<div style="display: flex; justify-content: center; align-items: center; gap: 1rem; margin-bottom: 0.75rem;">
 				<!-- Indian Flute (Bansuri) and Peacock Feather SVG -->
 				<svg width="120" height="60" viewBox="0 0 120 60" xmlns="http://www.w3.org/2000/svg">
 					<!-- Flute -->
@@ -272,14 +250,14 @@ const { title, description } = Astro.props;
 					</g>
 				</svg>
 			</div>
-			<p style="margin-bottom: 0.5rem; color: #000000; font-weight: 600;">
-				To get contact details, send the <b>User ID</b> of the person to <a href="mailto:rahulbaliastrology@gmail.com" style="color: #000000; text-decoration: underline; font-weight: 800;">rahulbaliastrology@gmail.com</a>.
+			<p style="margin-bottom: 0.5rem; color: #1e293b; font-weight: 500;">
+				To get contact details, send the <b>User ID</b> of the person to <a href="mailto:rahulbaliastrology@gmail.com" style="color: #6366f1; text-decoration: none;">rahulbaliastrology@gmail.com</a>.
 				<br />
 				Each contact detail costs 100 rupees via UPI.
 			</p>
-			<p style="opacity: 0.8;">
+			<p>
 				&copy; {new Date().getFullYear()} moonine.
-				Location data &copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" style="color: #000000; text-decoration: underline;">OpenStreetMap</a> contributors.
+				Location data &copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" style="color: #64748b;">OpenStreetMap</a> contributors.
 			</p>
 		</footer>
 
