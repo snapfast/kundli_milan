@@ -24,24 +24,43 @@ const { title, description } = Astro.props;
 				margin: 0.5rem auto;
 				padding: 0 0.25rem;
 				line-height: 1.35;
-				background-color: #fdfdfd;
+				background-color: #fffef0;
 				font-size: 0.88rem;
-				color: #1a1a1a;
+				color: #000000;
 			}
 			.container {
-				background: white;
-				padding: 0.75rem 1rem;
-				border-radius: 6px;
-				box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+				background: #fffdf0;
+				padding: 1.5rem;
+				border-radius: 8px;
+				box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+				position: relative;
+				border: 1px solid #fde68a;
+				overflow: hidden;
 			}
+			.floral-corner {
+				position: absolute;
+				width: 80px;
+				height: 80px;
+				background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M0 0 c 50 0 100 50 100 100 M 0 0 c 0 50 50 100 100 100 M 20 0 Q 20 20 0 20 M 0 40 Q 40 40 40 0 M 60 0 Q 60 60 0 60 M 0 80 Q 80 80 80 0' fill='none' stroke='%23fde68a' stroke-width='2'/%3E%3Ccircle cx='10' cy='10' r='3' fill='%23fde68a'/%3E%3Ccircle cx='30' cy='30' r='2' fill='%23fde68a'/%3E%3C/svg%3E");
+				background-size: contain;
+				background-repeat: no-repeat;
+				pointer-events: none;
+				opacity: 0.6;
+			}
+			.top-left { top: 0; left: 0; }
+			.top-right { top: 0; right: 0; transform: rotate(90deg); }
+			.bottom-left { bottom: 0; left: 0; transform: rotate(270deg); }
+			.bottom-right { bottom: 0; right: 0; transform: rotate(180deg); }
+
 			h1, h2 {
-				color: #0f172a;
-				border-bottom: 1.5px solid #6366f1;
-				padding-bottom: 0.2rem;
-				margin-top: 0.25rem;
-				margin-bottom: 0.5rem;
-				font-size: 1.25rem;
-				font-weight: 700;
+				color: #000000;
+				border-bottom: 2px solid #facc15;
+				padding-bottom: 0.3rem;
+				margin-top: 0.5rem;
+				margin-bottom: 0.75rem;
+				font-size: 1.35rem;
+				font-weight: 800;
+				text-align: center;
 			}
 
 			/* Form & Buttons */
@@ -49,10 +68,10 @@ const { title, description } = Astro.props;
 				display: flex;
 				flex-direction: column;
 				gap: 0.5rem;
-				background: #f8fafc;
-				padding: 0.75rem;
-				border-radius: 4px;
-				border: 1px solid #e2e8f0;
+				background: #fffcf0;
+				padding: 1rem;
+				border-radius: 6px;
+				border: 1px solid #fde68a;
 			}
 			.form-row {
 				display: grid;
@@ -73,7 +92,7 @@ const { title, description } = Astro.props;
 			label {
 				font-weight: 600;
 				margin-bottom: 0.15rem;
-				color: #334155;
+				color: #000000;
 				font-size: 0.75rem;
 			}
 			input, select {
@@ -84,25 +103,26 @@ const { title, description } = Astro.props;
 				transition: all 0.1s;
 			}
 			input:focus, select:focus {
-				border-color: #6366f1;
+				border-color: #facc15;
 				outline: none;
-				box-shadow: 0 0 0 1px #6366f1;
+				box-shadow: 0 0 0 1px #facc15;
 			}
 			button, .btn, .nav-link {
-				padding: 0.4rem 0.75rem;
-				background-color: #6366f1;
-				color: white;
-				border: none;
-				border-radius: 4px;
+				padding: 0.5rem 1rem;
+				background-color: #facc15;
+				color: #000000;
+				border: 1px solid #eab308;
+				border-radius: 6px;
 				cursor: pointer;
 				font-size: 0.85rem;
-				font-weight: 500;
+				font-weight: 600;
 				text-decoration: none;
 				display: inline-block;
 				text-align: center;
+				transition: all 0.2s;
 			}
 			.nav-link.active {
-				background-color: #4834d4;
+				background-color: #eab308;
 				box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
 				transform: translateY(1px);
 			}
@@ -131,16 +151,17 @@ const { title, description } = Astro.props;
 			.match-name {
 				font-size: 1rem;
 				font-weight: 700;
-				color: #0f172a;
+				color: #000000;
 			}
 			.match-category {
-				background: #6366f1;
-				color: white;
+				background: #000000;
+				color: #facc15;
 				padding: 0.1rem 0.4rem;
 				border-radius: 4px;
 				font-size: 0.7rem;
 				font-weight: 700;
 				text-transform: uppercase;
+				border: 1px solid #facc15;
 			}
 			.match-score-container {
 				margin: 0.4rem 0;
@@ -154,11 +175,11 @@ const { title, description } = Astro.props;
 			.match-score-value {
 				font-size: 1rem;
 				font-weight: 800;
-				color: #0f172a;
+				color: #000000;
 			}
 			.match-score-max {
 				font-size: 0.65rem;
-				color: #64748b;
+				color: #333333;
 			}
 			.match-percentage {
 				font-size: 0.7rem;
@@ -176,7 +197,7 @@ const { title, description } = Astro.props;
 			}
 			.match-description {
 				font-style: italic;
-				color: #475569;
+				color: #000000;
 				font-size: 0.8rem;
 				margin-bottom: 0.4rem;
 			}
@@ -193,20 +214,20 @@ const { title, description } = Astro.props;
 			}
 			.koota-item {
 				font-size: 0.7rem;
-				color: #1e293b;
-				background: #f8fafc;
+				color: #000000;
+				background: #fffdf0;
 				padding: 0.25rem;
 				border-radius: 3px;
 				text-align: center;
-				border: 1px solid #e2e8f0;
+				border: 1px solid #fde68a;
 			}
 			.koota-explanation {
 				display: block;
 				margin-top: 0.15rem;
-				color: #64748b;
+				color: #333333;
 				font-size: 0.6rem;
 				text-align: left;
-				border-top: 1px solid #f1f5f9;
+				border-top: 1px solid #fde68a;
 				padding-top: 0.15rem;
 			}
 		</style>
@@ -219,18 +240,46 @@ const { title, description } = Astro.props;
 		</nav>
 
 		<div class="container">
+			<div class="floral-corner top-left"></div>
+			<div class="floral-corner top-right"></div>
+			<div class="floral-corner bottom-left"></div>
+			<div class="floral-corner bottom-right"></div>
 			<slot />
 		</div>
 
-		<footer style="margin-top: 2rem; font-size: 0.75rem; color: #64748b; text-align: center; border-top: 1px solid #e2e8f0; padding-top: 1rem;">
-			<p style="margin-bottom: 0.5rem; color: #1e293b; font-weight: 500;">
-				To get contact details, send the <b>User ID</b> of the person to <a href="mailto:rahulbaliastrology@gmail.com" style="color: #6366f1; text-decoration: none;">rahulbaliastrology@gmail.com</a>.
+		<footer style="margin-top: 2rem; font-size: 0.75rem; color: #000000; text-align: center; border-top: 2px solid #facc15; padding-top: 1rem; background: #fffdf0; border-radius: 8px 8px 0 0; position: relative; overflow: hidden;">
+			<div style="display: flex; justify-content: center; align-items: center; gap: 1rem; margin-bottom: 0.5rem;">
+				<!-- Indian Flute (Bansuri) and Peacock Feather SVG -->
+				<svg width="120" height="60" viewBox="0 0 120 60" xmlns="http://www.w3.org/2000/svg">
+					<!-- Flute -->
+					<rect x="10" y="45" width="100" height="6" rx="3" fill="#b7741b" stroke="#8a5a15" stroke-width="0.5"/>
+					<circle cx="25" cy="48" r="1" fill="#000" />
+					<circle cx="35" cy="48" r="1" fill="#000" />
+					<circle cx="45" cy="48" r="1" fill="#000" />
+					<circle cx="55" cy="48" r="1" fill="#000" />
+					<circle cx="65" cy="48" r="1" fill="#000" />
+					<circle cx="75" cy="48" r="1" fill="#000" />
+
+					<!-- Peacock Feather -->
+					<g transform="translate(60, 10) rotate(-15)">
+						<path d="M0,40 Q-15,20 0,0 Q15,20 0,40" fill="#179F53" opacity="0.8"/>
+						<path d="M0,35 Q-10,18 0,5 Q10,18 0,35" fill="#374992"/>
+						<circle cx="0" cy="15" r="4" fill="#A7D170"/>
+						<circle cx="0" cy="15" r="2" fill="#000"/>
+						<!-- Filaments -->
+						<path d="M0,40 L-5,45 M0,35 L-8,38 M0,30 L-10,32 M0,25 L-11,25 M0,20 L-10,18 M0,15 L-8,12 M0,10 L-5,5" stroke="#179F53" stroke-width="0.5"/>
+						<path d="M0,40 L5,45 M0,35 L8,38 M0,30 L10,32 M0,25 L11,25 M0,20 L10,18 M0,15 L8,12 M0,10 L5,5" stroke="#179F53" stroke-width="0.5"/>
+					</g>
+				</svg>
+			</div>
+			<p style="margin-bottom: 0.5rem; color: #000000; font-weight: 600;">
+				To get contact details, send the <b>User ID</b> of the person to <a href="mailto:rahulbaliastrology@gmail.com" style="color: #000000; text-decoration: underline; font-weight: 800;">rahulbaliastrology@gmail.com</a>.
 				<br />
 				Each contact detail costs 100 rupees via UPI.
 			</p>
-			<p>
+			<p style="opacity: 0.8;">
 				&copy; {new Date().getFullYear()} moonine.
-				Location data &copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" style="color: #64748b;">OpenStreetMap</a> contributors.
+				Location data &copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" style="color: #000000; text-decoration: underline;">OpenStreetMap</a> contributors.
 			</p>
 		</footer>
 
