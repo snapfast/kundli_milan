@@ -403,12 +403,41 @@ import Layout from '../layouts/Layout.astro';
 							);
 
 							kootaHtml = `
-								<div class="koota-grid">
-									${compat.kootas.map(k => `
-										<div class="koota-item">
-											${k.name}: ${k.score}/${k.max}
-										</div>
-									`).join('')}
+								<div style="overflow-x: auto; margin-top: 0.5rem;">
+									<table class="compact-table" style="font-size: 0.65rem;">
+										<thead>
+											<tr>
+												<th>#</th>
+												<th>Guna</th>
+												<th>Girl</th>
+												<th>Boy</th>
+												<th>Obtained</th>
+												<th>Max</th>
+												<th>Area of Life</th>
+											</tr>
+										</thead>
+										<tbody>
+											${compat.kootas.map((k, idx) => `
+												<tr>
+													<td>${idx + 1}</td>
+													<td>${k.name}</td>
+													<td>${k.girlValue}</td>
+													<td>${k.boyValue}</td>
+													<td>${k.score}</td>
+													<td>${k.max}</td>
+													<td>${k.areaOfLife}</td>
+												</tr>
+											`).join('')}
+										</tbody>
+										<tfoot>
+											<tr style="background: #f8fafc; font-weight: 800;">
+												<td colspan="4" style="text-align: right;">Total Guna Milan Points</td>
+												<td>${compat.score}</td>
+												<td>${compat.maxScore}</td>
+												<td></td>
+											</tr>
+										</tfoot>
+									</table>
 								</div>
 							`;
 
