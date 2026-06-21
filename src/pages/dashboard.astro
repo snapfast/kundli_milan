@@ -408,7 +408,6 @@ import Layout from '../layouts/Layout.astro';
 									${compat.kootas.map(k => `
 										<div class="koota-item">
 											${k.name}: ${k.score}/${k.max}
-											<div class="koota-explanation">${KOOTA_INFO[k.name] || ""}</div>
 										</div>
 									`).join('')}
 								</div>
