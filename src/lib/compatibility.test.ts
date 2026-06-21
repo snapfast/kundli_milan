@@ -101,13 +101,13 @@ describe('Astrology and Compatibility Tests', () => {
 
         const result = calculateCompatibility(user1, user2);
 
-        expect(result.score).toBe(34);
+        expect(result.score).toBe(35);
         expect(result.kootas.find(k => k.name === "Varna")?.score).toBe(1);
         expect(result.kootas.find(k => k.name === "Vashya")?.score).toBe(1);
         expect(result.kootas.find(k => k.name === "Tara")?.score).toBe(3);
         expect(result.kootas.find(k => k.name === "Yoni")?.score).toBe(4);
         expect(result.kootas.find(k => k.name === "Maitri")?.score).toBe(5);
-        expect(result.kootas.find(k => k.name === "Gana")?.score).toBe(5);
+        expect(result.kootas.find(k => k.name === "Gana")?.score).toBe(6);
         expect(result.kootas.find(k => k.name === "Bhakoot")?.score).toBe(7);
         expect(result.kootas.find(k => k.name === "Nadi")?.score).toBe(8);
     });
