@@ -30,6 +30,7 @@ describe('Astrology and Compatibility Tests', () => {
         const result = calculateCompatibility(user1, user2);
 
         expect(result.score).toBe(31.5);
+        expect(result.category).toBe("Excellent");
         expect(result.kootas.find(k => k.name === "Varna")?.score).toBe(1);
         expect(result.kootas.find(k => k.name === "Vashya")?.score).toBe(1);
         expect(result.kootas.find(k => k.name === "Tara")?.score).toBe(1.5);
@@ -63,8 +64,9 @@ describe('Astrology and Compatibility Tests', () => {
 
         const result = calculateCompatibility(user1, user2);
 
-        expect(result.score).toBe(22.5);
-        expect(result.kootas.find(k => k.name === "Varna")?.score).toBe(0);
+        expect(result.score).toBe(23.5);
+        expect(result.category).toBe("Very Good");
+        expect(result.kootas.find(k => k.name === "Varna")?.score).toBe(1);
         expect(result.kootas.find(k => k.name === "Vashya")?.score).toBe(1);
         expect(result.kootas.find(k => k.name === "Tara")?.score).toBe(1.5);
         expect(result.kootas.find(k => k.name === "Yoni")?.score).toBe(2);
@@ -102,8 +104,9 @@ describe('Astrology and Compatibility Tests', () => {
         const result = calculateCompatibility(user1, user2);
 
         expect(result.score).toBe(35);
-        expect(result.kootas.find(k => k.name === "Varna")?.score).toBe(1);
-        expect(result.kootas.find(k => k.name === "Vashya")?.score).toBe(1);
+        expect(result.category).toBe("Excellent");
+        expect(result.kootas.find(k => k.name === "Varna")?.score).toBe(0);
+        expect(result.kootas.find(k => k.name === "Vashya")?.score).toBe(2);
         expect(result.kootas.find(k => k.name === "Tara")?.score).toBe(3);
         expect(result.kootas.find(k => k.name === "Yoni")?.score).toBe(4);
         expect(result.kootas.find(k => k.name === "Maitri")?.score).toBe(5);

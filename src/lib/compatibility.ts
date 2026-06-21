@@ -308,36 +308,32 @@ export function calculateCompatibility(user1: UserAstrology, user2: UserAstrolog
 
     const totalScore = kootas.reduce((acc, k) => acc + k.score, 0);
 
-    let category = "Casual Interest";
-    let description = "You share some basic similarities, but might need to work on understanding each other's deeper motivations.";
+    let category = "Bad";
+    let description = "This pairing shows significant cosmic friction. While all relationships take work, this one may face more fundamental challenges.";
 
-    if (totalScore >= 28) {
-        category = "Soul Connection";
+    if (totalScore > 28) {
+        category = "Excellent";
         description = "A rare and powerful alignment. You likely feel an immediate sense of home and deep understanding with this person.";
     } else if (totalScore >= 21) {
-        category = "Dynamic Duo";
+        category = "Very Good";
         description = "Great harmony in major areas of life. You complement each other well and can build a strong, lasting partnership.";
     } else if (totalScore >= 18) {
-        category = "Friendly Alliance";
+        category = "Good";
         description = "A solid foundation for friendship or cooperation. You have enough in common to enjoy each other's company regularly.";
     } else if (totalScore >= 12) {
-        category = "Growth Potential";
+        category = "Not Good";
         description = "While there are some differences, there is enough common ground to build a relationship if both partners are willing to adapt and grow.";
     }
 
-    // Creative Chemistry Overrides
+    // Creative Chemistry Overrides (Add context to description)
     if (maitriScore === 5 && ganaScore === 6) {
-        category = "Intellectual Harmony";
-        description = "Your minds work on the same wavelength. Communication is effortless and you share many core values.";
+        description = "Intellectual Harmony: Your minds work on the same wavelength. Communication is effortless and you share many core values. " + description;
     } else if (yoniScore === 4 && nadiScore === 8) {
-        category = "Passionate Bond";
-        description = "There is a strong physical and energetic attraction between you. Your vibes are highly complementary.";
+        description = "Passionate Bond: There is a strong physical and energetic attraction between you. Your vibes are highly complementary. " + description;
     } else if (bhakootScore === 7 && nadiScore === 8) {
-        category = "Destined Union";
-        description = "Strong cosmic protection surrounds this match. You are likely to experience prosperity and deep longevity together.";
+        description = "Destined Union: Strong cosmic protection surrounds this match. You are likely to experience prosperity and deep longevity together. " + description;
     } else if (maitriScore >= 4 && varnaScore === 1) {
-        category = "Social Synergy";
-        description = "You share similar worldviews and social standing, making for a very smooth and comfortable public life together.";
+        description = "Social Synergy: You share similar worldviews and social standing, making for a very smooth and comfortable public life together. " + description;
     }
 
     // Manglik Matching Logic (Lagan-based for calculations)
@@ -355,14 +351,11 @@ export function calculateCompatibility(user1: UserAstrology, user2: UserAstrolog
 
     if (user1.isLaganManglik !== undefined && user2.isLaganManglik !== undefined) {
         if (m1 && !m2) {
-            category = "Complex Alignment";
-            description = "You have a Manglik Dosha while your partner does not. This can sometimes lead to imbalances in energy if not managed with patience.";
+            description = "Complex Alignment: You have a Manglik Dosha while your partner does not. This can sometimes lead to imbalances in energy if not managed with patience. " + description;
         } else if (!m1 && m2) {
-            category = "Complex Alignment";
-            description = "Your partner has a Manglik Dosha while you do not. This can sometimes lead to imbalances in energy if not managed with patience.";
+            description = "Complex Alignment: Your partner has a Manglik Dosha while you do not. This can sometimes lead to imbalances in energy if not managed with patience. " + description;
         } else if (m1 && m2) {
-            category = "Powerful Synergy";
-            description = "Both of you are Manglik, which actually creates a balanced and high-energy partnership. You understand each other's intensity.";
+            description = "Powerful Synergy: Both of you are Manglik, which actually creates a balanced and high-energy partnership. You understand each other's intensity. " + description;
         }
     }
 
