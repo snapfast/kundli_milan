@@ -445,8 +445,19 @@ import Layout from '../layouts/Layout.astro';
 						matchesData.forEach((m: any) => {
 							const otherUser = users.find(u => u.uid === m.uid);
 							let kootaHtml = '';
+							let age: number | undefined = undefined;
 
 							if (otherUser) {
+								const uDob = typeof otherUser.dob === 'string' && otherUser.dob.includes('T') ? otherUser.dob.split('T')[0] : otherUser.dob;
+								if (uDob) {
+									const dobDate = new Date(uDob);
+									const today = new Date();
+									age = today.getFullYear() - dobDate.getFullYear();
+									const m = today.getMonth() - dobDate.getMonth();
+									if (m < 0 || (m === 0 && today.getDate() < dobDate.getDate())) {
+										age--;
+									}
+								}
 								let compat = {
 									kootas: m.kootas || [],
 									doshas: m.doshas || [],
@@ -461,7 +472,6 @@ import Layout from '../layouts/Layout.astro';
 									const uLon = otherUser.lon ? parseFloat(otherUser.lon) : 77.2090;
 
 									// Ensure dob and tob are in correct format if they came back as ISO strings or something else from backend
-									const uDob = typeof otherUser.dob === 'string' && otherUser.dob.includes('T') ? otherUser.dob.split('T')[0] : otherUser.dob;
 									const uTob = typeof otherUser.tob === 'string' && otherUser.tob.includes('T') ? otherUser.tob.split('T')[1].substring(0, 5) : otherUser.tob;
 
 									const uData = calculateAstrology(uDob, uTob, uLat, uLon);
@@ -531,7 +541,7 @@ import Layout from '../layouts/Layout.astro';
 
 								const card = document.createElement('div');
 								card.className = 'match-card';
-								card.innerHTML = distanceHtml + generateMatchCardHtml(m.uid, m.name, m.category, m.score, compat.description, kootaHtml, compat.doshas);
+								card.innerHTML = distanceHtml + generateMatchCardHtml(m.uid, m.name, age, m.category, m.score, compat.description, kootaHtml, compat.doshas);
 								listContainer.appendChild(card);
 							}
 						});
