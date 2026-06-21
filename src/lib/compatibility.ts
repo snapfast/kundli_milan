@@ -240,10 +240,6 @@ export function calculateCompatibility(user1: UserAstrology, user2: UserAstrolog
         const isCancelled = (l1 === l2 || (f1 === 1 && f2 === 1)) ||
                             (user1.moonSignIdx === user2.moonSignIdx && user1.nakshatraIdx !== user2.nakshatraIdx);
 
-        if (isCancelled) {
-            ganaScore = 6;
-        }
-
         if (ganaScore === 0 || isCancelled) {
             doshas.push({
                 name: "Gana Dosha",
@@ -269,9 +265,6 @@ export function calculateCompatibility(user1: UserAstrology, user2: UserAstrolog
 
         // Cancellation logic
         const isCancelled = l1 === l2 || (f1 === 1 && f2 === 1);
-        if (isCancelled) {
-            bhakootScore = 7;
-        }
 
         doshas.push({
             name,
@@ -293,10 +286,6 @@ export function calculateCompatibility(user1: UserAstrology, user2: UserAstrolog
         // Cancellation logic
         const isCancelled = (user1.moonSignIdx === user2.moonSignIdx && user1.nakshatraIdx !== user2.nakshatraIdx) ||
                             (user1.nakshatraIdx === user2.nakshatraIdx && user1.moonSignIdx !== user2.moonSignIdx);
-
-        if (isCancelled) {
-            nadiScore = 8;
-        }
 
         doshas.push({
             name,
