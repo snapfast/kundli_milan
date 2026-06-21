@@ -17,14 +17,16 @@ describe('Astrology and Compatibility Tests', () => {
             name: kamini.name,
             nakshatraIdx: astro1.panchang.nakshatraIdx,
             moonSignIdx: astro1.panchang.moonSignIdx,
-            isLaganManglik: astro1.panchang.isLaganManglik
+            isLaganManglik: astro1.panchang.isLaganManglik,
+            gender: 'female'
         };
 
         const user2 = {
             name: rahul.name,
             nakshatraIdx: astro2.panchang.nakshatraIdx,
             moonSignIdx: astro2.panchang.moonSignIdx,
-            isLaganManglik: astro2.panchang.isLaganManglik
+            isLaganManglik: astro2.panchang.isLaganManglik,
+            gender: 'male'
         };
 
         const result = calculateCompatibility(user1, user2);
@@ -52,14 +54,16 @@ describe('Astrology and Compatibility Tests', () => {
             name: shweta.name,
             nakshatraIdx: astro1.panchang.nakshatraIdx,
             moonSignIdx: astro1.panchang.moonSignIdx,
-            isLaganManglik: astro1.panchang.isLaganManglik
+            isLaganManglik: astro1.panchang.isLaganManglik,
+            gender: 'female'
         };
 
         const user2 = {
             name: rahul.name,
             nakshatraIdx: astro2.panchang.nakshatraIdx,
             moonSignIdx: astro2.panchang.moonSignIdx,
-            isLaganManglik: astro2.panchang.isLaganManglik
+            isLaganManglik: astro2.panchang.isLaganManglik,
+            gender: 'male'
         };
 
         const result = calculateCompatibility(user1, user2);
@@ -91,14 +95,16 @@ describe('Astrology and Compatibility Tests', () => {
             name: kamini2.name,
             nakshatraIdx: astro1.panchang.nakshatraIdx,
             moonSignIdx: astro1.panchang.moonSignIdx,
-            isLaganManglik: astro1.panchang.isLaganManglik
+            isLaganManglik: astro1.panchang.isLaganManglik,
+            gender: 'female'
         };
 
         const user2 = {
             name: rahul2.name,
             nakshatraIdx: astro2.panchang.nakshatraIdx,
             moonSignIdx: astro2.panchang.moonSignIdx,
-            isLaganManglik: astro2.panchang.isLaganManglik
+            isLaganManglik: astro2.panchang.isLaganManglik,
+            gender: 'male'
         };
 
         const result = calculateCompatibility(user1, user2);
