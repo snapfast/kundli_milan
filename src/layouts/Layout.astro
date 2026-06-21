@@ -24,21 +24,20 @@ const { title, description } = Astro.props;
 				margin: 0.5rem auto;
 				padding: 0 0.25rem;
 				line-height: 1.35;
-				background-color: #fffdf0;
-				background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M50 50c-10-10-20 0-20 10 0 10 10 20 20 10 10-10 20 0 20-10 0-10-10-20-20-10zm0 0c10 10 0 20-10 20-10 0-20-10-10-20 10-10 0-20 10-20 10 0 20 10 10 20zm0 0c-10 10-20 0-20-10 0-10 10-20 20-10 10 10 20 0 20 10 0 10-10 20-20 10zm0 0c10-10 0-20-10-20-10 0-20 10-10 20 10 10 0 20 10 20 10 0 20-10 10-20z' fill='%23facc15' fill-opacity='0.08'/%3E%3C/svg%3E");
+				background-color: #fdfdfd;
+				background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Cpath d='M50 20c-5-10-15-10-20 0-10-5-10-15 0-20 10 5 10 15 0 20 5 10 15 10 20 0 5 10 15 10 20 0 10 5 10 15 0 20-10-5-10-15 0-20-5-10-15-10-20 0z' fill='%236366f1' fill-opacity='0.05'/%3E%3C/svg%3E");
+				background-size: 300px 300px;
 				font-size: 0.88rem;
-				color: #000;
+				color: #1a1a1a;
 			}
 			.container {
 				background: white;
 				padding: 0.75rem 1rem;
 				border-radius: 6px;
 				box-shadow: 0 1px 3px rgba(0,0,0,0.08);
-				position: relative;
-				border: 1px solid #fef9c3;
 			}
 			h1, h2 {
-				color: #000;
+				color: #0f172a;
 				border-bottom: 1.5px solid #6366f1;
 				padding-bottom: 0.2rem;
 				margin-top: 0.25rem;
@@ -52,10 +51,10 @@ const { title, description } = Astro.props;
 				display: flex;
 				flex-direction: column;
 				gap: 0.5rem;
-				background: #fffdf0;
+				background: #f8fafc;
 				padding: 0.75rem;
 				border-radius: 4px;
-				border: 1px solid #fde047;
+				border: 1px solid #e2e8f0;
 			}
 			.form-row {
 				display: grid;
@@ -76,7 +75,7 @@ const { title, description } = Astro.props;
 			label {
 				font-weight: 600;
 				margin-bottom: 0.15rem;
-				color: #000;
+				color: #334155;
 				font-size: 0.75rem;
 			}
 			input, select {
@@ -118,8 +117,8 @@ const { title, description } = Astro.props;
 				margin-top: 1rem;
 			}
 			.match-card {
-				background: #fffdf0;
-				border: 1px solid #fde047;
+				background: #fff;
+				border: 1px solid #e2e8f0;
 				border-radius: 6px;
 				padding: 0.75rem;
 				margin-bottom: 0.5rem;
@@ -134,7 +133,7 @@ const { title, description } = Astro.props;
 			.match-name {
 				font-size: 1rem;
 				font-weight: 700;
-				color: #000;
+				color: #0f172a;
 			}
 			.match-category {
 				background: #6366f1;
@@ -157,7 +156,7 @@ const { title, description } = Astro.props;
 			.match-score-value {
 				font-size: 1rem;
 				font-weight: 800;
-				color: #000;
+				color: #0f172a;
 			}
 			.match-score-max {
 				font-size: 0.65rem;
@@ -196,12 +195,12 @@ const { title, description } = Astro.props;
 			}
 			.koota-item {
 				font-size: 0.7rem;
-				color: #000;
-				background: #fffdf0;
+				color: #1e293b;
+				background: #f8fafc;
 				padding: 0.25rem;
 				border-radius: 3px;
 				text-align: center;
-				border: 1px solid #fde047;
+				border: 1px solid #e2e8f0;
 			}
 			.koota-explanation {
 				display: block;
@@ -226,30 +225,6 @@ const { title, description } = Astro.props;
 		</div>
 
 		<footer style="margin-top: 2rem; font-size: 0.75rem; color: #64748b; text-align: center; border-top: 1px solid #e2e8f0; padding-top: 1rem;">
-			<div style="display: flex; justify-content: center; align-items: center; gap: 1rem; margin-bottom: 0.75rem;">
-				<!-- Indian Flute (Bansuri) and Peacock Feather SVG -->
-				<svg width="120" height="60" viewBox="0 0 120 60" xmlns="http://www.w3.org/2000/svg">
-					<!-- Flute -->
-					<rect x="10" y="45" width="100" height="6" rx="3" fill="#b7741b" stroke="#8a5a15" stroke-width="0.5"/>
-					<circle cx="25" cy="48" r="1" fill="#000" />
-					<circle cx="35" cy="48" r="1" fill="#000" />
-					<circle cx="45" cy="48" r="1" fill="#000" />
-					<circle cx="55" cy="48" r="1" fill="#000" />
-					<circle cx="65" cy="48" r="1" fill="#000" />
-					<circle cx="75" cy="48" r="1" fill="#000" />
-
-					<!-- Peacock Feather -->
-					<g transform="translate(60, 10) rotate(-15)">
-						<path d="M0,40 Q-15,20 0,0 Q15,20 0,40" fill="#179F53" opacity="0.8"/>
-						<path d="M0,35 Q-10,18 0,5 Q10,18 0,35" fill="#374992"/>
-						<circle cx="0" cy="15" r="4" fill="#A7D170"/>
-						<circle cx="0" cy="15" r="2" fill="#000"/>
-						<!-- Filaments -->
-						<path d="M0,40 L-5,45 M0,35 L-8,38 M0,30 L-10,32 M0,25 L-11,25 M0,20 L-10,18 M0,15 L-8,12 M0,10 L-5,5" stroke="#179F53" stroke-width="0.5"/>
-						<path d="M0,40 L5,45 M0,35 L8,38 M0,30 L10,32 M0,25 L11,25 M0,20 L10,18 M0,15 L8,12 M0,10 L5,5" stroke="#179F53" stroke-width="0.5"/>
-					</g>
-				</svg>
-			</div>
 			<p style="margin-bottom: 0.5rem; color: #1e293b; font-weight: 500;">
 				To get contact details, send the <b>User ID</b> of the person to <a href="mailto:rahulbaliastrology@gmail.com" style="color: #6366f1; text-decoration: none;">rahulbaliastrology@gmail.com</a>.
 				<br />
