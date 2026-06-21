@@ -7,6 +7,11 @@ import Layout from '../layouts/Layout.astro';
         .guide-section {
             margin-bottom: 2rem;
         }
+        .guide-section h1 {
+            text-align: center;
+            border-bottom: none;
+            margin-bottom: 0.25rem;
+        }
         .guide-section h2 {
             text-align: center;
             border-bottom: none;
@@ -69,8 +74,10 @@ import Layout from '../layouts/Layout.astro';
         }
     </style>
 
-    <h1>The moonine Astrology Guide</h1>
-    <p style="text-align: center; font-style: italic; color: #64748b; margin-bottom: 2rem;">Ancient Vedic Wisdom meets Modern Matchmaking</p>
+    <section class="guide-section">
+        <h1>The moonine Astrology Guide</h1>
+        <p style="text-align: center; font-style: italic; color: #64748b; margin-bottom: 2rem;">Ancient Vedic Wisdom meets Modern Matchmaking</p>
+    </section>
 
     <section class="guide-section">
         <h2>Ashta Koota (36 Points)</h2>
@@ -86,42 +93,42 @@ import Layout from '../layouts/Layout.astro';
                 <tbody>
                     <tr>
                         <td><strong>Varna</strong></td>
-                        <td>Spiritual development & work ego.</td>
+                        <td>Work style and ego matching.</td>
                         <td><span class="score-badge">1 Point</span></td>
                     </tr>
                     <tr>
                         <td><strong>Vashya</strong></td>
-                        <td>Mutual attraction & power dynamics.</td>
+                        <td>Mutual attraction and how you balance each other's power.</td>
                         <td><span class="score-badge">2 Points</span></td>
                     </tr>
                     <tr>
                         <td><strong>Tara</strong></td>
-                        <td>Health, well-being & longevity.</td>
+                        <td>General well-being and health of the couple.</td>
                         <td><span class="score-badge">3 Points</span></td>
                     </tr>
                     <tr>
                         <td><strong>Yoni</strong></td>
-                        <td>Biological & sexual compatibility.</td>
+                        <td>Natural physical chemistry and biological bonding.</td>
                         <td><span class="score-badge">4 Points</span></td>
                     </tr>
                     <tr>
                         <td><strong>Maitri</strong></td>
-                        <td>Psychological friendship & shared values.</td>
+                        <td>Friendship, shared values, and mutual respect.</td>
                         <td><span class="score-badge">5 Points</span></td>
                     </tr>
                     <tr>
                         <td><strong>Gana</strong></td>
-                        <td>Temperament & basic nature.</td>
+                        <td>Personality type and general outlook on life.</td>
                         <td><span class="score-badge">6 Points</span></td>
                     </tr>
                     <tr>
                         <td><strong>Bhakoot</strong></td>
-                        <td>Emotional harmony & financial prosperity.</td>
+                        <td>Deep emotional harmony and long-term prosperity.</td>
                         <td><span class="score-badge">7 Points</span></td>
                     </tr>
                     <tr>
                         <td><strong>Nadi</strong></td>
-                        <td>Genetic compatibility & progeny.</td>
+                        <td>Vital energy compatibility and health of future generations.</td>
                         <td><span class="score-badge">8 Points</span></td>
                     </tr>
                 </tbody>
@@ -130,23 +137,23 @@ import Layout from '../layouts/Layout.astro';
     </section>
 
     <section class="guide-section">
-        <h2>Doshas & Cancellations</h2>
+        <h2>Major Relationship Challenges (Doshas)</h2>
         <div class="dosha-grid">
             <div class="dosha-card">
                 <div class="dosha-title">🔥 Manglik Dosha</div>
-                <div class="dosha-desc">Placement of Mars in specific houses from the Lagna (Ascendant). <strong>Cancellation:</strong> If both partners are Manglik, energies balance out.</div>
+                <div class="dosha-desc">Represents an intense, fiery energy that can lead to frequent arguments, dominance issues, or a general lack of peace in the household if not understood.</div>
             </div>
             <div class="dosha-card">
                 <div class="dosha-title">🌑 Bhakoot Dosha</div>
-                <div class="dosha-desc">Moon sign distances (2/12, 5/9, 6/8). <strong>Cancellation:</strong> If Rasi lords are mutual friends or the same.</div>
+                <div class="dosha-desc">Indicates a mismatch in emotional waves and prosperity. It can manifest as feelings of emotional isolation, financial instability, or a struggle to grow together.</div>
             </div>
             <div class="dosha-card">
                 <div class="dosha-title">🧬 Nadi Dosha</div>
-                <div class="dosha-desc">Genetic mismatch. <strong>Cancellation:</strong> If partners share Rasi but have different Nakshatras, or vice versa.</div>
+                <div class="dosha-desc">Refers to a core energetic mismatch. Couples might face chronic health issues, low physical energy, or difficulties in starting a family.</div>
             </div>
             <div class="dosha-card">
                 <div class="dosha-title">👹 Gana Dosha</div>
-                <div class="dosha-desc">Clash of temperaments (Deva vs Rakshasa). Requires conscious emotional adjustment.</div>
+                <div class="dosha-desc">A fundamental clash in temperament. For example, one person may be very peace-loving while the other is highly assertive, leading to a constant struggle to find common ground.</div>
             </div>
         </div>
     </section>
