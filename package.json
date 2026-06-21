@@ -7,7 +7,7 @@
   },
   "scripts": {
     "dev": "astro dev",
-    "test:ci": "node --experimental-vm-modules node_modules/jest/bin/jest.js --ci --bail --passWithNoTests --coverage=false",
+    "test:ci": "NODE_OPTIONS=--experimental-vm-modules jest --ci --bail --passWithNoTests --coverage=false",
     "build": "npm run test:ci && astro build",
     "preview": "astro preview",
     "astro": "astro"
