@@ -383,21 +383,22 @@ import Layout from '../layouts/Layout.astro';
 
 							const uData = calculateAstrology(uDob, uTob, uLat, uLon);
 
+							// Prioritize pre-calculated indices from profile for consistency
 							const compat = calculateCompatibility(
 								{
 									name: profile.name,
-									nakshatraIdx: astroData.panchang.nakshatraIdx,
-									moonSignIdx: astroData.panchang.moonSignIdx,
-									isMoonManglik: profile.isMoonManglik,
-									isLaganManglik: profile.isLaganManglik,
+									nakshatraIdx: profile.nakshatraIdx ?? astroData.panchang.nakshatraIdx,
+									moonSignIdx: profile.moonSignIdx ?? astroData.panchang.moonSignIdx,
+									isMoonManglik: profile.isMoonManglik ?? astroData.panchang.isMoonManglik,
+									isLaganManglik: profile.isLaganManglik ?? astroData.panchang.isLaganManglik,
 									gender: profile.gender
 								},
 								{
 									name: otherUser.name,
-									nakshatraIdx: uData.panchang.nakshatraIdx,
-									moonSignIdx: uData.panchang.moonSignIdx,
-									isMoonManglik: uData.panchang.isMoonManglik,
-									isLaganManglik: uData.panchang.isLaganManglik,
+									nakshatraIdx: otherUser.nakshatraIdx ?? uData.panchang.nakshatraIdx,
+									moonSignIdx: otherUser.moonSignIdx ?? uData.panchang.moonSignIdx,
+									isMoonManglik: otherUser.isMoonManglik ?? uData.panchang.isMoonManglik,
+									isLaganManglik: otherUser.isLaganManglik ?? uData.panchang.isLaganManglik,
 									gender: otherUser.gender
 								}
 							);

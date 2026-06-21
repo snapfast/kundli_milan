@@ -41,10 +41,17 @@ export async function fetchUsers(): Promise<UserProfile[]> {
             return [];
         }
 
-        // Map userId to uid if necessary from backend
+        // Map and clean data from backend
         return data.map((u: any) => ({
             ...u,
-            uid: u.uid || u.userId || ''
+            uid: u.uid || u.userId || '',
+            // Explicitly convert types as backend might return them as strings/various types
+            nakshatraIdx: (u.nakshatraIdx !== '' && u.nakshatraIdx !== undefined) ? Number(u.nakshatraIdx) : undefined,
+            moonSignIdx: (u.moonSignIdx !== '' && u.moonSignIdx !== undefined) ? Number(u.moonSignIdx) : undefined,
+            isMoonManglik: String(u.isMoonManglik).toLowerCase() === 'true',
+            isLaganManglik: String(u.isLaganManglik).toLowerCase() === 'true',
+            lat: u.lat !== undefined ? String(u.lat) : undefined,
+            lon: u.lon !== undefined ? String(u.lon) : undefined
         })) as UserProfile[];
     } catch (error) {
         console.error('Error fetching users:', error);

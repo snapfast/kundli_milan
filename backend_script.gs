@@ -191,7 +191,7 @@ function doGet(e) {
       });
     }
 
-    const values = sheet.getRange(1, 1, sheet.getLastRow(), sheet.getLastColumn()).getValues();
+    const values = sheet.getRange(1, 1, sheet.getLastRow(), sheet.getLastColumn()).getDisplayValues();
     const data = rowsToJson(values);
 
     return jsonResponse({
