@@ -226,9 +226,16 @@ const { title, description } = Astro.props;
 			<slot />
 		</div>
 
+		<div id="qr-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background-color: rgba(0, 0, 0, 0.7); z-index: 9999; justify-content: center; align-items: center;">
+			<div style="position: relative; max-width: 90vw; max-height: 90vh;">
+				<button id="close-qr-modal" style="position: absolute; top: -30px; right: -30px; background: none; border: none; color: white; font-size: 24px; cursor: pointer; padding: 5px; line-height: 1;" aria-label="Close modal">&times;</button>
+				<img src="https://astrology.rahulbali.in/donate-qr.png" alt="Donate QR Code" style="max-width: 100%; max-height: 90vh; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.3);" />
+			</div>
+		</div>
+
 		<footer style="margin-top: 2rem; font-size: 0.75rem; color: #64748b; text-align: center; border-top: 1px solid #e2e8f0; padding-top: 1rem;">
 			<p style="margin-bottom: 0.5rem; color: #1e293b; font-weight: 500;">
-				To get contact details, send the <b>User ID</b> of the person to <a href="mailto:rahulbaliastrology@gmail.com" style="color: #6366f1; text-decoration: none;">rahulbaliastrology@gmail.com</a>.
+				To get contact details, send the <b>User ID</b> of the person to <a href="#" id="show-qr-link" style="color: #6366f1; text-decoration: none; margin-right: 0.25rem;">(show qr)</a><a href="mailto:rahulbaliastrology@gmail.com" style="color: #6366f1; text-decoration: none;">rahulbaliastrology@gmail.com</a>.
 				<br />
 				Each contact detail costs 100 rupees via UPI.
 			</p>
@@ -267,6 +274,29 @@ const { title, description } = Astro.props;
 
 			// Optional: Re-check navigation if user details might have been updated
 			window.addEventListener('storage', updateNavigation);
+
+			// QR Modal Logic
+			const showQrLink = document.getElementById('show-qr-link');
+			const qrModal = document.getElementById('qr-modal');
+			const closeQrModalBtn = document.getElementById('close-qr-modal');
+
+			if (showQrLink && qrModal && closeQrModalBtn) {
+				showQrLink.addEventListener('click', (e) => {
+					e.preventDefault();
+					qrModal.style.display = 'flex';
+				});
+
+				closeQrModalBtn.addEventListener('click', () => {
+					qrModal.style.display = 'none';
+				});
+
+				// Close when clicking outside the image
+				qrModal.addEventListener('click', (e) => {
+					if (e.target === qrModal) {
+						qrModal.style.display = 'none';
+					}
+				});
+			}
 		</script>
 	</body>
 </html>
