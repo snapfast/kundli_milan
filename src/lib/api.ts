@@ -1,4 +1,4 @@
-const BACKEND_URL = 'https://script.google.com/macros/s/AKfycbxkFvFgDC7K5DsWfgGdyP4Glze-PuwOnze3MF3G3laobxD4yfMI3v-wI_WSPR8OFNds/exec';
+const BACKEND_URL = 'https://script.google.com/macros/s/AKfycbw1l-mYkF0Zc7oCDqti4O4_bsmDxnpfodJeBjXcC-ysww04-Ct36OYY_dNdj7iWUqV5/exec';
 
 export interface UserProfile {
     uid: string;
