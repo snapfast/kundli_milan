@@ -348,14 +348,10 @@ export function calculateCompatibility(user1: UserAstrology, user2: UserAstrolog
         nadiScore = 0;
         let name = n1 === 2 ? "Antya Nadi Dosha" : "Nadi Dosha";
 
-        // Cancellation logic
-        const isCancelled = (user1.moonSignIdx === user2.moonSignIdx && user1.nakshatraIdx !== user2.nakshatraIdx) ||
-                            (user1.nakshatraIdx === user2.nakshatraIdx && user1.moonSignIdx !== user2.moonSignIdx);
-
         doshas.push({
             name,
-            description: isCancelled ? "Cancelled due to Nakshatra/Rasi variations." : "Relates to genetic compatibility and progeny vitality.",
-            isCancelled
+            description: "Relates to genetic compatibility and progeny vitality.",
+            isCancelled: false
         });
     }
     const nGirl = NAKSHATRA_PROPS[girl.nakshatraIdx].nadi;
