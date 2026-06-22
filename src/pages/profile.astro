@@ -29,7 +29,7 @@ import Layout from '../layouts/Layout.astro';
 		}
 		footer {
 			margin-top: 2rem;
-			font-size: 0.75rem;
+			font-size: var(--font-xs);
 			color: #6c757d;
 			text-align: center;
 		}
@@ -60,7 +60,7 @@ import Layout from '../layouts/Layout.astro';
 		}
 		.info-label {
 			font-weight: 700;
-			font-size: 0.75rem;
+			font-size: var(--font-xs);
 			text-transform: uppercase;
 			color: #6366f1;
 			margin-bottom: 0.25rem;
@@ -68,7 +68,7 @@ import Layout from '../layouts/Layout.astro';
 		.compact-table {
 			width: 100%;
 			border-collapse: collapse;
-			font-size: 0.8rem;
+			font-size: var(--font-sm);
 		}
 		.compact-table th, .compact-table td {
 			padding: 0.35rem 0.5rem;
@@ -82,7 +82,7 @@ import Layout from '../layouts/Layout.astro';
 		}
 	</style>
 
-	<h1 id="page-title">Create Your Profile</h1>
+	<h1 id="page-title" style="font-family: var(--font-secondary); font-size: var(--font-3xl); border-bottom: none; text-align: center;">Create Your Profile</h1>
 
 		<form id="detailsForm" novalidate>
 			<div class="form-row">
