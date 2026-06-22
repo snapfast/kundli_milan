@@ -4,45 +4,42 @@ import Layout from '../layouts/Layout.astro';
 
 <Layout title="moonine - Astrology Matchmaker">
 	<style>
-		#suggestions {
-			position: absolute;
-			top: 100%;
-			left: 0;
-			right: 0;
-			background: white;
-			border: 1px solid #ccc;
-			border-top: none;
-			z-index: 1000;
-			max-height: 200px;
-			overflow-y: auto;
-			display: none;
-			border-radius: 0 0 4px 4px;
-			box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+		.hero {
+			text-align: center;
+			padding: 3rem 1rem;
+			background: linear-gradient(to bottom, #eff6ff, #ffffff);
+			border-radius: 8px;
+			margin-bottom: 2rem;
+			border: 1px solid #bfdbfe;
 		}
-		.suggestion-item {
-			padding: 0.75rem;
-			cursor: pointer;
-			border-bottom: 1px solid #eee;
-		}
-		.suggestion-item:last-child {
+		.hero h1 {
+			font-size: 2.5rem;
+			color: #1e40af;
+			margin-bottom: 1rem;
 			border-bottom: none;
 		}
-		footer {
-			margin-top: 2rem;
-			font-size: 0.75rem;
-			color: #6c757d;
-			text-align: center;
+		.hero p {
+			font-size: 1.1rem;
+			color: #475569;
+			max-width: 600px;
+			margin: 0 auto 2rem auto;
+			line-height: 1.6;
 		}
-		.form-actions {
-			display: flex;
-			gap: 0.75rem;
-			margin-top: 0.5rem;
+		.hero .btn-cta {
+			font-size: 1.1rem;
+			padding: 0.75rem 2rem;
+			border-radius: 9999px;
+			background-color: #6366f1;
+			color: white;
+			text-decoration: none;
+			font-weight: 600;
+			box-shadow: 0 4px 6px rgba(99, 102, 241, 0.25);
+			transition: all 0.2s ease-in-out;
 		}
-		.btn-submit {
-			flex: 2;
-		}
-		.btn-reset {
-			flex: 1;
+		.hero .btn-cta:hover {
+			background-color: #4f46e5;
+			transform: translateY(-2px);
+			box-shadow: 0 6px 8px rgba(99, 102, 241, 0.3);
 		}
 		.visual-guide h2, .visual-guide h3 {
 			border-bottom: none;
@@ -54,24 +51,30 @@ import Layout from '../layouts/Layout.astro';
 			background-image: var(--floral-bg);
 			background-size: 300px 300px;
 			border: 1px solid #e2e8f0;
-			padding: 0.5rem 0.75rem;
+			padding: 1.5rem;
 			border-radius: 6px;
 			text-align: center;
+			box-shadow: 0 2px 4px rgba(0,0,0,0.05);
 		}
 		.info-label {
 			font-weight: 700;
-			font-size: 0.75rem;
+			font-size: 1rem;
 			text-transform: uppercase;
 			color: #6366f1;
-			margin-bottom: 0.25rem;
+			margin-bottom: 0.5rem;
+		}
+		.info-value {
+			font-size: 0.9rem;
+			color: #475569;
+			line-height: 1.5;
 		}
 		.compact-table {
 			width: 100%;
 			border-collapse: collapse;
-			font-size: 0.8rem;
+			font-size: 0.9rem;
 		}
 		.compact-table th, .compact-table td {
-			padding: 0.35rem 0.5rem;
+			padding: 0.5rem 0.75rem;
 			text-align: left;
 			border-bottom: 1px solid #f1f5f9;
 		}
@@ -82,80 +85,20 @@ import Layout from '../layouts/Layout.astro';
 		}
 	</style>
 
-	<div style="background: #eff6ff; border: 1px solid #bfdbfe; padding: 0.4rem; border-radius: 4px; text-align: center; margin-bottom: 1rem; font-size: 0.75rem; font-weight: 600; color: #1e40af;">
+	<div style="background: #eff6ff; border: 1px solid #bfdbfe; padding: 0.6rem; border-radius: 4px; text-align: center; margin-bottom: 1.5rem; font-size: 0.85rem; font-weight: 600; color: #1e40af;">
 		🎁 Limited Offer: Free for the first 100 users!
 	</div>
 
-	<h1>Submit Your Details</h1>
-		<div id="redirecting" style="display: none; text-align: center; padding: 2rem;">
-			Redirecting to your dashboard...
-		</div>
+	<div id="redirecting" style="display: none; text-align: center; padding: 2rem;">
+		Redirecting to your dashboard...
+	</div>
 
-		<form id="detailsForm" novalidate>
-			<div class="form-row">
-				<div class="field">
-					<label for="name">Full Name</label>
-					<input type="text" id="name" name="name" required minlength="2" maxlength="50" placeholder="Enter your full name" />
-				</div>
-				<div class="field">
-					<label for="email">Email Address</label>
-					<input type="email" id="email" name="email" required placeholder="your.email@example.com" />
-				</div>
-			</div>
-			<div class="form-row">
-				<div class="field">
-					<label for="dob">Date of Birth</label>
-					<input type="date" id="dob" name="dob" required max={new Date().toISOString().split('T')[0]} />
-				</div>
-				<div class="field">
-					<label for="tob">Time of Birth</label>
-					<div style="display: flex; gap: 0.25rem;">
-						<select id="tob_hour" required style="flex: 1;">
-							<option value="">Hour</option>
-						</select>
-						<select id="tob_min" required style="flex: 1;">
-							<option value="">Min</option>
-						</select>
-						<select id="tob_ampm" required style="flex: 1;">
-							<option value="AM">AM</option>
-							<option value="PM">PM</option>
-						</select>
-					</div>
-					<input type="hidden" id="tob" name="tob" />
-				</div>
-			</div>
-			<div class="form-row">
-				<div class="field">
-					<label for="gender">Gender</label>
-					<select id="gender" name="gender" required>
-						<option value="">Select Gender</option>
-						<option value="male">Male</option>
-						<option value="female">Female</option>
-						<option value="other">Other</option>
-					</select>
-				</div>
-				<div class="field">
-					<label for="location">Birth Location (City, Country)</label>
-					<input type="text" id="location" name="location" required placeholder="e.g. New Delhi, India" autocomplete="off" />
-					<div id="suggestions"></div>
-					<input type="hidden" id="lat" name="lat" />
-					<input type="hidden" id="lon" name="lon" />
-				</div>
-			</div>
-			<div class="form-row">
-				<div class="field">
-					<label for="currentLocation">Current Location (Optional)</label>
-					<input type="text" id="currentLocation" name="currentLocation" placeholder="e.g. Mumbai, India" autocomplete="off" />
-					<div id="currentSuggestions"></div>
-					<input type="hidden" id="currentLat" name="currentLat" />
-					<input type="hidden" id="currentLon" name="currentLon" />
-				</div>
-			</div>
-			<div class="form-actions">
-				<button type="submit" class="btn-submit">Submit Details</button>
-				<button type="button" id="resetBtn" class="btn-reset btn-danger">Reset</button>
-			</div>
-		</form>
+	<div id="main-content">
+		<section class="hero">
+			<h1>Find Your Cosmic Match</h1>
+			<p>Discover deep connections based on ancient Vedic Astrology. Join moonine to explore your personalized Ashta Koota compatibility and find your perfect soulmate.</p>
+			<a href="/profile" class="btn-cta">Start Your Journey</a>
+		</section>
 
 	<section class="visual-guide" style="margin-top: 2rem; border-top: 1px solid #e2e8f0; padding-top: 1.5rem;">
 		<h2>Ancient Wisdom. Modern Match.</h2>
@@ -209,323 +152,47 @@ import Layout from '../layouts/Layout.astro';
 		</p>
 	</section>
 
+	</div>
+
 	<script>
-			import { getOrSetUserId, getCookie, setCookie, clearUserData } from '../lib/user';
-			import { fetchUsers, resetUserProfile } from '../lib/api';
+			import { getCookie } from '../lib/user';
+			import { fetchUsers } from '../lib/api';
+			import { getOrSetUserId } from '../lib/user';
 
 			// Immediate redirection if user details already exist
 			const storedDetails = getCookie('user_details');
+			const uid = getOrSetUserId();
 
 			if (storedDetails) {
+				const mainContent = document.getElementById('main-content');
+				const redirectingDiv = document.getElementById('redirecting');
+				if (mainContent && redirectingDiv) {
+					mainContent.style.display = 'none';
+					redirectingDiv.style.display = 'block';
+				}
 				window.location.href = '/dashboard';
 			}
 
-			const form = document.getElementById('detailsForm') as HTMLFormElement;
-			const nameInput = document.getElementById('name') as HTMLInputElement;
-			const emailInput = document.getElementById('email') as HTMLInputElement;
-			const dobInput = document.getElementById('dob') as HTMLInputElement;
-			const genderInput = document.getElementById('gender') as HTMLSelectElement;
-			const resetBtn = document.getElementById('resetBtn') as HTMLButtonElement;
-			const locationInput = document.getElementById('location') as HTMLInputElement;
-			const suggestionsContainer = document.getElementById('suggestions') as HTMLDivElement;
-			const latInput = document.getElementById('lat') as HTMLInputElement;
-			const lonInput = document.getElementById('lon') as HTMLInputElement;
-			const currentLocationInput = document.getElementById('currentLocation') as HTMLInputElement;
-			const currentSuggestionsContainer = document.getElementById('currentSuggestions') as HTMLDivElement;
-			const currentLatInput = document.getElementById('currentLat') as HTMLInputElement;
-			const currentLonInput = document.getElementById('currentLon') as HTMLInputElement;
-			const redirectingDiv = document.getElementById('redirecting') as HTMLDivElement;
-
-			const tobHour = document.getElementById('tob_hour') as HTMLSelectElement;
-			const tobMin = document.getElementById('tob_min') as HTMLSelectElement;
-			const tobAmPm = document.getElementById('tob_ampm') as HTMLSelectElement;
-			const tobHidden = document.getElementById('tob') as HTMLInputElement;
-
-			// Populate Hour and Min dropdowns
-			for (let i = 1; i <= 12; i++) {
-				const val = i.toString().padStart(2, '0');
-				const opt = new Option(val, val);
-				tobHour.add(opt);
-			}
-			for (let i = 0; i < 60; i++) {
-				const val = i.toString().padStart(2, '0');
-				const opt = new Option(val, val);
-				tobMin.add(opt);
-			}
-
-			function syncTime() {
-				const h = tobHour.value;
-				const m = tobMin.value;
-				const ap = tobAmPm.value;
-				if (h && m && ap) {
-					let h24 = parseInt(h);
-					if (ap === 'PM' && h24 < 12) h24 += 12;
-					if (ap === 'AM' && h24 === 12) h24 = 0;
-					tobHidden.value = `${h24.toString().padStart(2, '0')}:${m}`;
-					autoSave();
-				}
-			}
-
-			[tobHour, tobMin, tobAmPm].forEach(el => el.addEventListener('change', syncTime));
-
-			// Ensure user ID is set on load
-			const uid = getOrSetUserId();
-
-			// Pre-fill form from cookies
-			function preFillForm() {
-				const stored = getCookie('user_details');
-				if (stored) {
-					try {
-						const details = JSON.parse(stored);
-						const fields = ['name', 'email', 'dob', 'tob', 'gender', 'location', 'lat', 'lon', 'currentLocation', 'currentLat', 'currentLon'];
-						fields.forEach(field => {
-							const element = document.getElementById(field) as HTMLInputElement | HTMLSelectElement;
-							if (element && details[field]) {
-								element.value = details[field];
-							}
-						});
-
-						// Sync the AM/PM dropdowns
-						if (details.tob) {
-							const [h24, min] = details.tob.split(':');
-							let h12 = parseInt(h24);
-							const ampm = h12 >= 12 ? 'PM' : 'AM';
-							h12 = h12 % 12;
-							if (h12 === 0) h12 = 12;
-
-							tobHour.value = h12.toString().padStart(2, '0');
-							tobMin.value = min;
-							tobAmPm.value = ampm;
-						}
-					} catch (e) {
-						console.error('Error parsing user_details cookie:', e);
-					}
-				}
-			}
-			preFillForm();
-
-			// Auto-detect current location via IP if blank
-			async function autoDetectLocation() {
-				if (!currentLocationInput.value) {
-					try {
-						// Using ipapi.co (free tier, no key required for low volume)
-						const response = await fetch('https://ipapi.co/json/');
-						if (response.ok) {
-							const data = await response.json();
-							if (data && data.city && data.country_name) {
-								currentLocationInput.value = `${data.city}, ${data.country_name}`;
-								currentLatInput.value = data.latitude;
-								currentLonInput.value = data.longitude;
-								autoSave();
-							}
-						}
-					} catch (e) {
-						console.error('Failed to auto-detect location via IP:', e);
-					}
-				}
-			}
-			autoDetectLocation();
-
-			// Auto-save logic
-			function autoSave() {
-				const formData = new FormData(form);
-				const data = Object.fromEntries(formData.entries());
-				const payload = {
-					...data,
-					uid: getOrSetUserId()
-				};
-				setCookie('user_details', JSON.stringify(payload), 365);
-			}
-
-			form.addEventListener('input', autoSave);
-			form.addEventListener('change', autoSave);
-
 			// Check if user already exists and redirect to dashboard if so
 			async function checkExistingUser() {
-				const users = await fetchUsers();
-				const existingUser = users.find(u => u.uid === uid);
-				if (existingUser && existingUser.name) { // Ensure they actually have a profile
-					form.style.display = 'none';
-					redirectingDiv.style.display = 'block';
-
-					// Hide the dashboard link since we are redirecting anyway
-					const dashboardLink = document.getElementById('dashboardLink');
-					if (dashboardLink) {
-						dashboardLink.style.display = 'none';
+				if (!storedDetails) {
+					try {
+						const users = await fetchUsers();
+						const existingUser = users.find(u => u.uid === uid);
+						if (existingUser && existingUser.name) {
+							const mainContent = document.getElementById('main-content');
+							const redirectingDiv = document.getElementById('redirecting');
+							if (mainContent && redirectingDiv) {
+								mainContent.style.display = 'none';
+								redirectingDiv.style.display = 'block';
+							}
+							window.location.href = '/dashboard';
+						}
+					} catch (error) {
+						console.error('Failed to check existing user:', error);
 					}
-
-					window.location.href = '/dashboard';
 				}
 			}
 			checkExistingUser();
-
-			resetBtn?.addEventListener('click', async () => {
-				if (confirm('Are you sure you want to reset your profile? Please note that we do not keep your data after a reset. It will be permanently deleted from our systems as well as your local device.')) {
-					const uid = getOrSetUserId();
-					if (uid) await resetUserProfile(uid);
-					clearUserData();
-					window.location.reload();
-				}
-			});
-
-			// Location Autocomplete Setup Function
-			function setupAutocomplete(inputEl: HTMLInputElement, suggestionsEl: HTMLDivElement, latEl: HTMLInputElement, lonEl: HTMLInputElement) {
-				let timeout: ReturnType<typeof setTimeout>;
-				inputEl?.addEventListener('input', () => {
-					clearTimeout(timeout);
-					const query = inputEl.value;
-					if (query.length < 3) {
-						suggestionsEl.style.display = 'none';
-						return;
-					}
-
-					timeout = setTimeout(async () => {
-						try {
-							suggestionsEl.innerHTML = '<div class="suggestion-item" style="color: #666;">Searching locations...</div>';
-							suggestionsEl.style.display = 'block';
-
-							const response = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&limit=5`);
-
-							if (!response.ok) throw new Error('Network response was not ok');
-
-							const data = await response.json();
-
-							suggestionsEl.innerHTML = '';
-							if (data.length > 0) {
-								data.forEach((item: any) => {
-									const div = document.createElement('div');
-									div.className = 'suggestion-item';
-									div.textContent = item.display_name;
-									div.addEventListener('click', () => {
-										inputEl.value = item.display_name;
-										latEl.value = item.lat;
-										lonEl.value = item.lon;
-										suggestionsEl.style.display = 'none';
-										autoSave(); // Ensure lat/lon are saved
-									});
-									suggestionsEl.appendChild(div);
-								});
-								suggestionsEl.style.display = 'block';
-							} else {
-								suggestionsEl.innerHTML = '<div class="suggestion-item" style="color: #dc3545;">No locations found. Try a different city.</div>';
-								suggestionsEl.style.display = 'block';
-							}
-						} catch (error) {
-							console.error('Error fetching locations:', error);
-							suggestionsEl.innerHTML = '<div class="suggestion-item" style="color: #dc3545;">Error connecting to location service. Please type manually or try again.</div>';
-							suggestionsEl.style.display = 'block';
-						}
-					}, 300);
-				});
-
-				document.addEventListener('click', (e) => {
-					if (e.target !== inputEl) {
-						suggestionsEl.style.display = 'none';
-					}
-				});
-			}
-
-			setupAutocomplete(locationInput, suggestionsContainer, latInput, lonInput);
-			setupAutocomplete(currentLocationInput, currentSuggestionsContainer, currentLatInput, currentLonInput);
-
-			form?.addEventListener('submit', async (e) => {
-				e.preventDefault();
-
-				if (!nameInput.value || nameInput.value.length < 2) {
-					alert('Please enter your full name (at least 2 characters).');
-					nameInput.focus();
-					return;
-				}
-
-				const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-				if (!emailInput.value || !emailRegex.test(emailInput.value)) {
-					alert('Please enter a valid email address.');
-					emailInput.focus();
-					return;
-				}
-
-				if (!dobInput.value) {
-					alert('Please select your Date of Birth.');
-					dobInput.focus();
-					return;
-				}
-
-				// Manual validation for fields that might fail silently or need specific selection
-				if (!tobHidden.value) {
-					alert('Please select your complete Time of Birth.');
-					tobHour.focus();
-					return;
-				}
-
-				if (!genderInput.value) {
-					alert('Please select your Gender.');
-					genderInput.focus();
-					return;
-				}
-
-				if (!locationInput.value) {
-					alert('Please enter your birth location.');
-					locationInput.focus();
-					return;
-				}
-
-				if (currentLocationInput.value && (!currentLatInput.value || !currentLonInput.value)) {
-					alert('Please select your current location from the suggestions list to get accurate coordinates.');
-					currentLocationInput.focus();
-					return;
-				}
-
-				if (!latInput.value || !lonInput.value) {
-					alert('Please select a location from the suggestions list to get accurate coordinates.');
-					locationInput.focus();
-					return;
-				}
-
-				const formData = new FormData(form);
-				const data = Object.fromEntries(formData.entries());
-				const uid = getOrSetUserId();
-
-				const payload = {
-					...data,
-					uid: uid
-				};
-
-				// Save to cookie immediately for dashboard use
-				setCookie('user_details', JSON.stringify(payload), 365);
-
-				// Show loading state on button
-				const submitBtn = form.querySelector('button[type="submit"]') as HTMLButtonElement;
-				submitBtn.disabled = true;
-				submitBtn.textContent = 'Saving...';
-
-				try {
-					// We import saveUserProfile here or at the top
-					const { saveUserProfile } = await import('../lib/api');
-					const { calculateAstrology } = await import('../lib/astrology');
-
-					const dataPayload = payload as any;
-
-					// Calculate basic astrology for the user to store it
-					const lat = dataPayload.lat ? parseFloat(dataPayload.lat as string) : 28.6139;
-					const lon = dataPayload.lon ? parseFloat(dataPayload.lon as string) : 77.2090;
-					const astroData = calculateAstrology(dataPayload.dob as string, dataPayload.tob as string, lat, lon);
-
-					const profileToSave = {
-						...payload,
-						nakshatraIdx: astroData.panchang.nakshatraIdx,
-						moonSignIdx: astroData.panchang.moonSignIdx,
-						isMoonManglik: astroData.panchang.isMoonManglik,
-						isLaganManglik: astroData.panchang.isLaganManglik,
-						matches: [] // Will be populated by dashboard
-					} as any;
-
-					await saveUserProfile(profileToSave);
-					window.location.href = '/dashboard';
-				} catch (error) {
-					console.error('Error saving profile:', error);
-					// Even if save fails, we go to dashboard because we have local cookies
-					window.location.href = '/dashboard';
-				}
-			});
 	</script>
 </Layout>

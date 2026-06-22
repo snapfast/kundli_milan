@@ -82,7 +82,7 @@ import Layout from '../layouts/Layout.astro';
 		}
 	</style>
 
-	<h1>Edit Your Profile</h1>
+	<h1 id="page-title">Create Your Profile</h1>
 
 		<form id="detailsForm" novalidate>
 			<div class="form-row">
@@ -145,8 +145,8 @@ import Layout from '../layouts/Layout.astro';
 				</div>
 			</div>
 			<div class="form-actions">
-				<button type="submit" class="btn-submit">Update Details</button>
-				<button type="button" id="cancelBtn" class="btn-reset" style="background: #e2e8f0; color: #475569;">Cancel</button>
+				<button type="submit" class="btn-submit" id="submitBtn">Submit Details</button>
+				<button type="button" id="cancelBtn" class="btn-reset" style="background: #e2e8f0; color: #475569; display: none;">Cancel</button>
 			</div>
 		</form>
 
@@ -154,13 +154,11 @@ import Layout from '../layouts/Layout.astro';
 			import { getOrSetUserId, getCookie, setCookie, clearUserData } from '../lib/user';
 			import { fetchUsers, resetUserProfile } from '../lib/api';
 
-			// Redirect if user has no profile details stored (must have a profile to edit)
 			const storedDetails = getCookie('user_details');
-			if (!storedDetails) {
-				window.location.href = '/';
-			}
 
 			const form = document.getElementById('detailsForm') as HTMLFormElement;
+			const pageTitle = document.getElementById('page-title') as HTMLHeadingElement;
+			const submitBtn = document.getElementById('submitBtn') as HTMLButtonElement;
 			const nameInput = document.getElementById('name') as HTMLInputElement;
 			const emailInput = document.getElementById('email') as HTMLInputElement;
 			const dobInput = document.getElementById('dob') as HTMLInputElement;
@@ -215,6 +213,10 @@ import Layout from '../layouts/Layout.astro';
 				const stored = getCookie('user_details');
 				if (stored) {
 					try {
+						pageTitle.textContent = 'Edit Your Profile';
+						submitBtn.textContent = 'Update Details';
+						cancelBtn.style.display = 'inline-block';
+
 						const details = JSON.parse(stored);
 						const fields = ['name', 'email', 'dob', 'tob', 'gender', 'location', 'lat', 'lon', 'currentLocation', 'currentLat', 'currentLon'];
 						fields.forEach(field => {
