@@ -286,18 +286,12 @@ export function calculateCompatibility(user1: UserAstrology, user2: UserAstrolog
     const gGirl = NAKSHATRA_PROPS[girl.nakshatraIdx].gana;
     let ganaScore = GANA_MATRIX[gBoy][gGirl];
 
-    if (ganaScore < 6) {
-        // Cancellation logic
-        const isCancelled = (l1 === l2 || (f1 === 1 && f2 === 1)) ||
-                            (user1.moonSignIdx === user2.moonSignIdx && user1.nakshatraIdx !== user2.nakshatraIdx);
-
-        if (ganaScore === 0 || isCancelled) {
-            doshas.push({
-                name: "Gana Dosha",
-                description: isCancelled ? "Cancelled due to friendly Rasi lords or same Rasi." : "Significant differences in temperament and character traits.",
-                isCancelled
-            });
-        }
+    if (ganaScore === 0) {
+        doshas.push({
+            name: "Gana Dosha",
+            description: "Significant differences in temperament and character traits.",
+            isCancelled: false
+        });
     }
     kootas.push({
         name: "Gana Koot",
@@ -321,13 +315,10 @@ export function calculateCompatibility(user1: UserAstrology, user2: UserAstrolog
         if (rDiff === 5 || rDiff === 9) name = "Navpancham Bhakoot";
         if (rDiff === 6 || rDiff === 8) name = "Shadashtak Bhakoot";
 
-        // Cancellation logic
-        const isCancelled = l1 === l2 || (f1 === 1 && f2 === 1);
-
         doshas.push({
             name,
-            description: isCancelled ? "Cancelled due to friendly Rasi lords." : "May impact prosperity and relationship longevity.",
-            isCancelled
+            description: "May impact prosperity and relationship longevity.",
+            isCancelled: false
         });
     }
     kootas.push({
