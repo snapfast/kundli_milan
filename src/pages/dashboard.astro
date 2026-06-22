@@ -152,6 +152,37 @@ import Layout from '../layouts/Layout.astro';
 		.koota-summary:hover {
 			color: #0f172a;
 		}
+		.floating-scroll-btns {
+			position: fixed;
+			bottom: 1rem;
+			right: 1rem;
+			display: flex;
+			flex-direction: column;
+			gap: 0.5rem;
+			z-index: 1000;
+		}
+		.scroll-btn {
+			width: 2.5rem;
+			height: 2.5rem;
+			border-radius: 50%;
+			background-color: #6366f1;
+			color: white;
+			border: none;
+			cursor: pointer;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+			font-size: 1.25rem;
+			transition: background-color 0.2s, transform 0.2s;
+		}
+		.scroll-btn:hover {
+			background-color: #4f46e5;
+			transform: translateY(-2px);
+		}
+		.scroll-btn:active {
+			transform: translateY(0);
+		}
 	</style>
 
 	<h1 style="font-family: var(--font-secondary); font-size: var(--font-3xl); border-bottom: none; text-align: center;">moonine</h1>
@@ -210,6 +241,11 @@ import Layout from '../layouts/Layout.astro';
 	<div id="error-state" style="display: none;" class="no-data">
 		<p style="color: #dc3545; font-weight: bold;">Error connecting to the stars.</p>
 		<p>We encountered a problem while fetching moonine data. Please try again later.</p>
+	</div>
+
+	<div id="floating-scroll-btns" class="floating-scroll-btns" style="display: none;">
+		<button id="scroll-up-btn" class="scroll-btn" aria-label="Scroll to top">↑</button>
+		<button id="scroll-down-btn" class="scroll-btn" aria-label="Scroll to bottom">↓</button>
 	</div>
 
 	<script>
@@ -419,6 +455,26 @@ import Layout from '../layouts/Layout.astro';
 				// Rendering
 				document.getElementById('loading')!.style.display = 'none';
 				document.getElementById('dashboard-content')!.style.display = 'block';
+
+				const floatingBtns = document.getElementById('floating-scroll-btns');
+				if (floatingBtns) {
+					floatingBtns.style.display = 'flex';
+				}
+
+				const scrollUpBtn = document.getElementById('scroll-up-btn');
+				const scrollDownBtn = document.getElementById('scroll-down-btn');
+
+				if (scrollUpBtn) {
+					scrollUpBtn.addEventListener('click', () => {
+						window.scrollTo({ top: 0, behavior: 'smooth' });
+					});
+				}
+
+				if (scrollDownBtn) {
+					scrollDownBtn.addEventListener('click', () => {
+						window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+					});
+				}
 
 				const infoGrid = document.getElementById('profile-panchang')!;
 				const items = [
