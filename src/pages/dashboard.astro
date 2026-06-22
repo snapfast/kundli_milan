@@ -134,6 +134,24 @@ import Layout from '../layouts/Layout.astro';
 			padding: 0.5rem 1rem;
 			font-size: 0.9rem;
 		}
+		.koota-details {
+			margin-top: 0.5rem;
+			background: #f8fafc;
+			border: 1px solid #e2e8f0;
+			border-radius: 4px;
+			padding: 0.25rem 0.5rem;
+		}
+		.koota-summary {
+			font-size: 0.75rem;
+			font-weight: 600;
+			color: #475569;
+			cursor: pointer;
+			padding: 0.25rem 0;
+			display: list-item;
+		}
+		.koota-summary:hover {
+			color: #0f172a;
+		}
 	</style>
 
 	<h1>Your moonine Dashboard</h1>
@@ -498,42 +516,45 @@ import Layout from '../layouts/Layout.astro';
 								}
 
 								kootaHtml = `
-									<div style="overflow-x: auto; margin-top: 0.5rem;">
-										<table class="compact-table" style="font-size: 0.65rem;">
-											<thead>
-												<tr>
-													<th>#</th>
-													<th>Guna</th>
-													<th>Girl</th>
-													<th>Boy</th>
-													<th>Obtained</th>
-													<th>Max</th>
-													<th>Area of Life</th>
-												</tr>
-											</thead>
-											<tbody>
-												${compat.kootas.map((k: any, idx: number) => `
+									<details class="koota-details">
+										<summary class="koota-summary">View Guna Milan Details</summary>
+										<div style="overflow-x: auto; margin-top: 0.5rem;">
+											<table class="compact-table" style="font-size: 0.65rem;">
+												<thead>
 													<tr>
-														<td>${idx + 1}</td>
-														<td>${k.name}</td>
-														<td>${k.girlValue}</td>
-														<td>${k.boyValue}</td>
-														<td>${k.score}</td>
-														<td>${k.max}</td>
-														<td>${k.areaOfLife}</td>
+														<th>#</th>
+														<th>Guna</th>
+														<th>Girl</th>
+														<th>Boy</th>
+														<th>Obtained</th>
+														<th>Max</th>
+														<th>Area of Life</th>
 													</tr>
-												`).join('')}
-											</tbody>
-											<tfoot>
-												<tr style="background: #f8fafc; font-weight: 800;">
-													<td colspan="4" style="text-align: right;">Total Guna Milan Points</td>
-													<td>${compat.score}</td>
-													<td>${compat.maxScore}</td>
-													<td></td>
-												</tr>
-											</tfoot>
-										</table>
-									</div>
+												</thead>
+												<tbody>
+													${compat.kootas.map((k: any, idx: number) => `
+														<tr>
+															<td>${idx + 1}</td>
+															<td>${k.name}</td>
+															<td>${k.girlValue}</td>
+															<td>${k.boyValue}</td>
+															<td>${k.score}</td>
+															<td>${k.max}</td>
+															<td>${k.areaOfLife}</td>
+														</tr>
+													`).join('')}
+												</tbody>
+												<tfoot>
+													<tr style="background: #f8fafc; font-weight: 800;">
+														<td colspan="4" style="text-align: right;">Total Guna Milan Points</td>
+														<td>${compat.score}</td>
+														<td>${compat.maxScore}</td>
+														<td></td>
+													</tr>
+												</tfoot>
+											</table>
+										</div>
+									</details>
 								`;
 
 								const distanceHtml = showDistance && m.distance !== undefined ?
