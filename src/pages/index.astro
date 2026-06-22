@@ -12,6 +12,16 @@ import Layout from '../layouts/Layout.astro';
 			margin-bottom: 2rem;
 			border: 1px solid #bfdbfe;
 		}
+		.logo {
+			font-family: 'Dancing Script', cursive;
+			background: linear-gradient(to right, #9333ea, #a855f7);
+			-webkit-background-clip: text;
+			-webkit-text-fill-color: transparent;
+			font-size: 4rem;
+			font-weight: bold;
+			margin-bottom: 0.5rem;
+			display: inline-block;
+		}
 		.hero h1 {
 			font-size: var(--font-3xl); font-family: var(--font-secondary);
 			color: #1e40af;
@@ -95,6 +105,7 @@ import Layout from '../layouts/Layout.astro';
 
 	<div id="main-content">
 		<section class="hero">
+			<div class="logo">moonine</div>
 			<h1>Find Your Cosmic Match</h1>
 			<p>Discover deep connections based on ancient Vedic Astrology. Join moonine to explore your personalized Ashta Koota compatibility and find your perfect soulmate.</p>
 			<a href="/profile" class="btn-cta">Start Your Journey</a>
