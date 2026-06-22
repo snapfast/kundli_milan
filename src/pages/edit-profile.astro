@@ -82,14 +82,7 @@ import Layout from '../layouts/Layout.astro';
 		}
 	</style>
 
-	<div style="background: #eff6ff; border: 1px solid #bfdbfe; padding: 0.4rem; border-radius: 4px; text-align: center; margin-bottom: 1rem; font-size: 0.75rem; font-weight: 600; color: #1e40af;">
-		🎁 Limited Offer: Free for the first 100 users!
-	</div>
-
-	<h1>Submit Your Details</h1>
-		<div id="redirecting" style="display: none; text-align: center; padding: 2rem;">
-			Redirecting to your dashboard...
-		</div>
+	<h1>Edit Your Profile</h1>
 
 		<form id="detailsForm" novalidate>
 			<div class="form-row">
@@ -152,72 +145,19 @@ import Layout from '../layouts/Layout.astro';
 				</div>
 			</div>
 			<div class="form-actions">
-				<button type="submit" class="btn-submit">Submit Details</button>
-				<button type="button" id="resetBtn" class="btn-reset btn-danger">Reset</button>
+				<button type="submit" class="btn-submit">Update Details</button>
+				<button type="button" id="cancelBtn" class="btn-reset" style="background: #e2e8f0; color: #475569;">Cancel</button>
 			</div>
 		</form>
-
-	<section class="visual-guide" style="margin-top: 2rem; border-top: 1px solid #e2e8f0; padding-top: 1.5rem;">
-		<h2>Ancient Wisdom. Modern Match.</h2>
-
-		<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 2rem;">
-			<div class="info-card">
-				<div class="info-label">Guna Milan</div>
-				<div class="info-value" style="font-size: 0.8rem;">36-point traditional Ashta Koota system for deep soul compatibility.</div>
-			</div>
-			<div class="info-card">
-				<div class="info-label">Dosha Analysis</div>
-				<div class="info-value" style="font-size: 0.8rem;">Smart detection of Manglik and Gana doshas with traditional cancellation rules.</div>
-			</div>
-			<div class="info-card">
-				<div class="info-label">High Precision</div>
-				<div class="info-value" style="font-size: 0.8rem;">Calculations powered by high-precision astronomical algorithms (Lahiri Ayanamsa).</div>
-			</div>
-		</div>
-
-		<h3>The 8 Pillars of Compatibility</h3>
-		<div style="overflow-x: auto;">
-			<table class="compact-table">
-				<thead>
-					<tr>
-						<th>Koota</th>
-						<th>Focus Area</th>
-						<th>Max</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr><td>Varna</td><td>Spiritual & Ego alignment</td><td>1</td></tr>
-					<tr><td>Vashya</td><td>Mutual attraction & Power balance</td><td>2</td></tr>
-					<tr><td>Tara</td><td>Health, Destiny & Longevity</td><td>3</td></tr>
-					<tr><td>Yoni</td><td>Biological & Intimate compatibility</td><td>4</td></tr>
-					<tr><td>Maitri</td><td>Friendship & Psychological bond</td><td>5</td></tr>
-					<tr><td>Gana</td><td>Temperament & Character matching</td><td>6</td></tr>
-					<tr><td>Bhakoot</td><td>Emotional & Financial prosperity</td><td>7</td></tr>
-					<tr><td>Nadi</td><td>Genetic health & Progeny</td><td>8</td></tr>
-				</tbody>
-				<tfoot>
-					<tr>
-						<th colspan="2" style="text-align: right;">Total Potential</th>
-						<th>36</th>
-					</tr>
-				</tfoot>
-			</table>
-		</div>
-
-		<p style="text-align: center; margin-top: 1.5rem;">
-			<a href="/astrology-guide" class="btn">Visual Astrology Guide &rarr;</a>
-		</p>
-	</section>
 
 	<script>
 			import { getOrSetUserId, getCookie, setCookie, clearUserData } from '../lib/user';
 			import { fetchUsers, resetUserProfile } from '../lib/api';
 
-			// Immediate redirection if user details already exist
+			// Redirect if user has no profile details stored (must have a profile to edit)
 			const storedDetails = getCookie('user_details');
-
-			if (storedDetails) {
-				window.location.href = '/dashboard';
+			if (!storedDetails) {
+				window.location.href = '/';
 			}
 
 			const form = document.getElementById('detailsForm') as HTMLFormElement;
@@ -225,7 +165,7 @@ import Layout from '../layouts/Layout.astro';
 			const emailInput = document.getElementById('email') as HTMLInputElement;
 			const dobInput = document.getElementById('dob') as HTMLInputElement;
 			const genderInput = document.getElementById('gender') as HTMLSelectElement;
-			const resetBtn = document.getElementById('resetBtn') as HTMLButtonElement;
+			const cancelBtn = document.getElementById('cancelBtn') as HTMLButtonElement;
 			const locationInput = document.getElementById('location') as HTMLInputElement;
 			const suggestionsContainer = document.getElementById('suggestions') as HTMLDivElement;
 			const latInput = document.getElementById('lat') as HTMLInputElement;
@@ -234,7 +174,6 @@ import Layout from '../layouts/Layout.astro';
 			const currentSuggestionsContainer = document.getElementById('currentSuggestions') as HTMLDivElement;
 			const currentLatInput = document.getElementById('currentLat') as HTMLInputElement;
 			const currentLonInput = document.getElementById('currentLon') as HTMLInputElement;
-			const redirectingDiv = document.getElementById('redirecting') as HTMLDivElement;
 
 			const tobHour = document.getElementById('tob_hour') as HTMLSelectElement;
 			const tobMin = document.getElementById('tob_min') as HTMLSelectElement;
@@ -262,7 +201,7 @@ import Layout from '../layouts/Layout.astro';
 					if (ap === 'PM' && h24 < 12) h24 += 12;
 					if (ap === 'AM' && h24 === 12) h24 = 0;
 					tobHidden.value = `${h24.toString().padStart(2, '0')}:${m}`;
-					autoSave();
+
 				}
 			}
 
@@ -316,7 +255,7 @@ import Layout from '../layouts/Layout.astro';
 								currentLocationInput.value = `${data.city}, ${data.country_name}`;
 								currentLatInput.value = data.latitude;
 								currentLonInput.value = data.longitude;
-								autoSave();
+
 							}
 						}
 					} catch (e) {
@@ -326,46 +265,8 @@ import Layout from '../layouts/Layout.astro';
 			}
 			autoDetectLocation();
 
-			// Auto-save logic
-			function autoSave() {
-				const formData = new FormData(form);
-				const data = Object.fromEntries(formData.entries());
-				const payload = {
-					...data,
-					uid: getOrSetUserId()
-				};
-				setCookie('user_details', JSON.stringify(payload), 365);
-			}
-
-			form.addEventListener('input', autoSave);
-			form.addEventListener('change', autoSave);
-
-			// Check if user already exists and redirect to dashboard if so
-			async function checkExistingUser() {
-				const users = await fetchUsers();
-				const existingUser = users.find(u => u.uid === uid);
-				if (existingUser && existingUser.name) { // Ensure they actually have a profile
-					form.style.display = 'none';
-					redirectingDiv.style.display = 'block';
-
-					// Hide the dashboard link since we are redirecting anyway
-					const dashboardLink = document.getElementById('dashboardLink');
-					if (dashboardLink) {
-						dashboardLink.style.display = 'none';
-					}
-
-					window.location.href = '/dashboard';
-				}
-			}
-			checkExistingUser();
-
-			resetBtn?.addEventListener('click', async () => {
-				if (confirm('Are you sure you want to reset your profile? Please note that we do not keep your data after a reset. It will be permanently deleted from our systems as well as your local device.')) {
-					const uid = getOrSetUserId();
-					if (uid) await resetUserProfile(uid);
-					clearUserData();
-					window.location.reload();
-				}
+			cancelBtn?.addEventListener('click', () => {
+				window.location.href = '/dashboard';
 			});
 
 			// Location Autocomplete Setup Function
@@ -401,7 +302,7 @@ import Layout from '../layouts/Layout.astro';
 										latEl.value = item.lat;
 										lonEl.value = item.lon;
 										suggestionsEl.style.display = 'none';
-										autoSave(); // Ensure lat/lon are saved
+										 // Ensure lat/lon are saved
 									});
 									suggestionsEl.appendChild(div);
 								});
