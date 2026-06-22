@@ -21,12 +21,6 @@
 
 ---
 
-## 🎁 Exclusive Limited Offer
-
-To celebrate our launch, **moonine is completely free for the first 100 users!** Join now to secure your spot and start your journey toward a more conscious and celestial relationship.
-
----
-
 ## 🏛️ The 8 Pillars of Compatibility
 
 Our matching engine analyzes the traditional **Ashta Koota**, ensuring a comprehensive assessment of your union:
