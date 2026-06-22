@@ -25,12 +25,12 @@ import Layout from '../layouts/Layout.astro';
 		.info-label {
 			font-weight: 700;
 			color: #64748b;
-			font-size: 0.6rem;
+			font-size: var(--font-xs);
 			text-transform: uppercase;
 			letter-spacing: 0.05em;
 		}
 		.info-value {
-			font-size: 0.8rem;
+			font-size: var(--font-sm);
 			color: #0f172a;
 			font-weight: 500;
 			word-break: normal;
@@ -38,7 +38,7 @@ import Layout from '../layouts/Layout.astro';
 			line-height: 1.1;
 		}
 		.section-title {
-			font-size: 1rem;
+			font-size: var(--font-base);
 			margin: 0.75rem 0 0.5rem 0;
 			border-bottom: 1px solid #f1f5f9;
 			padding-bottom: 0.15rem;
@@ -48,7 +48,7 @@ import Layout from '../layouts/Layout.astro';
 		.compact-table {
 			width: 100%;
 			border-collapse: collapse;
-			font-size: 0.75rem;
+			font-size: var(--font-xs);
 			background: #fff;
 			border-radius: 4px;
 			overflow: hidden;
@@ -91,7 +91,7 @@ import Layout from '../layouts/Layout.astro';
 		.dosha-header {
 			font-weight: 800;
 			color: #991b1b;
-			font-size: 0.65rem;
+			font-size: var(--font-xs);
 			text-transform: uppercase;
 			margin-bottom: 0.2rem;
 		}
@@ -112,10 +112,10 @@ import Layout from '../layouts/Layout.astro';
 		.dosha-name {
 			font-weight: 700;
 			color: #1e293b;
-			font-size: 0.75rem;
+			font-size: var(--font-xs);
 		}
 		.dosha-description {
-			font-size: 0.7rem;
+			font-size: var(--font-xs);
 			color: #475569;
 			line-height: 1.25;
 		}
@@ -132,7 +132,7 @@ import Layout from '../layouts/Layout.astro';
 		}
 		.btn-sm {
 			padding: 0.5rem 1rem;
-			font-size: 0.9rem;
+			font-size: var(--font-sm);
 		}
 		.koota-details {
 			margin-top: 0.5rem;
@@ -142,7 +142,7 @@ import Layout from '../layouts/Layout.astro';
 			padding: 0.25rem 0.5rem;
 		}
 		.koota-summary {
-			font-size: 0.75rem;
+			font-size: var(--font-xs);
 			font-weight: 600;
 			color: #475569;
 			cursor: pointer;
@@ -154,7 +154,7 @@ import Layout from '../layouts/Layout.astro';
 		}
 	</style>
 
-	<h1>Your moonine Dashboard</h1>
+	<h1 style="font-family: var(--font-secondary); font-size: var(--font-3xl); border-bottom: none; text-align: center;">Your moonine Dashboard</h1>
 
 	<div id="loading" class="loading-container">
 		<div class="loader"></div>
@@ -519,7 +519,7 @@ import Layout from '../layouts/Layout.astro';
 									<details class="koota-details">
 										<summary class="koota-summary">View Guna Milan Details</summary>
 										<div style="overflow-x: auto; margin-top: 0.5rem;">
-											<table class="compact-table" style="font-size: 0.65rem;">
+											<table class="compact-table" style="font-size: var(--font-xs);">
 												<thead>
 													<tr>
 														<th>#</th>
@@ -558,7 +558,7 @@ import Layout from '../layouts/Layout.astro';
 								`;
 
 								const distanceHtml = showDistance && m.distance !== undefined ?
-									`<div style="font-size: 0.8rem; color: #64748b; margin-top: 0.5rem; font-weight: 600;">📍 Approx. ${Math.round(m.distance)} km away</div>` : '';
+									`<div style="font-size: var(--font-sm); color: #64748b; margin-top: 0.5rem; font-weight: 600;">📍 Approx. ${Math.round(m.distance)} km away</div>` : '';
 
 								const card = document.createElement('div');
 								card.className = 'match-card';

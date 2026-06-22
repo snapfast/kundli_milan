@@ -13,20 +13,20 @@ import Layout from '../layouts/Layout.astro';
 			border: 1px solid #bfdbfe;
 		}
 		.hero h1 {
-			font-size: 2.5rem;
+			font-size: var(--font-3xl); font-family: var(--font-secondary);
 			color: #1e40af;
 			margin-bottom: 1rem;
 			border-bottom: none;
 		}
 		.hero p {
-			font-size: 1.1rem;
+			font-size: var(--font-lg);
 			color: #475569;
 			max-width: 600px;
 			margin: 0 auto 2rem auto;
 			line-height: 1.6;
 		}
 		.hero .btn-cta {
-			font-size: 1.1rem;
+			font-size: var(--font-lg);
 			padding: 0.75rem 2rem;
 			border-radius: 9999px;
 			background-color: #6366f1;
@@ -58,20 +58,20 @@ import Layout from '../layouts/Layout.astro';
 		}
 		.info-label {
 			font-weight: 700;
-			font-size: 1rem;
+			font-size: var(--font-base);
 			text-transform: uppercase;
 			color: #6366f1;
 			margin-bottom: 0.5rem;
 		}
 		.info-value {
-			font-size: 0.9rem;
+			font-size: var(--font-sm);
 			color: #475569;
 			line-height: 1.5;
 		}
 		.compact-table {
 			width: 100%;
 			border-collapse: collapse;
-			font-size: 0.9rem;
+			font-size: var(--font-sm);
 		}
 		.compact-table th, .compact-table td {
 			padding: 0.5rem 0.75rem;
@@ -85,7 +85,7 @@ import Layout from '../layouts/Layout.astro';
 		}
 	</style>
 
-	<div style="background: #eff6ff; border: 1px solid #bfdbfe; padding: 0.6rem; border-radius: 4px; text-align: center; margin-bottom: 1.5rem; font-size: 0.85rem; font-weight: 600; color: #1e40af;">
+	<div style="background: #eff6ff; border: 1px solid #bfdbfe; padding: 0.6rem; border-radius: 4px; text-align: center; margin-bottom: 1.5rem; font-size: var(--font-sm); font-weight: 600; color: #1e40af;">
 		🎁 Limited Offer: Free for the first 100 users!
 	</div>
 
@@ -101,20 +101,20 @@ import Layout from '../layouts/Layout.astro';
 		</section>
 
 	<section class="visual-guide" style="margin-top: 2rem; border-top: 1px solid #e2e8f0; padding-top: 1.5rem;">
-		<h2>Ancient Wisdom. Modern Match.</h2>
+		<h2 style="font-family: var(--font-secondary); font-size: var(--font-2xl); border-bottom: none; text-align: center;">Ancient Wisdom. Modern Match.</h2>
 
 		<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 2rem;">
 			<div class="info-card">
 				<div class="info-label">Guna Milan</div>
-				<div class="info-value" style="font-size: 0.8rem;">36-point traditional Ashta Koota system for deep soul compatibility.</div>
+				<div class="info-value" style="font-size: var(--font-sm);">36-point traditional Ashta Koota system for deep soul compatibility.</div>
 			</div>
 			<div class="info-card">
 				<div class="info-label">Dosha Analysis</div>
-				<div class="info-value" style="font-size: 0.8rem;">Smart detection of Manglik and Gana doshas with traditional cancellation rules.</div>
+				<div class="info-value" style="font-size: var(--font-sm);">Smart detection of Manglik and Gana doshas with traditional cancellation rules.</div>
 			</div>
 			<div class="info-card">
 				<div class="info-label">High Precision</div>
-				<div class="info-value" style="font-size: 0.8rem;">Calculations powered by high-precision astronomical algorithms (Lahiri Ayanamsa).</div>
+				<div class="info-value" style="font-size: var(--font-sm);">Calculations powered by high-precision astronomical algorithms (Lahiri Ayanamsa).</div>
 			</div>
 		</div>
 
