@@ -388,11 +388,28 @@ const { title, description } = Astro.props;
 			updateNavigation();
 
 			async function updateTotalUsers() {
+				const CACHE_KEY = 'total_users_count';
+				const CACHE_TIME_KEY = 'total_users_count_timestamp';
+				const ONE_DAY = 24 * 60 * 60 * 1000;
+
+				const countEl = document.getElementById('total-users-count');
+				const cachedCount = localStorage.getItem(CACHE_KEY);
+				const cachedTimestamp = localStorage.getItem(CACHE_TIME_KEY);
+				const now = Date.now();
+
+				if (cachedCount && cachedTimestamp) {
+					if (countEl) countEl.textContent = cachedCount;
+					if (now - parseInt(cachedTimestamp) < ONE_DAY) {
+						return;
+					}
+				}
+
 				try {
 					const users = await fetchUsers();
 					const count = users.filter(u => u.name).length;
-					const countEl = document.getElementById('total-users-count');
 					if (countEl) countEl.textContent = count.toString();
+					localStorage.setItem(CACHE_KEY, count.toString());
+					localStorage.setItem(CACHE_TIME_KEY, now.toString());
 				} catch (err) {
 					console.error('Failed to fetch total users:', err);
 				}
