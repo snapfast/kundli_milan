@@ -8,16 +8,30 @@
 
 ## ✨ Why moonine?
 
+- **👤 No Account, No Login**
+  Jump straight into finding your soul connection. No tedious sign-ups or passwords to remember.
+- **🏆 Best Matches First**
+  Our algorithm prioritizes your highest compatibility scores so you see your best potential partners immediately.
+- **🤝 Personal Vetting Promise**
+  I will personally make sure the party is genuine before any information or money is exchanged, ensuring a safe and secure experience.
 - **🎯 Precision Matching**
   Our 36-point Guna Milan system goes beyond surface-level interests, analyzing 8 distinct dimensions of compatibility to find your most harmonious matches.
 - **🛡️ Deeper Insights, Fewer Surprises**
-  Automated detection of Manglik and Nadi Doshas—complete with traditional cancellation rules—provides a nuanced understanding of potential challenges and strengths.
+  Automated detection of Manglik and Nadi Doshas provides a nuanced understanding of potential challenges and strengths.
 - **📊 Your Personal Cosmic Dashboard**
   Get instant access to your unique Nakshatra, Moon Sign, and planetary positions. Understand your cosmic DNA at a glance.
 - **🔒 Privacy You Can Trust**
   Your journey is personal. We never share your email or sensitive birth details on public match cards. Your data stays yours.
 - **🎓 Learn as You Match**
   We believe in empowerment through knowledge. moonine explains the *why* behind every score, turning ancient wisdom into actionable insights.
+- **✨ Location-Based Discovery**
+  Connect with highly compatible matches near you using our proximity-based sorting.
+- **🚀 Lightning Fast & Seamless**
+  Built on modern web technologies, the app is incredibly fast, allowing you to view and navigate matches instantly.
+- **📱 Mobile-First Design**
+  A beautiful, responsive interface designed to provide an excellent experience on any device, anywhere.
+- **💸 No Hidden Fees**
+  Transparency is key. We are upfront about any costs associated with connecting, with no recurring subscriptions.
 
 ---
 
