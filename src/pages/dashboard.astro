@@ -2,7 +2,7 @@
 import Layout from '../layouts/Layout.astro';
 ---
 
-<Layout title="moonine - Dashboard">
+<Layout title="Moonine - A Vedic Matchmaker - Dashboard">
 	<style is:global>
 		.dashboard-grid {
 			display: grid;
@@ -185,7 +185,7 @@ import Layout from '../layouts/Layout.astro';
 		}
 	</style>
 
-	<h1 style="font-family: var(--font-secondary); font-size: var(--font-3xl); border-bottom: none; text-align: center;">moonine</h1>
+	<h1 style="font-family: var(--font-secondary); font-size: var(--font-3xl); border-bottom: none; text-align: center;">Moonine - A Vedic Matchmaker</h1>
 
 	<div id="loading" class="loading-container">
 		<div class="loader"></div>
@@ -215,7 +215,7 @@ import Layout from '../layouts/Layout.astro';
 			</table>
 		</div>
 
-		<div class="section-title">Your Top moonine Matches</div>
+		<div class="section-title">Your Top Moonine - A Vedic Matchmaker Matches</div>
 		<div id="matches-list">
 			<!-- Matches injected here -->
 		</div>
@@ -234,13 +234,13 @@ import Layout from '../layouts/Layout.astro';
 	</div>
 
 	<div id="no-profile" style="display: none;" class="no-data">
-		<p>We couldn't find your moonine profile. Please share your birth details to get started!</p>
+		<p>We couldn't find your Moonine - A Vedic Matchmaker profile. Please share your birth details to get started!</p>
 		<a href="/" class="btn">Create Profile</a>
 	</div>
 
 	<div id="error-state" style="display: none;" class="no-data">
 		<p style="color: #dc3545; font-weight: bold;">Error connecting to the stars.</p>
-		<p>We encountered a problem while fetching moonine data. Please try again later.</p>
+		<p>We encountered a problem while fetching Moonine - A Vedic Matchmaker data. Please try again later.</p>
 	</div>
 
 	<div id="floating-scroll-btns" class="floating-scroll-btns" style="display: none;">
@@ -298,7 +298,7 @@ import Layout from '../layouts/Layout.astro';
 			}
 
 			resetBtn?.addEventListener('click', async () => {
-				if (confirm('Are you sure you want to reset your moonine profile? Please note that we do not keep your data after a reset. It will be permanently deleted from our systems as well as your local device.')) {
+				if (confirm('Are you sure you want to reset your Moonine - A Vedic Matchmaker profile? Please note that we do not keep your data after a reset. It will be permanently deleted from our systems as well as your local device.')) {
 					if (uid) await resetUserProfile(uid);
 					clearUserData();
 					window.location.href = '/';
