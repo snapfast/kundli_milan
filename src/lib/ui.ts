@@ -21,7 +21,7 @@ export function generateMatchCardHtml(uid: string, name: string, age: number | u
         <div class="match-header">
             <div style="display: flex; flex-direction: column;">
                 <span class="match-name">${name}${age !== undefined ? `, ${age}` : ''}</span>
-                <span style="font-size: var(--font-xs); color: #64748b; font-weight: 600;">ID: ${uid}</span>
+                <span style="font-size: var(--font-xs); color: black; font-weight: 600;">ID: ${uid}</span>
             </div>
             <span class="match-category" style="background-color: ${progressColor}">${category}</span>
         </div>
