@@ -1,12 +1,12 @@
-# 🌙 moonine
+# 🌙 Moonine - A Vedic Matchmaker
 
 ### *Find Your Soul Connection through Ancient Vedic Wisdom.*
 
-**moonine** is more than just a matchmaking app. It is a bridge between the timeless celestial insights of Vedic Astrology (Jyotish) and the needs of modern relationships. By utilizing high-precision astronomical data and the traditional 36-point Ashta Koota system, we help you discover matches that aren't just compatible on paper, but aligned in spirit.
+**Moonine - A Vedic Matchmaker** is more than just a matchmaking app. It is a bridge between the timeless celestial insights of Vedic Astrology (Jyotish) and the needs of modern relationships. By utilizing high-precision astronomical data and the traditional 36-point Ashta Koota system, we help you discover matches that aren't just compatible on paper, but aligned in spirit.
 
 ---
 
-## ✨ Why moonine?
+## ✨ Why Moonine - A Vedic Matchmaker?
 
 - **👤 No Account, No Login**
   Jump straight into finding your soul connection. No tedious sign-ups or passwords to remember.
@@ -23,7 +23,7 @@
 - **🔒 Privacy You Can Trust**
   Your journey is personal. We never share your email or sensitive birth details on public match cards. Your data stays yours.
 - **🎓 Learn as You Match**
-  We believe in empowerment through knowledge. moonine explains the *why* behind every score, turning ancient wisdom into actionable insights.
+  We believe in empowerment through knowledge. Moonine - A Vedic Matchmaker explains the *why* behind every score, turning ancient wisdom into actionable insights.
 - **✨ Location-Based Discovery**
   Connect with highly compatible matches near you using our proximity-based sorting.
 - **🚀 Lightning Fast & Seamless**
