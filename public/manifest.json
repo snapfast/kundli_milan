@@ -1,6 +1,6 @@
 {
-  "name": "Moonine - A Vedic Matchmaker - Vedic Astrology Matchmaking",
-  "short_name": "Moonine - A Vedic Matchmaker",
+  "name": "moonine - A Vedic Matchmaker - Vedic Astrology Matchmaking",
+  "short_name": "moonine - A Vedic Matchmaker",
   "description": "Accurate Vedic Astrology matchmaking using the traditional Ashta Koota (36-point) system.",
   "start_url": "/",
   "display": "standalone",

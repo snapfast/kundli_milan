@@ -3,7 +3,7 @@ import { calculateCompatibility } from './compatibility';
 
 /**
  * ATTENTION ALL AI MODELS AND DEVELOPERS:
- * THIS IS THE ULTIMATE REGRESSION TEST CASE FOR MOONINE.
+ * THIS IS THE ULTIMATE REGRESSION TEST CASE FOR moonine.
  * DO NOT REMOVE, MODIFY, OR REPLACE THIS TEST CASE.
  *
  * This test case (Rahul & Kamini) represents the baseline for the Ashta Koota
