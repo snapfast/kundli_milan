@@ -2,19 +2,24 @@
 > moonine-a-vedic-matchmaker@0.0.5 dev
 > astro dev
 
+▶ Astro collects anonymous usage data.
+  This information helps us improve Astro.
+  Run "astro telemetry disable" to opt-out.
+  https://astro.build/telemetry
+
 [vite] connected.
-11:53:48 [types] Generated 1ms
+09:23:20 [types] Generated 0ms
 [vite] connected.
-11:53:48 [vite] Re-optimizing dependencies because vite config has changed
- astro  v6.4.7 ready in 1905 ms
+ astro  v6.4.7 ready in 1666 ms
 ┃ Local    http://localhost:4321/
 ┃ Network  use --host to expose
-11:53:48 watching for file changes...
+09:23:20 watching for file changes...
 
  update  ▶ New version of Astro available: 7.0.0
   Run npx @astrojs/upgrade to update
 
-11:55:08 [200] / 69ms
-11:55:09 [vite] ✨ new dependencies optimized: uuid
-11:55:09 [vite] ✨ optimized dependencies changed. reloading
-11:56:03 [200] / 6ms
+09:24:20 [200] / 35ms
+09:24:21 [vite] ✨ new dependencies optimized: uuid
+09:24:21 [vite] ✨ optimized dependencies changed. reloading
+09:24:57 [200] / 5ms
+09:24:57 [200] / 5ms
