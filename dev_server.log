@@ -8,17 +8,26 @@
   https://astro.build/telemetry
 
 [vite] connected.
-04:13:56 [types] Generated 1ms
+04:51:47 [types] Generated 1ms
 [vite] connected.
- astro  v6.4.7 ready in 1640 ms
+ astro  v6.4.7 ready in 1935 ms
 ┃ Local    http://localhost:4321/
 ┃ Network  use --host to expose
-04:13:56 watching for file changes...
+04:51:47 watching for file changes...
 
  update  ▶ New version of Astro available: 7.0.0
   Run npx @astrojs/upgrade to update
 
-04:15:30 [200] /astrology-guide 40ms
-04:15:30 [vite] ✨ new dependencies optimized: uuid
-04:15:30 [vite] ✨ optimized dependencies changed. reloading
-04:16:09 [200] /astrology-guide 5ms
+04:52:48 [200] /dashboard 64ms
+04:52:49 [vite] ✨ new dependencies optimized: uuid, astronomy-engine
+04:52:49 [vite] ✨ optimized dependencies changed. reloading
+04:53:19 [200] / 17ms
+04:54:35 [200] / 6ms
+04:54:36 [200] /profile 25ms
+04:55:43 [200] / 9ms
+04:55:44 [200] /profile 6ms
+04:56:48 [200] / 5ms
+04:56:49 [200] /profile 5ms
+04:57:38 [200] / 6ms
+04:57:38 [200] /profile 6ms
+04:58:54 [200] /dashboard 5ms
