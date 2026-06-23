@@ -79,16 +79,12 @@ import Layout from '../layouts/Layout.astro';
 		}
 	</style>
 
-	<div id="redirecting" style="display: none; text-align: center; padding: 2rem;">
-		Redirecting to your dashboard...
-	</div>
-
 	<div id="main-content">
 		<section class="hero">
 			<div class="logo" data-text="Moonine"><span class="logo-text">Moonine</span></div>
 			<p>Join Moonine - A Vedic Matchmaker to explore your personalized Ashta Koota compatibility and find your perfect soulmate.</p>
 			<div style="margin-top: 2rem;">
-				<a href="/profile" class="btn-cta" style="display: inline-block;">Get Started for free</a>
+				<a href="/profile" id="cta-btn" class="btn-cta" style="display: inline-block;">Get Started for free</a>
 			</div>
 			<ul style="list-style-type: none; padding: 0; margin-top: 1.5rem; text-align: left; display: inline-block; color: #475569; font-size: var(--font-base); line-height: 1.6;">
 				<li>&mdash; <strong>No Account, No Login:</strong> Jump straight in without tedious sign-ups.</li>
@@ -160,40 +156,40 @@ import Layout from '../layouts/Layout.astro';
 			import { fetchUsers } from '../lib/api';
 			import { getOrSetUserId } from '../lib/user';
 
-			// Immediate redirection if user details already exist
 			const storedDetails = getCookie('user_details');
 			const uid = getOrSetUserId();
 
-			if (storedDetails) {
-				const mainContent = document.getElementById('main-content');
-				const redirectingDiv = document.getElementById('redirecting');
-				if (mainContent && redirectingDiv) {
-					mainContent.style.display = 'none';
-					redirectingDiv.style.display = 'block';
+			function updateCtaButton(name) {
+				const ctaBtn = document.getElementById('cta-btn');
+				if (ctaBtn && name) {
+					ctaBtn.textContent = `Welcome ${name}`;
+					ctaBtn.href = '/dashboard';
 				}
-				window.location.href = '/dashboard';
 			}
 
-			// Check if user already exists and redirect to dashboard if so
-			async function checkExistingUser() {
-				if (!storedDetails) {
+			if (storedDetails) {
+				try {
+					const details = JSON.parse(decodeURIComponent(storedDetails));
+					if (details && details.name) {
+						updateCtaButton(details.name);
+					}
+				} catch (e) {
+					console.error('Failed to parse user details:', e);
+				}
+			} else {
+				// Check if user already exists and update CTA if so
+				async function checkExistingUser() {
 					try {
 						const users = await fetchUsers();
 						const existingUser = users.find(u => u.uid === uid);
 						if (existingUser && existingUser.name) {
-							const mainContent = document.getElementById('main-content');
-							const redirectingDiv = document.getElementById('redirecting');
-							if (mainContent && redirectingDiv) {
-								mainContent.style.display = 'none';
-								redirectingDiv.style.display = 'block';
-							}
-							window.location.href = '/dashboard';
+							updateCtaButton(existingUser.name);
 						}
 					} catch (error) {
 						console.error('Failed to check existing user:', error);
 					}
 				}
+				checkExistingUser();
 			}
-			checkExistingUser();
 	</script>
 </Layout>
