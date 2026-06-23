@@ -173,7 +173,6 @@ import Layout from '../layouts/Layout.astro';
 			align-items: center;
 			justify-content: center;
 			box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-			font-size: 1.25rem;
 			transition: background-color 0.2s, transform 0.2s;
 		}
 		.scroll-btn:hover {
@@ -244,8 +243,16 @@ import Layout from '../layouts/Layout.astro';
 	</div>
 
 	<div id="floating-scroll-btns" class="floating-scroll-btns" style="display: none;">
-		<button id="scroll-up-btn" class="scroll-btn" aria-label="Scroll to top">↑</button>
-		<button id="scroll-down-btn" class="scroll-btn" aria-label="Scroll to bottom">↓</button>
+		<button id="scroll-up-btn" class="scroll-btn" aria-label="Page up">
+			<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+				<path d="M18 15l-6-6-6 6"/>
+			</svg>
+		</button>
+		<button id="scroll-down-btn" class="scroll-btn" aria-label="Page down">
+			<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+				<path d="M6 9l6 6 6-6"/>
+			</svg>
+		</button>
 	</div>
 
 	<script>
@@ -466,13 +473,13 @@ import Layout from '../layouts/Layout.astro';
 
 				if (scrollUpBtn) {
 					scrollUpBtn.addEventListener('click', () => {
-						window.scrollTo({ top: 0, behavior: 'smooth' });
+						window.scrollBy({ top: -window.innerHeight, behavior: 'smooth' });
 					});
 				}
 
 				if (scrollDownBtn) {
 					scrollDownBtn.addEventListener('click', () => {
-						window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+						window.scrollBy({ top: window.innerHeight, behavior: 'smooth' });
 					});
 				}
 
