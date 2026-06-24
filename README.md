@@ -13,7 +13,7 @@
 - **🏆 Best Matches First**
   Our algorithm prioritizes your highest compatibility scores so you see your best potential partners immediately.
 - **🤝 Personal Vetting Promise**
-  I will personally make sure the party is genuine before any information is exchanged, ensuring a safe and secure experience.
+  I will personally make sure the party is genuine before any information or money is exchanged, ensuring a safe and secure experience.
 - **🎯 Precision Matching**
   Our 36-point Guna Milan system goes beyond surface-level interests, analyzing 8 distinct dimensions of compatibility to find your most harmonious matches.
 - **🛡️ Deeper Insights, Fewer Surprises**
@@ -31,7 +31,7 @@
 - **📱 Mobile-First Design**
   A beautiful, responsive interface designed to provide an excellent experience on any device, anywhere.
 - **💸 No Hidden Fees**
-  Transparency is key. This is a free service with no recurring subscriptions. If your rishta is successful, you can choose to donate.
+  Transparency is key. We are upfront about any costs associated with connecting, with no recurring subscriptions.
 
 ---
 
