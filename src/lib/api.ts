@@ -162,7 +162,33 @@ export async function fetchUsers(): Promise<UserProfile[]> {
         }
     })();
 
-    return fetchPromise;
+        // Map and clean data from backend
+        return data.map((u: any) => ({
+            ...u,
+            uid: u.uid || u.userId || '',
+            // Explicitly convert types as backend might return them as strings/various types
+            nakshatraIdx: (u.nakshatraIdx !== '' && u.nakshatraIdx !== undefined) ? Number(u.nakshatraIdx) : undefined,
+            moonSignIdx: (u.moonSignIdx !== '' && u.moonSignIdx !== undefined) ? Number(u.moonSignIdx) : undefined,
+            isMoonManglik: String(u.isMoonManglik).toLowerCase() === 'true',
+            isLaganManglik: String(u.isLaganManglik).toLowerCase() === 'true',
+            lat: u.lat !== undefined ? String(u.lat) : undefined,
+            lon: u.lon !== undefined ? String(u.lon) : undefined,
+            currentLocation: u.currentLocation !== undefined ? String(u.currentLocation) : undefined,
+            currentLat: u.currentLat !== undefined ? String(u.currentLat) : undefined,
+            currentLon: u.currentLon !== undefined ? String(u.currentLon) : undefined,
+            phone: u.phone !== undefined ? String(u.phone) : '',
+            height: u.height !== undefined ? String(u.height) : undefined,
+            maritalStatus: u.maritalStatus !== undefined ? String(u.maritalStatus) : undefined,
+            education: u.education !== undefined ? String(u.education) : undefined,
+            occupation: u.occupation !== undefined ? String(u.occupation) : undefined,
+            income: u.income !== undefined ? String(u.income) : undefined,
+            religion: u.religion !== undefined ? String(u.religion) : undefined,
+            bio: u.bio !== undefined ? String(u.bio) : undefined
+        })) as UserProfile[];
+    } catch (error) {
+        console.error('Error fetching users:', error);
+        return [];
+    }
 }
 
 export async function saveUserProfile(profile: UserProfile): Promise<boolean> {
