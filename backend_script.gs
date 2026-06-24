@@ -46,7 +46,7 @@ function parseJsonData(e) {
  */
 function getHeaders(sheet, incomingData) {
   const lastColumn = sheet.getLastColumn();
-  const baselineHeaders = ["uid", "name", "email", "dob", "tob", "gender", "location", "lat", "lon", "currentLocation", "currentLat", "currentLon", "nakshatraIdx", "moonSignIdx", "isMoonManglik", "isLaganManglik", "matches", "nearest", "updatedAt"];
+  const baselineHeaders = ["uid", "name", "email", "phone", "dob", "tob", "gender", "location", "lat", "lon", "currentLocation", "currentLat", "currentLon", "height", "maritalStatus", "education", "occupation", "income", "religion", "bio", "nakshatraIdx", "moonSignIdx", "isMoonManglik", "isLaganManglik", "matches", "nearest", "updatedAt"];
 
   // Initialize completely empty sheet with baseline headers
   if (lastColumn === 0) {

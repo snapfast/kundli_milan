@@ -97,6 +97,23 @@ import Layout from '../layouts/Layout.astro';
 			</div>
 			<div class="form-row">
 				<div class="field">
+					<label for="phone">Contact Number (10 digits)</label>
+					<input type="tel" id="phone" name="phone" required pattern="[0-9]{10}" placeholder="e.g. 9876543210" maxlength="10" />
+				</div>
+				<div class="field">
+					<label for="maritalStatus">Marital Status</label>
+					<select id="maritalStatus" name="maritalStatus">
+						<option value="">Select status</option>
+						<option value="Never Married">Never Married</option>
+						<option value="Awaiting Divorce">Awaiting Divorce</option>
+						<option value="Divorced">Divorced</option>
+						<option value="Widowed">Widowed</option>
+						<option value="Annulled">Annulled</option>
+					</select>
+				</div>
+			</div>
+			<div class="form-row">
+				<div class="field">
 					<label for="dob">Date of Birth</label>
 					<input type="date" id="dob" name="dob" required max={new Date().toISOString().split('T')[0]} />
 				</div>
@@ -142,6 +159,36 @@ import Layout from '../layouts/Layout.astro';
 					<div id="currentSuggestions"></div>
 					<input type="hidden" id="currentLat" name="currentLat" />
 					<input type="hidden" id="currentLon" name="currentLon" />
+				</div>
+				<div class="field">
+					<label for="height">Height</label>
+					<input type="text" id="height" name="height" placeholder="e.g. 5'8'' or 173 cm" />
+				</div>
+			</div>
+			<div class="form-row">
+				<div class="field">
+					<label for="religion">Religion / Community</label>
+					<input type="text" id="religion" name="religion" placeholder="e.g. Hindu, Brahmin" />
+				</div>
+				<div class="field">
+					<label for="education">Education</label>
+					<input type="text" id="education" name="education" placeholder="e.g. B.Tech, MBA" />
+				</div>
+			</div>
+			<div class="form-row">
+				<div class="field">
+					<label for="occupation">Occupation</label>
+					<input type="text" id="occupation" name="occupation" placeholder="e.g. Software Engineer" />
+				</div>
+				<div class="field">
+					<label for="income">Annual Income</label>
+					<input type="text" id="income" name="income" placeholder="e.g. 15 LPA" />
+				</div>
+			</div>
+			<div class="form-row">
+				<div class="field" style="grid-column: span 2;">
+					<label for="bio">About Me / Bio</label>
+					<textarea id="bio" name="bio" rows="3" class="bio-textarea" placeholder="Tell us a bit about yourself..."></textarea>
 				</div>
 			</div>
 			<div class="form-actions">
@@ -218,9 +265,13 @@ import Layout from '../layouts/Layout.astro';
 						cancelBtn.style.display = 'inline-block';
 
 						const details = JSON.parse(stored);
-						const fields = ['name', 'email', 'dob', 'tob', 'gender', 'location', 'lat', 'lon', 'currentLocation', 'currentLat', 'currentLon'];
+						const fields = [
+							'name', 'email', 'phone', 'dob', 'tob', 'gender', 'location', 'lat', 'lon',
+							'currentLocation', 'currentLat', 'currentLon', 'height', 'maritalStatus',
+							'education', 'occupation', 'income', 'religion', 'bio'
+						];
 						fields.forEach(field => {
-							const element = document.getElementById(field) as HTMLInputElement | HTMLSelectElement;
+							const element = document.getElementById(field) as HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement;
 							if (element && details[field]) {
 								element.value = details[field];
 							}
@@ -374,6 +425,14 @@ import Layout from '../layouts/Layout.astro';
 				if (!emailInput.value || !emailRegex.test(emailInput.value)) {
 					alert('Please enter a valid email address.');
 					emailInput.focus();
+					return;
+				}
+
+				const phoneInput = document.getElementById('phone') as HTMLInputElement;
+				const phoneRegex = /^[0-9]{10}$/;
+				if (!phoneInput.value || !phoneRegex.test(phoneInput.value)) {
+					alert('Please enter a valid 10-digit contact number.');
+					phoneInput.focus();
 					return;
 				}
 
