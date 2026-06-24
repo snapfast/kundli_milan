@@ -4,6 +4,7 @@ export interface UserProfile {
     uid: string;
     name: string;
     email: string;
+    phone: string;
     dob: string;
     tob: string;
     gender: string;
@@ -13,6 +14,13 @@ export interface UserProfile {
     currentLocation?: string;
     currentLat?: string;
     currentLon?: string;
+    height?: string;
+    maritalStatus?: string;
+    education?: string;
+    occupation?: string;
+    income?: string;
+    religion?: string;
+    bio?: string;
     nakshatraIdx?: number;
     moonSignIdx?: number;
     isMoonManglik?: boolean;
@@ -94,7 +102,15 @@ export async function fetchUsers(): Promise<UserProfile[]> {
             lon: u.lon !== undefined ? String(u.lon) : undefined,
             currentLocation: u.currentLocation !== undefined ? String(u.currentLocation) : undefined,
             currentLat: u.currentLat !== undefined ? String(u.currentLat) : undefined,
-            currentLon: u.currentLon !== undefined ? String(u.currentLon) : undefined
+            currentLon: u.currentLon !== undefined ? String(u.currentLon) : undefined,
+            phone: u.phone !== undefined ? String(u.phone) : '',
+            height: u.height !== undefined ? String(u.height) : undefined,
+            maritalStatus: u.maritalStatus !== undefined ? String(u.maritalStatus) : undefined,
+            education: u.education !== undefined ? String(u.education) : undefined,
+            occupation: u.occupation !== undefined ? String(u.occupation) : undefined,
+            income: u.income !== undefined ? String(u.income) : undefined,
+            religion: u.religion !== undefined ? String(u.religion) : undefined,
+            bio: u.bio !== undefined ? String(u.bio) : undefined
         })) as UserProfile[];
     } catch (error) {
         console.error('Error fetching users:', error);
