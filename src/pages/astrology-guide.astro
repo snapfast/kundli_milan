@@ -2,10 +2,10 @@
 import Layout from '../layouts/Layout.astro';
 ---
 
-<Layout title="User Manual - Understanding moonine - A Vedic Matchmaker & Guna Milan" description="Deep dive into Vedic Astrology matchmaking. Learn about the 8 Kootas, Ashta Koota matching, Manglik Dosha, and how moonine - A Vedic Matchmaker calculates compatibility.">
+<Layout title="User Manual - Understanding moonine - A Vedic Matchmaker" description="Learn how to use moonine - A Vedic Matchmaker, navigate the dashboard, and understand Vedic Astrology matchmaking including Guna Milan and Doshas.">
     <style>
         .guide-section {
-            margin-bottom: 2rem;
+            margin-bottom: 3rem;
         }
         .guide-section h1 {
             text-align: center;
@@ -17,8 +17,39 @@ import Layout from '../layouts/Layout.astro';
         .guide-section h2 {
             text-align: center;
             border-bottom: none;
-            margin-top: 1.5rem;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
             color: #6366f1;
+            font-family: var(--font-secondary);
+            font-size: var(--font-2xl);
+        }
+        .guide-section h3 {
+            border-bottom: none;
+            margin-top: 1.5rem;
+            color: black;
+            font-size: var(--font-lg);
+        }
+        .step-card {
+            background: #fff;
+            background-image: var(--floral-bg);
+            background-size: 300px 300px;
+            border: 1px solid #e2e8f0;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .step-number {
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            background: #6366f1;
+            color: white;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 30px;
+            font-weight: 700;
+            margin-right: 0.5rem;
         }
         .visual-table {
             width: 100%;
@@ -60,7 +91,7 @@ import Layout from '../layouts/Layout.astro';
             background-image: var(--floral-bg);
             background-size: 300px 300px;
             border: 1px solid #e2e8f0;
-            padding: 0.75rem;
+            padding: 1rem;
             border-radius: 6px;
         }
         .dosha-title {
@@ -76,124 +107,129 @@ import Layout from '../layouts/Layout.astro';
             color: black;
             line-height: 1.4;
         }
+        .highlight-box {
+            background: #f0f9ff;
+            border-left: 4px solid #0ea5e9;
+            padding: 1rem;
+            border-radius: 4px;
+            margin: 1rem 0;
+        }
+        .contact-box {
+            background: #fdf2f2;
+            border: 1px dashed #ef4444;
+            padding: 1.5rem;
+            border-radius: 8px;
+            text-align: center;
+        }
     </style>
 
     <section class="guide-section">
         <h1>User Manual</h1>
-        <p style="text-align: center; font-style: italic; color: black; margin-bottom: 2rem;">Ancient Vedic Wisdom meets Modern Matchmaking</p>
+        <p style="text-align: center; font-style: italic; color: black; margin-bottom: 2rem;">Your guide to finding the perfect match on moonine</p>
     </section>
 
     <section class="guide-section">
-        <h2 style="font-family: var(--font-secondary); font-size: var(--font-2xl);">Ashta Koota (36 Points)</h2>
+        <h2>How to Use moonine</h2>
+        <div class="step-card">
+            <h3><span class="step-number">1</span> Create Your Profile</h3>
+            <p>Go to the <strong>Home</strong> page and click <strong>"Get Started"</strong>. Enter your birth details (date, time, and location). These are essential for calculating your unique astrological footprint (Kundli).</p>
+        </div>
+        <div class="step-card">
+            <h3><span class="step-number">2</span> Explore Your Dashboard</h3>
+            <p>Once your profile is set, you'll be taken to your personal <strong>moonine</strong> dashboard. Here you can see your Panchang details, planetary positions, and most importantly, your compatible matches.</p>
+        </div>
+        <div class="step-card">
+            <h3><span class="step-number">3</span> Discover Matches</h3>
+            <p>Scroll down to <strong>"Top moonine Matches"</strong>. We automatically compare your stars with every other user and show you the most compatible people first. If you've shared your current location, you can also see people near you!</p>
+        </div>
+    </section>
+
+    <section class="guide-section">
+        <h2>Understanding Your Matches</h2>
+        <p>We use the traditional <strong>Ashta Koota (36 Points)</strong> system, also known as Guna Milan, to calculate compatibility.</p>
+
         <div style="overflow-x: auto;">
             <table class="visual-table">
                 <thead>
                     <tr>
                         <th>Koota</th>
                         <th>Compatibility Aspect</th>
-                        <th>Max Score</th>
+                        <th>Max Points</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td><strong>Varna</strong></td>
-                        <td>Work style and ego matching.</td>
-                        <td><span class="score-badge">1 Point</span></td>
-                    </tr>
-                    <tr>
-                        <td><strong>Vashya</strong></td>
-                        <td>Mutual attraction and how you balance each other's power.</td>
-                        <td><span class="score-badge">2 Points</span></td>
-                    </tr>
-                    <tr>
-                        <td><strong>Tara</strong></td>
-                        <td>General well-being and health of the couple.</td>
-                        <td><span class="score-badge">3 Points</span></td>
-                    </tr>
-                    <tr>
-                        <td><strong>Yoni</strong></td>
-                        <td>Natural physical chemistry and biological bonding.</td>
-                        <td><span class="score-badge">4 Points</span></td>
-                    </tr>
-                    <tr>
-                        <td><strong>Maitri</strong></td>
-                        <td>Friendship, shared values, and mutual respect.</td>
-                        <td><span class="score-badge">5 Points</span></td>
-                    </tr>
-                    <tr>
-                        <td><strong>Gana</strong></td>
-                        <td>Personality type and general outlook on life.</td>
-                        <td><span class="score-badge">6 Points</span></td>
-                    </tr>
-                    <tr>
-                        <td><strong>Bhakoot</strong></td>
-                        <td>Deep emotional harmony and long-term prosperity.</td>
-                        <td><span class="score-badge">7 Points</span></td>
-                    </tr>
-                    <tr>
-                        <td><strong>Nadi</strong></td>
-                        <td>Vital energy compatibility and health of future generations.</td>
-                        <td><span class="score-badge">8 Points</span></td>
-                    </tr>
+                    <tr><td><strong>Varna</strong></td><td>Work style and ego matching.</td><td><span class="score-badge">1 Point</span></td></tr>
+                    <tr><td><strong>Vashya</strong></td><td>Mutual attraction and dominance.</td><td><span class="score-badge">2 Points</span></td></tr>
+                    <tr><td><strong>Tara</strong></td><td>Health and well-being.</td><td><span class="score-badge">3 Points</span></td></tr>
+                    <tr><td><strong>Yoni</strong></td><td>Physical chemistry and bonding.</td><td><span class="score-badge">4 Points</span></td></tr>
+                    <tr><td><strong>Maitri</strong></td><td>Friendship and shared values.</td><td><span class="score-badge">5 Points</span></td></tr>
+                    <tr><td><strong>Gana</strong></td><td>Personality type and temperament.</td><td><span class="score-badge">6 Points</span></td></tr>
+                    <tr><td><strong>Bhakoot</strong></td><td>Emotional harmony and prosperity.</td><td><span class="score-badge">7 Points</span></td></tr>
+                    <tr><td><strong>Nadi</strong></td><td>Vital energy and genetic health.</td><td><span class="score-badge">8 Points</span></td></tr>
                 </tbody>
             </table>
+        </div>
+
+        <div class="highlight-box">
+            <strong>What is a good score?</strong>
+            <ul style="margin: 0.5rem 0 0 1.2rem; font-size: var(--font-sm);">
+                <li><strong>28 - 36:</strong> Excellent Compatibility 💎</li>
+                <li><strong>21 - 27:</strong> Very Good Compatibility ✨</li>
+                <li><strong>18 - 20:</strong> Good / Average Match 🤝</li>
+                <li><strong>Below 18:</strong> May require astrological consultation ⚠️</li>
+            </ul>
+        </div>
+
+        <h3>Major Challenges (Doshas)</h3>
+        <p>Even with a high score, certain "Doshas" can indicate specific areas that need attention:</p>
+        <div class="dosha-grid">
+            <div class="dosha-card">
+                <div class="dosha-title">🔥 Manglik Dosha</div>
+                <div class="dosha-desc">Fiery energy that can lead to arguments or dominance if not balanced.</div>
+            </div>
+            <div class="dosha-card">
+                <div class="dosha-title">🌑 Bhakoot Dosha</div>
+                <div class="dosha-desc">Mismatch in emotional waves or financial growth.</div>
+            </div>
+            <div class="dosha-card">
+                <div class="dosha-title">🧬 Nadi Dosha</div>
+                <div class="dosha-desc">Core energetic mismatch affecting health or family.</div>
+            </div>
+            <div class="dosha-card">
+                <div class="dosha-title">👹 Gana Dosha</div>
+                <div class="dosha-desc">Fundamental clash in temperament or outlook on life.</div>
+            </div>
         </div>
     </section>
 
     <section class="guide-section">
-        <h2 style="font-family: var(--font-secondary); font-size: var(--font-2xl);">Major Relationship Challenges (Doshas)</h2>
-        <div class="dosha-grid">
-            <div class="dosha-card">
-                <div class="dosha-title">🔥 Manglik Dosha</div>
-                <div class="dosha-desc">Represents an intense, fiery energy that can lead to frequent arguments, dominance issues, or a general lack of peace in the household if not understood.</div>
-            </div>
-            <div class="dosha-card">
-                <div class="dosha-title">🌑 Bhakoot Dosha</div>
-                <div class="dosha-desc">Indicates a mismatch in emotional waves and prosperity. It can manifest as feelings of emotional isolation, financial instability, or a struggle to grow together.</div>
-            </div>
-            <div class="dosha-card">
-                <div class="dosha-title">🧬 Nadi Dosha</div>
-                <div class="dosha-desc">Refers to a core energetic mismatch. Couples might face chronic health issues, low physical energy, or difficulties in starting a family.</div>
-            </div>
-            <div class="dosha-card">
-                <div class="dosha-title">👹 Gana Dosha</div>
-                <div class="dosha-desc">A fundamental clash in temperament. For example, one person may be very peace-loving while the other is highly assertive, leading to a constant struggle to find common ground.</div>
-            </div>
+        <h2>What Happens After a Match?</h2>
+        <p>Found someone interesting? Here is how you can proceed with the <strong>Rishta</strong> (connection):</p>
+
+        <div class="contact-box">
+            <p style="font-size: var(--font-lg); font-weight: 700; color: #b91c1c; margin-bottom: 0.5rem;">The Connection Process</p>
+            <ol style="text-align: left; display: inline-block; margin-bottom: 1rem;">
+                <li>Note down the <strong>User ID</strong> of the person you like.</li>
+                <li>Email the User ID to <a href="mailto:rahulbaliastrology@gmail.com" style="color: #6366f1; font-weight: 700;">rahulbaliastrology@gmail.com</a>.</li>
+                <li><strong>Rahul Bali</strong> will personally contact the other party to share your interest and details.</li>
+                <li>Both parties have the <strong>complete choice to Accept or Decline</strong> the interest.</li>
+            </ol>
+            <p style="font-size: var(--font-sm); color: black; font-style: italic;">We ensure a vetted and respectful introduction process.</p>
         </div>
     </section>
 
-    <section class="guide-section" style="background: #f8fafc; padding: 1rem; border-radius: 6px; margin-top: 2rem;">
-        <h2 style="font-family: var(--font-secondary); font-size: var(--font-2xl); margin-top: 0;">Match Classifications</h2>
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 1rem;">
-            <div style="text-align: center;">
-                <div style="font-size: var(--font-lg);">💎</div>
-                <div style="font-weight: 700; font-size: var(--font-sm);">Excellent</div>
-                <div style="font-size: var(--font-xs); color: black;">> 28 Points</div>
+    <section class="guide-section">
+        <h2>Our Commitment</h2>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+            <div class="step-card">
+                <strong>Free Service</strong>
+                <p style="font-size: var(--font-sm); margin-top: 0.5rem;">This platform is entirely free to use. There are no registration fees or hidden costs for finding matches.</p>
             </div>
-            <div style="text-align: center;">
-                <div style="font-size: var(--font-lg);">✨</div>
-                <div style="font-weight: 700; font-size: var(--font-sm);">Very Good</div>
-                <div style="font-size: var(--font-xs); color: black;">21 - 28 Points</div>
-            </div>
-            <div style="text-align: center;">
-                <div style="font-size: var(--font-lg);">🤝</div>
-                <div style="font-weight: 700; font-size: var(--font-sm);">Good</div>
-                <div style="font-size: var(--font-xs); color: black;">18 - 20 Points</div>
-            </div>
-            <div style="text-align: center;">
-                <div style="font-size: var(--font-lg);">⚠️</div>
-                <div style="font-weight: 700; font-size: var(--font-sm);">Not Good</div>
-                <div style="font-size: var(--font-xs); color: black;">12 - 17 Points</div>
-            </div>
-            <div style="text-align: center;">
-                <div style="font-size: var(--font-lg);">🛑</div>
-                <div style="font-weight: 700; font-size: var(--font-sm);">Bad</div>
-                <div style="font-size: var(--font-xs); color: black;">0 - 11 Points</div>
+            <div class="step-card">
+                <strong>Optional Donations</strong>
+                <p style="font-size: var(--font-sm); margin-top: 0.5rem;">If your match is successful and you find your soulmate here, you can choose to support us via the donation link in the footer.</p>
             </div>
         </div>
-        <p style="font-size: var(--font-xs); color: black; text-align: center; margin-top: 1rem; font-style: italic;">
-            Note: Special cosmic alignments like "Destined Union" or "Intellectual Harmony" may provide additional context to these primary classifications.
-        </p>
     </section>
 
     <div style="text-align: center; margin-top: 3rem; padding-bottom: 3rem;">
