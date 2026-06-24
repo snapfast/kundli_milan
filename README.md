@@ -30,8 +30,6 @@
   Built on modern web technologies, the app is incredibly fast, allowing you to view and navigate matches instantly.
 - **📱 Mobile-First Design**
   A beautiful, responsive interface designed to provide an excellent experience on any device, anywhere.
-- **💸 No Hidden Fees**
-  Transparency is key. This is a free service with no recurring subscriptions. If your rishta is successful, you can choose to donate.
 
 ---
 
