@@ -62,44 +62,91 @@ export interface UserProfile {
     }[];
 }
 
-export async function fetchUsers(): Promise<UserProfile[]> {
-    try {
-        const response = await fetch(BACKEND_URL);
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const result = await response.json();
+let usersCache: UserProfile[] | null = null;
+let fetchPromise: Promise<UserProfile[]> | null = null;
+const USERS_CACHE_KEY = 'users_list_cache';
+const USERS_CACHE_TIME_KEY = 'users_list_cache_timestamp';
+const CACHE_TTL = 30 * 60 * 1000; // 30 minutes
 
-        // Handle both direct array and { status: 'success', data: [...] } formats
-        let data: any[] = [];
-        if (Array.isArray(result)) {
-            data = result;
-        } else if (result && typeof result === 'object' && Array.isArray(result.data)) {
-            data = result.data;
-        } else {
-            console.warn('API returned unexpected format:', result);
-            return [];
-        }
-
-        // Map and clean data from backend
-        return data.map((u: any) => ({
-            ...u,
-            uid: u.uid || u.userId || '',
-            // Explicitly convert types as backend might return them as strings/various types
-            nakshatraIdx: (u.nakshatraIdx !== '' && u.nakshatraIdx !== undefined) ? Number(u.nakshatraIdx) : undefined,
-            moonSignIdx: (u.moonSignIdx !== '' && u.moonSignIdx !== undefined) ? Number(u.moonSignIdx) : undefined,
-            isMoonManglik: String(u.isMoonManglik).toLowerCase() === 'true',
-            isLaganManglik: String(u.isLaganManglik).toLowerCase() === 'true',
-            lat: u.lat !== undefined ? String(u.lat) : undefined,
-            lon: u.lon !== undefined ? String(u.lon) : undefined,
-            currentLocation: u.currentLocation !== undefined ? String(u.currentLocation) : undefined,
-            currentLat: u.currentLat !== undefined ? String(u.currentLat) : undefined,
-            currentLon: u.currentLon !== undefined ? String(u.currentLon) : undefined
-        })) as UserProfile[];
-    } catch (error) {
-        console.error('Error fetching users:', error);
-        return [];
+export function invalidateUsersCache() {
+    usersCache = null;
+    if (typeof window !== 'undefined') {
+        localStorage.removeItem(USERS_CACHE_KEY);
+        localStorage.removeItem(USERS_CACHE_TIME_KEY);
     }
+}
+
+export async function fetchUsers(): Promise<UserProfile[]> {
+    if (usersCache) return usersCache;
+
+    if (typeof window !== 'undefined') {
+        const cachedData = localStorage.getItem(USERS_CACHE_KEY);
+        const cachedTime = localStorage.getItem(USERS_CACHE_TIME_KEY);
+        const now = Date.now();
+
+        if (cachedData && cachedTime && (now - parseInt(cachedTime) < CACHE_TTL)) {
+            try {
+                usersCache = JSON.parse(cachedData);
+                return usersCache!;
+            } catch (e) {
+                console.warn('Failed to parse users cache:', e);
+                invalidateUsersCache();
+            }
+        }
+    }
+
+    if (fetchPromise) return fetchPromise;
+
+    fetchPromise = (async () => {
+        try {
+            const response = await fetch(BACKEND_URL);
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            const result = await response.json();
+
+            // Handle both direct array and { status: 'success', data: [...] } formats
+            let data: any[] = [];
+            if (Array.isArray(result)) {
+                data = result;
+            } else if (result && typeof result === 'object' && Array.isArray(result.data)) {
+                data = result.data;
+            } else {
+                console.warn('API returned unexpected format:', result);
+                return [];
+            }
+
+            // Map and clean data from backend
+            const users = data.map((u: any) => ({
+                ...u,
+                uid: u.uid || u.userId || '',
+                // Explicitly convert types as backend might return them as strings/various types
+                nakshatraIdx: (u.nakshatraIdx !== '' && u.nakshatraIdx !== undefined) ? Number(u.nakshatraIdx) : undefined,
+                moonSignIdx: (u.moonSignIdx !== '' && u.moonSignIdx !== undefined) ? Number(u.moonSignIdx) : undefined,
+                isMoonManglik: String(u.isMoonManglik).toLowerCase() === 'true',
+                isLaganManglik: String(u.isLaganManglik).toLowerCase() === 'true',
+                lat: u.lat !== undefined ? String(u.lat) : undefined,
+                lon: u.lon !== undefined ? String(u.lon) : undefined,
+                currentLocation: u.currentLocation !== undefined ? String(u.currentLocation) : undefined,
+                currentLat: u.currentLat !== undefined ? String(u.currentLat) : undefined,
+                currentLon: u.currentLon !== undefined ? String(u.currentLon) : undefined
+            })) as UserProfile[];
+
+            usersCache = users;
+            if (typeof window !== 'undefined') {
+                localStorage.setItem(USERS_CACHE_KEY, JSON.stringify(users));
+                localStorage.setItem(USERS_CACHE_TIME_KEY, Date.now().toString());
+            }
+            return users;
+        } catch (error) {
+            console.error('Error fetching users:', error);
+            return [];
+        } finally {
+            fetchPromise = null;
+        }
+    })();
+
+    return fetchPromise;
 }
 
 export async function saveUserProfile(profile: UserProfile): Promise<boolean> {
@@ -116,6 +163,7 @@ export async function saveUserProfile(profile: UserProfile): Promise<boolean> {
         // With 'no-cors', response.ok is always false and status is 0.
         // We assume success if no error was thrown during fetch.
         console.log('User profile submission sent to backend');
+        invalidateUsersCache();
         return true;
     } catch (error) {
         console.error('Critical error during profile submission:', error);
@@ -137,6 +185,7 @@ export async function resetUserProfile(uid: string): Promise<boolean> {
             }),
         });
         console.log('User profile deletion request sent to backend');
+        invalidateUsersCache();
         return true;
     } catch (error) {
         console.error('Critical error during profile deletion:', error);

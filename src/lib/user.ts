@@ -43,4 +43,11 @@ export function clearUserData() {
   deleteCookie('user_id');
   deleteCookie('user_details');
   localStorage.removeItem('user_details');
+
+  // Clear API caches
+  if (typeof window !== 'undefined') {
+    localStorage.removeItem('users_list_cache');
+    localStorage.removeItem('users_list_cache_timestamp');
+    sessionStorage.removeItem('auto_detected_location');
+  }
 }
