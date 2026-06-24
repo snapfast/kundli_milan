@@ -197,6 +197,13 @@ import Layout from '../layouts/Layout.astro';
 			<!-- Injected here -->
 		</div>
 
+		<div id="bio-section" style="display: none; margin-bottom: 1.5rem;">
+			<div class="section-title">About Me</div>
+			<div class="info-card">
+				<p id="bio-content" style="margin: 0; font-size: var(--font-sm); white-space: pre-wrap; color: black; line-height: 1.4;"></p>
+			</div>
+		</div>
+
 		<div class="section-title">Planetary Positions</div>
 		<div style="overflow-x: auto; margin-bottom: 2rem;">
 			<table class="compact-table" id="planets-table">
@@ -487,13 +494,24 @@ import Layout from '../layouts/Layout.astro';
 				const items = [
 					{ label: 'User ID', value: profile.uid },
 					{ label: 'Name', value: profile.name },
+					{ label: 'Email', value: profile.email },
+					{ label: 'Phone', value: profile.phone },
+					{ label: 'Gender', value: profile.gender ? (profile.gender.charAt(0).toUpperCase() + profile.gender.slice(1)) : 'N/A' },
+					{ label: 'Marital Status', value: profile.maritalStatus || 'N/A' },
 					{ label: 'Born', value: `${profile.dob} ${formatTime12h(profile.tob)}` },
-					{ label: 'Location', value: profile.location },
+					{ label: 'Birth Location', value: profile.location },
+					{ label: 'Current Location', value: profile.currentLocation || 'N/A' },
 					{ label: 'Nakshatra', value: astroData.panchang.nakshatra },
 					{ label: 'Moon Sign', value: astroData.panchang.moonSign },
 					{ label: 'Day (Vara)', value: `${astroData.panchang.vara} (${astroData.panchang.varaLord})` },
 					{ label: 'Tithi', value: astroData.panchang.tithi },
-					{ label: 'Lagan Manglik', value: profile.isLaganManglik ? 'Yes' : 'No' }
+					{ label: 'Height', value: profile.height || 'N/A' },
+					{ label: 'Religion', value: profile.religion || 'N/A' },
+					{ label: 'Education', value: profile.education || 'N/A' },
+					{ label: 'Occupation', value: profile.occupation || 'N/A' },
+					{ label: 'Income', value: profile.income || 'N/A' },
+					{ label: 'Lagan Manglik', value: profile.isLaganManglik ? 'Yes' : 'No' },
+					{ label: 'Moon Manglik', value: profile.isMoonManglik ? 'Yes' : 'No' }
 				];
 
 				infoGrid.innerHTML = items.map(i => `
@@ -504,6 +522,15 @@ import Layout from '../layouts/Layout.astro';
 						</div>
 					</div>
 				`).join('');
+
+				const bioSection = document.getElementById('bio-section')!;
+				const bioContent = document.getElementById('bio-content')!;
+				if (profile.bio) {
+					bioSection.style.display = 'block';
+					bioContent.textContent = profile.bio;
+				} else {
+					bioSection.style.display = 'none';
+				}
 
 				const tbody = document.querySelector('#planets-table tbody')!;
 				tbody.innerHTML = ''; // clear before appending
