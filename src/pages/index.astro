@@ -133,29 +133,51 @@ import Layout from '../layouts/Layout.astro';
 				}
 			}
 
-			if (storedDetails) {
-				try {
-					const details = JSON.parse(decodeURIComponent(storedDetails));
-					if (details && details.name) {
-						updateCtaButton(details.name);
-					}
-				} catch (e) {
-					console.error('Failed to parse user details:', e);
+			function updateUserCounter(count) {
+				const counterEl = document.getElementById('user-counter');
+				if (!counterEl) return;
+
+				// Using 1000 as the minimum threshold before displaying exact numbers
+				if (count >= 1000) {
+					const formattedCount = count.toLocaleString('en-IN');
+					counterEl.textContent = `Join ${formattedCount} verified users finding their match.`;
+					counterEl.style.opacity = '1';
+				} else {
+					counterEl.textContent = 'Join our growing community finding their match.';
+					counterEl.style.opacity = '1';
 				}
-			} else {
-				// Check if user already exists and update CTA if so
-				async function checkExistingUser() {
+			}
+
+			async function initHomePage() {
+				let isLoggedIn = false;
+				if (storedDetails) {
 					try {
-						const users = await fetchUsers();
+						const details = JSON.parse(decodeURIComponent(storedDetails));
+						if (details && details.name) {
+							updateCtaButton(details.name);
+							isLoggedIn = true;
+						}
+					} catch (e) {
+						console.error('Failed to parse user details:', e);
+					}
+				}
+
+				try {
+					const users = await fetchUsers();
+					updateUserCounter(users.length);
+
+					if (!isLoggedIn) {
 						const existingUser = users.find(u => u.uid === uid);
 						if (existingUser && existingUser.name) {
 							updateCtaButton(existingUser.name);
 						}
-					} catch (error) {
-						console.error('Failed to check existing user:', error);
 					}
+				} catch (error) {
+					console.error('Failed to fetch users:', error);
+					updateUserCounter(0);
 				}
-				checkExistingUser();
 			}
+
+			initHomePage();
 	</script>
 </Layout>
