@@ -94,6 +94,33 @@ const { title, description } = Astro.props;
 				transition: width 0.3s ease-out, opacity 0.3s ease-in;
 				box-shadow: 0 1px 3px rgba(55, 48, 163, 0.4);
 			}
+			.site-header {
+				position: relative;
+				margin-bottom: 1.5rem;
+				padding-top: 0.5rem;
+			}
+			.user-counter {
+				position: absolute;
+				right: 0.5rem;
+				top: 0.5rem;
+				font-size: var(--font-xs);
+				color: #1d4046;
+				line-height: 1.8;
+				background: #f8fafc;
+				padding: 0.1rem 0.5rem;
+				border-radius: 9999px;
+				border: 1px solid #e2e8f0;
+			}
+			.user-counter strong {
+				color: #c74e23;
+			}
+			.site-nav {
+				display: flex;
+				gap: 0.75rem;
+				flex-wrap: wrap;
+				justify-content: center;
+				align-items: center;
+			}
 			/* Base Styles */
 			html {
 				font-size: 14px;
@@ -299,11 +326,11 @@ const { title, description } = Astro.props;
 	</head>
 	<body>
 		<div id="nav-loader"></div>
-		<header style="position: relative; margin-bottom: 1.5rem; padding-top: 0.5rem;">
-			<div style="position: absolute; right: 0.5rem; top: 0.5rem; font-size: var(--font-xs); color: #1d4046; line-height: 1.8; background: #f8fafc; padding: 0.1rem 0.5rem; border-radius: 9999px; border: 1px solid #e2e8f0;">
-				Users: <strong id="total-users-count" style="color: #c74e23;">...</strong>
+		<header class="site-header">
+			<div class="user-counter">
+				Users: <strong id="total-users-count">...</strong>
 			</div>
-			<nav style="display: flex; gap: 0.75rem; flex-wrap: wrap; justify-content: center; align-items: center;">
+			<nav class="site-nav">
 				<a href="/" class="nav-link" id="nav-home">Home</a>
 				<a href="/dashboard" class="nav-link" id="nav-dashboard" style="display: none;">moonine</a>
 				<a href="/astrology-guide" class="nav-link" id="nav-guide">User Manual</a>
@@ -321,21 +348,22 @@ const { title, description } = Astro.props;
 			</div>
 		</div>
 
-		<div id="eula-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background-color: rgba(0, 0, 0, 0.8); z-index: 10000; justify-content: center; align-items: center; padding: 1rem; box-sizing: border-box;">
-			<div style="background: white; border-radius: 8px; padding: 1rem; max-width: 600px; width: 95%; max-height: 80vh; display: flex; flex-direction: column; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);">
-				<h2 style="font-family: var(--font-secondary); font-size: var(--font-2xl); margin-top: 0; margin-bottom: 1rem; border-bottom: 2px solid #c74e23; padding-bottom: 0.5rem; flex-shrink: 0;">End User License Agreement (EULA)</h2>
-				<div style="font-size: var(--font-sm); color: #1d4046; line-height: 1.5; margin-bottom: 1.5rem; overflow-y: auto; flex-grow: 1; padding-right: 0.5rem; background-image: var(--floral-bg); background-size: 300px 300px;">
-					<p>Please read and accept the following terms before using our platform:</p>
-					<ul style="padding-left: 1.2rem; margin-bottom: 1rem;">
-						<li style="margin-bottom: 0.5rem;"><strong>Consent to Share Information:</strong> You consent to provide and share your information on this public platform.</li>
-						<li style="margin-bottom: 0.5rem;"><strong>Contact Details:</strong> Information entered by the user is shared with other users who show interest. Once you provide your information, the same information may be made available to other interested users.</li>
-						<li style="margin-bottom: 0.5rem;"><strong>Privacy & Security:</strong> All information remains private between the requesting parties. Communications are handled through secure email.</li>
-						<li style="margin-bottom: 0.5rem;"><strong>Limitation of Liability:</strong> This platform is purely for information sharing. We will not be responsible for any miscommunication, misunderstanding, or disputes that may arise. We only provide contact information. We are not liable for any legal situations arising from the use of this service.</li>
-					</ul>
-					<p>By clicking "I Agree", you acknowledge that you have read, understood, and agreed to these terms.</p>
+		<div id="eula-modal" style="display: none; position: fixed; bottom: 0; left: 0; width: 100vw; background-color: #fff; z-index: 10000; box-shadow: 0 -4px 6px -1px rgba(0, 0, 0, 0.1); border-top: 1px solid #e2e8f0; padding: 1rem; box-sizing: border-box; flex-direction: column; align-items: center;">
+			<div style="max-width: 800px; width: 100%; display: flex; flex-direction: column; gap: 1rem; background-image: var(--floral-bg); background-size: 300px 300px;">
+				<div>
+					<h2 style="font-family: var(--font-secondary); font-size: var(--font-lg); margin-top: 0; margin-bottom: 0.5rem; color: #c74e23;">End User License Agreement (EULA)</h2>
+					<div style="font-size: var(--font-xs); color: #1d4046; line-height: 1.4; max-height: 150px; overflow-y: auto; padding-right: 0.5rem;">
+						<p style="margin-top: 0; margin-bottom: 0.5rem;">By clicking "I Agree", you acknowledge and agree to the following terms:</p>
+						<ul style="padding-left: 1.2rem; margin-bottom: 0; margin-top: 0;">
+							<li style="margin-bottom: 0.25rem;"><strong>Consent:</strong> You consent to provide and share your information on this public platform.</li>
+							<li style="margin-bottom: 0.25rem;"><strong>Contact Sharing:</strong> Information you enter is shared with other interested users.</li>
+							<li style="margin-bottom: 0.25rem;"><strong>Privacy:</strong> All information remains private between requesting parties via secure email.</li>
+							<li><strong>Liability:</strong> We are not liable for miscommunication, disputes, or legal situations arising from the use of this service.</li>
+						</ul>
+					</div>
 				</div>
 				<div style="text-align: right; flex-shrink: 0;">
-					<button id="accept-eula" class="btn" style="padding: 0.5rem 1.5rem; font-size: var(--font-base);">I Agree</button>
+					<button id="accept-eula" class="btn" style="padding: 0.5rem 1.5rem; font-size: var(--font-sm);">I Agree</button>
 				</div>
 			</div>
 		</div>
@@ -464,19 +492,7 @@ const { title, description } = Astro.props;
 					if (link && link.href && link.href.startsWith(window.location.origin) && !link.href.includes('#') && link.target !== '_blank') {
 						if (link.href !== window.location.href) {
 							navLoader.style.opacity = '1';
-							navLoader.style.width = '30%';
-
-							setTimeout(() => {
-								if (navLoader.style.width === '30%') {
-									navLoader.style.width = '60%';
-								}
-							}, 200);
-
-							setTimeout(() => {
-								if (navLoader.style.width === '60%') {
-									navLoader.style.width = '90%';
-								}
-							}, 800);
+							navLoader.style.width = '80%';
 						}
 					}
 				});

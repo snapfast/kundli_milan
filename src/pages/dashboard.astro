@@ -480,13 +480,13 @@ import Layout from '../layouts/Layout.astro';
 
 				if (scrollUpBtn) {
 					scrollUpBtn.addEventListener('click', () => {
-						window.scrollBy({ top: -window.innerHeight, behavior: 'smooth' });
+						window.scrollTo({ top: 0, behavior: 'smooth' });
 					});
 				}
 
 				if (scrollDownBtn) {
 					scrollDownBtn.addEventListener('click', () => {
-						window.scrollBy({ top: window.innerHeight, behavior: 'smooth' });
+						window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
 					});
 				}
 

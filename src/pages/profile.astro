@@ -83,6 +83,7 @@ import Layout from '../layouts/Layout.astro';
 	</style>
 
 	<h1 id="page-title" style="font-family: var(--font-secondary); font-size: var(--font-3xl); border-bottom: none; text-align: center;">Create Your Profile</h1>
+	<div id="form-error-message" style="display: none; background-color: #fef2f2; border: 1px solid #ef4444; color: #b91c1c; padding: 0.75rem; border-radius: 4px; margin-bottom: 1.5rem; font-size: var(--font-sm); text-align: center;"></div>
 
 		<form id="detailsForm" novalidate>
 			<div class="form-row">
@@ -119,19 +120,7 @@ import Layout from '../layouts/Layout.astro';
 				</div>
 				<div class="field">
 					<label for="tob">Time of Birth</label>
-					<div style="display: flex; gap: 0.25rem;">
-						<select id="tob_hour" required style="flex: 1;">
-							<option value="">Hour</option>
-						</select>
-						<select id="tob_min" required style="flex: 1;">
-							<option value="">Min</option>
-						</select>
-						<select id="tob_ampm" required style="flex: 1;">
-							<option value="AM">AM</option>
-							<option value="PM">PM</option>
-						</select>
-					</div>
-					<input type="hidden" id="tob" name="tob" />
+					<input type="time" id="tob" name="tob" required style="width: 100%;" />
 				</div>
 			</div>
 			<div class="form-row">
@@ -219,38 +208,7 @@ import Layout from '../layouts/Layout.astro';
 			const currentSuggestionsContainer = document.getElementById('currentSuggestions') as HTMLDivElement;
 			const currentLatInput = document.getElementById('currentLat') as HTMLInputElement;
 			const currentLonInput = document.getElementById('currentLon') as HTMLInputElement;
-
-			const tobHour = document.getElementById('tob_hour') as HTMLSelectElement;
-			const tobMin = document.getElementById('tob_min') as HTMLSelectElement;
-			const tobAmPm = document.getElementById('tob_ampm') as HTMLSelectElement;
-			const tobHidden = document.getElementById('tob') as HTMLInputElement;
-
-			// Populate Hour and Min dropdowns
-			for (let i = 1; i <= 12; i++) {
-				const val = i.toString().padStart(2, '0');
-				const opt = new Option(val, val);
-				tobHour.add(opt);
-			}
-			for (let i = 0; i < 60; i++) {
-				const val = i.toString().padStart(2, '0');
-				const opt = new Option(val, val);
-				tobMin.add(opt);
-			}
-
-			function syncTime() {
-				const h = tobHour.value;
-				const m = tobMin.value;
-				const ap = tobAmPm.value;
-				if (h && m && ap) {
-					let h24 = parseInt(h);
-					if (ap === 'PM' && h24 < 12) h24 += 12;
-					if (ap === 'AM' && h24 === 12) h24 = 0;
-					tobHidden.value = `${h24.toString().padStart(2, '0')}:${m}`;
-
-				}
-			}
-
-			[tobHour, tobMin, tobAmPm].forEach(el => el.addEventListener('change', syncTime));
+			const tobInput = document.getElementById('tob') as HTMLInputElement;
 
 			// Ensure user ID is set on load
 			const uid = getOrSetUserId();
@@ -277,18 +235,10 @@ import Layout from '../layouts/Layout.astro';
 							}
 						});
 
-						// Sync the AM/PM dropdowns
-						if (details.tob) {
-							const [h24, min] = details.tob.split(':');
-							let h12 = parseInt(h24);
-							const ampm = h12 >= 12 ? 'PM' : 'AM';
-							h12 = h12 % 12;
-							if (h12 === 0) h12 = 12;
-
-							tobHour.value = h12.toString().padStart(2, '0');
-							tobMin.value = min;
-							tobAmPm.value = ampm;
+						if (details.tob && tobInput) {
+							tobInput.value = details.tob;
 						}
+
 					} catch (e) {
 						console.error('Error parsing user_details cookie:', e);
 					}
@@ -415,61 +365,67 @@ import Layout from '../layouts/Layout.astro';
 			form?.addEventListener('submit', async (e) => {
 				e.preventDefault();
 
+				const errorMsgEl = document.getElementById('form-error-message');
+				if (errorMsgEl) errorMsgEl.style.display = 'none';
+
+				const showError = (msg: string, focusEl: HTMLElement | null) => {
+					if (errorMsgEl) {
+						errorMsgEl.textContent = msg;
+						errorMsgEl.style.display = 'block';
+						// Scroll to top to see error
+						window.scrollTo({ top: 0, behavior: 'smooth' });
+					} else {
+						alert(msg);
+					}
+					if (focusEl) focusEl.focus();
+				};
+
 				if (!nameInput.value || nameInput.value.length < 2) {
-					alert('Please enter your full name (at least 2 characters).');
-					nameInput.focus();
+					showError('Please enter your full name (at least 2 characters).', nameInput);
 					return;
 				}
 
 				const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 				if (!emailInput.value || !emailRegex.test(emailInput.value)) {
-					alert('Please enter a valid email address.');
-					emailInput.focus();
+					showError('Please enter a valid email address.', emailInput);
 					return;
 				}
 
 				const phoneInput = document.getElementById('phone') as HTMLInputElement;
 				const phoneRegex = /^[0-9]{10}$/;
 				if (!phoneInput.value || !phoneRegex.test(phoneInput.value)) {
-					alert('Please enter a valid 10-digit contact number.');
-					phoneInput.focus();
+					showError('Please enter a valid 10-digit contact number.', phoneInput);
 					return;
 				}
 
 				if (!dobInput.value) {
-					alert('Please select your Date of Birth.');
-					dobInput.focus();
+					showError('Please select your Date of Birth.', dobInput);
 					return;
 				}
 
 				// Manual validation for fields that might fail silently or need specific selection
-				if (!tobHidden.value) {
-					alert('Please select your complete Time of Birth.');
-					tobHour.focus();
+				if (!tobInput.value) {
+					showError('Please select your complete Time of Birth.', tobInput);
 					return;
 				}
 
 				if (!genderInput.value) {
-					alert('Please select your Gender.');
-					genderInput.focus();
+					showError('Please select your Gender.', genderInput);
 					return;
 				}
 
 				if (!locationInput.value) {
-					alert('Please enter your birth location.');
-					locationInput.focus();
+					showError('Please enter your birth location.', locationInput);
 					return;
 				}
 
 				if (currentLocationInput.value && (!currentLatInput.value || !currentLonInput.value)) {
-					alert('Please select your current location from the suggestions list to get accurate coordinates.');
-					currentLocationInput.focus();
+					showError('Please select your current location from the suggestions list to get accurate coordinates.', currentLocationInput);
 					return;
 				}
 
 				if (!latInput.value || !lonInput.value) {
-					alert('Please select a location from the suggestions list to get accurate coordinates.');
-					locationInput.focus();
+					showError('Please select a location from the suggestions list to get accurate coordinates.', locationInput);
 					return;
 				}
 
