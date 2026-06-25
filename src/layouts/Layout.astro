@@ -331,6 +331,7 @@ const { title, description } = Astro.props;
 			<nav class="site-nav">
 				<a href="/" class="nav-link" id="nav-home">Home</a>
 				<a href="/dashboard" class="nav-link" id="nav-dashboard" style="display: none;">moonine</a>
+				<a href="/profile" class="nav-link" id="nav-profile" style="display: none;">My Profile</a>
 				<a href="/astrology-guide" class="nav-link" id="nav-guide">User Manual</a>
 			</nav>
 		</header>
@@ -391,10 +392,12 @@ const { title, description } = Astro.props;
 			function updateNavigation() {
 				const userDetails = getCookie('user_details');
 				const dashboardLink = document.getElementById('nav-dashboard');
+				const profileLink = document.getElementById('nav-profile');
 				const currentPath = window.location.pathname;
 
 				if (userDetails) {
 					if (dashboardLink) dashboardLink.style.display = 'inline-block';
+					if (profileLink) profileLink.style.display = 'inline-block';
 				}
 
 				// Active Link Highlighting
