@@ -86,7 +86,8 @@ import Layout from '../layouts/Layout.astro';
 			<div style="margin-top: 2rem;">
 				<a href="/profile" id="cta-btn" class="btn-cta" style="display: inline-block;">Get Started</a>
 			</div>
-			<p style="margin-top: 1rem; color: #64748b; font-size: calc(var(--font-base) / 2); text-align: center;">
+			<p id="user-counter" style="margin-top: 1rem; color: #c74e23; font-weight: 600; font-size: var(--font-sm); text-align: center; min-height: 1.5rem; transition: opacity 0.3s ease-in-out; opacity: 0;"></p>
+			<p style="margin-top: 0.5rem; color: #64748b; font-size: calc(var(--font-base) / 2); text-align: center;">
 				no login · best matches · personal vetting · local discovery · privacy first
 			</p>
 		</section>
@@ -133,29 +134,51 @@ import Layout from '../layouts/Layout.astro';
 				}
 			}
 
-			if (storedDetails) {
-				try {
-					const details = JSON.parse(decodeURIComponent(storedDetails));
-					if (details && details.name) {
-						updateCtaButton(details.name);
-					}
-				} catch (e) {
-					console.error('Failed to parse user details:', e);
+			function updateUserCounter(count) {
+				const counterEl = document.getElementById('user-counter');
+				if (!counterEl) return;
+
+				// Using 1000 as the minimum threshold before displaying exact numbers
+				if (count >= 1000) {
+					const formattedCount = count.toLocaleString('en-IN');
+					counterEl.textContent = `Join ${formattedCount} verified users finding their match.`;
+					counterEl.style.opacity = '1';
+				} else {
+					counterEl.textContent = 'Join our growing community finding their match.';
+					counterEl.style.opacity = '1';
 				}
-			} else {
-				// Check if user already exists and update CTA if so
-				async function checkExistingUser() {
+			}
+
+			async function initHomePage() {
+				let isLoggedIn = false;
+				if (storedDetails) {
 					try {
-						const users = await fetchUsers();
+						const details = JSON.parse(decodeURIComponent(storedDetails));
+						if (details && details.name) {
+							updateCtaButton(details.name);
+							isLoggedIn = true;
+						}
+					} catch (e) {
+						console.error('Failed to parse user details:', e);
+					}
+				}
+
+				try {
+					const users = await fetchUsers();
+					updateUserCounter(users.length);
+
+					if (!isLoggedIn) {
 						const existingUser = users.find(u => u.uid === uid);
 						if (existingUser && existingUser.name) {
 							updateCtaButton(existingUser.name);
 						}
-					} catch (error) {
-						console.error('Failed to check existing user:', error);
 					}
+				} catch (error) {
+					console.error('Failed to fetch users:', error);
+					updateUserCounter(0);
 				}
-				checkExistingUser();
 			}
+
+			initHomePage();
 	</script>
 </Layout>
