@@ -85,104 +85,126 @@ import Layout from '../layouts/Layout.astro';
 	<h1 id="page-title" style="font-family: var(--font-secondary); font-size: var(--font-3xl); border-bottom: none; text-align: center;">Create Your Profile</h1>
 	<div id="form-error-message" style="display: none; background-color: #fef2f2; border: 1px solid #ef4444; color: #b91c1c; padding: 0.75rem; border-radius: 4px; margin-bottom: 1.5rem; font-size: var(--font-sm); text-align: center;"></div>
 
+
 		<form id="detailsForm" novalidate>
-			<div class="form-row">
-				<div class="field">
-					<label for="name">Full Name</label>
-					<input type="text" id="name" name="name" required minlength="2" maxlength="50" placeholder="Enter your full name" />
+			<div id="step1" class="form-step">
+				<h2 style="text-align: center; font-size: var(--font-xl); margin-bottom: 1.5rem; border: none; font-family: var(--font-secondary); color: #1d4046;">Step 1: Basic Details</h2>
+				<div class="form-row">
+					<div class="field">
+						<label for="name">Full Name</label>
+						<input type="text" id="name" name="name" required minlength="2" maxlength="50" placeholder="Enter your full name" />
+					</div>
+					<div class="field">
+						<label for="email">Email Address</label>
+						<input type="email" id="email" name="email" required placeholder="your.email@example.com" />
+					</div>
 				</div>
-				<div class="field">
-					<label for="email">Email Address</label>
-					<input type="email" id="email" name="email" required placeholder="your.email@example.com" />
+				<div class="form-row">
+					<div class="field">
+						<label for="phone">Contact Number (10 digits)</label>
+						<input type="tel" id="phone" name="phone" required pattern="[0-9]{10}" placeholder="e.g. 9876543210" maxlength="10" />
+					</div>
+					<div class="field">
+						<label for="maritalStatus">Marital Status (Optional)</label>
+						<select id="maritalStatus" name="maritalStatus">
+							<option value="">Select status</option>
+							<option value="Never Married">Never Married</option>
+							<option value="Awaiting Divorce">Awaiting Divorce</option>
+							<option value="Divorced">Divorced</option>
+							<option value="Widowed">Widowed</option>
+							<option value="Annulled">Annulled</option>
+						</select>
+					</div>
 				</div>
-			</div>
-			<div class="form-row">
-				<div class="field">
-					<label for="phone">Contact Number (10 digits)</label>
-					<input type="tel" id="phone" name="phone" required pattern="[0-9]{10}" placeholder="e.g. 9876543210" maxlength="10" />
-				</div>
-				<div class="field">
-					<label for="maritalStatus">Marital Status (Optional)</label>
-					<select id="maritalStatus" name="maritalStatus">
-						<option value="">Select status</option>
-						<option value="Never Married">Never Married</option>
-						<option value="Awaiting Divorce">Awaiting Divorce</option>
-						<option value="Divorced">Divorced</option>
-						<option value="Widowed">Widowed</option>
-						<option value="Annulled">Annulled</option>
-					</select>
-				</div>
-			</div>
-			<div class="form-row">
-				<div class="field">
-					<label for="dob">Date of Birth</label>
-					<input type="date" id="dob" name="dob" required max={new Date().toISOString().split('T')[0]} />
-				</div>
-				<div class="field">
-					<label for="tob">Time of Birth</label>
-					<input type="time" id="tob" name="tob" required style="width: 100%;" />
+				<div class="form-actions">
+					<button type="button" class="btn-submit" id="next1Btn">Next</button>
+					<button type="button" class="btn-reset cancelBtn" style="background: #e2e8f0; color: #1d4046; display: none;">Cancel</button>
 				</div>
 			</div>
-			<div class="form-row">
-				<div class="field">
-					<label for="gender">Gender</label>
-					<select id="gender" name="gender" required>
-						<option value="">Select Gender</option>
-						<option value="male">Male</option>
-						<option value="female">Female</option>
-						<option value="other">Other</option>
-					</select>
+
+			<div id="step2" class="form-step" style="display: none;">
+				<h2 style="text-align: center; font-size: var(--font-xl); margin-bottom: 1.5rem; border: none; font-family: var(--font-secondary); color: #1d4046;">Step 2: Birth Details & Location</h2>
+				<div class="form-row">
+					<div class="field">
+						<label for="dob">Date of Birth</label>
+						<input type="date" id="dob" name="dob" required max={new Date().toISOString().split('T')[0]} />
+					</div>
+					<div class="field">
+						<label for="tob">Time of Birth</label>
+						<input type="time" id="tob" name="tob" required style="width: 100%;" />
+					</div>
 				</div>
-				<div class="field">
-					<label for="location">Birth Location (City, Country)</label>
-					<input type="text" id="location" name="location" required placeholder="e.g. New Delhi, India" autocomplete="off" />
-					<div id="suggestions"></div>
-					<input type="hidden" id="lat" name="lat" />
-					<input type="hidden" id="lon" name="lon" />
+				<div class="form-row">
+					<div class="field">
+						<label for="gender">Gender</label>
+						<select id="gender" name="gender" required>
+							<option value="">Select Gender</option>
+							<option value="male">Male</option>
+							<option value="female">Female</option>
+							<option value="other">Other</option>
+						</select>
+					</div>
+					<div class="field">
+						<label for="location">Birth Location (City, Country)</label>
+						<input type="text" id="location" name="location" required placeholder="e.g. New Delhi, India" autocomplete="off" />
+						<div id="suggestions"></div>
+						<input type="hidden" id="lat" name="lat" />
+						<input type="hidden" id="lon" name="lon" />
+					</div>
 				</div>
-			</div>
-			<div class="form-row">
-				<div class="field">
-					<label for="currentLocation">Current Location (Optional)</label>
-					<input type="text" id="currentLocation" name="currentLocation" placeholder="e.g. Mumbai, India" autocomplete="off" />
-					<div id="currentSuggestions"></div>
-					<input type="hidden" id="currentLat" name="currentLat" />
-					<input type="hidden" id="currentLon" name="currentLon" />
+				<div class="form-row">
+					<div class="field">
+						<label for="currentLocation">Current Location (Optional)</label>
+						<input type="text" id="currentLocation" name="currentLocation" placeholder="e.g. Mumbai, India" autocomplete="off" />
+						<div id="currentSuggestions"></div>
+						<input type="hidden" id="currentLat" name="currentLat" />
+						<input type="hidden" id="currentLon" name="currentLon" />
+					</div>
+					<div class="field">
+						<label for="height">Height (Optional)</label>
+						<input type="text" id="height" name="height" placeholder="e.g. 5'8'' or 173 cm" />
+					</div>
 				</div>
-				<div class="field">
-					<label for="height">Height (Optional)</label>
-					<input type="text" id="height" name="height" placeholder="e.g. 5'8'' or 173 cm" />
-				</div>
-			</div>
-			<div class="form-row">
-				<div class="field">
-					<label for="religion">Religion / Community (Optional)</label>
-					<input type="text" id="religion" name="religion" placeholder="e.g. Hindu, Brahmin" />
-				</div>
-				<div class="field">
-					<label for="education">Education (Optional)</label>
-					<input type="text" id="education" name="education" placeholder="e.g. B.Tech, MBA" />
-				</div>
-			</div>
-			<div class="form-row">
-				<div class="field">
-					<label for="occupation">Occupation (Optional)</label>
-					<input type="text" id="occupation" name="occupation" placeholder="e.g. Software Engineer" />
-				</div>
-				<div class="field">
-					<label for="income">Annual Income (Optional)</label>
-					<input type="text" id="income" name="income" placeholder="e.g. 15 LPA" />
-				</div>
-			</div>
-			<div class="form-row">
-				<div class="field" style="grid-column: span 2;">
-					<label for="bio">About Me / Bio (Optional)</label>
-					<textarea id="bio" name="bio" rows="3" class="bio-textarea" placeholder="Tell us a bit about yourself..."></textarea>
+				<div class="form-actions">
+					<button type="button" class="btn-reset" id="prev1Btn">Previous</button>
+					<button type="button" class="btn-submit" id="next2Btn">Next</button>
+					<button type="button" class="btn-reset cancelBtn" style="background: #e2e8f0; color: #1d4046; display: none;">Cancel</button>
 				</div>
 			</div>
-			<div class="form-actions">
-				<button type="submit" class="btn-submit" id="submitBtn">Submit Details</button>
-				<button type="button" id="cancelBtn" class="btn-reset" style="background: #e2e8f0; color: #1d4046; display: none;">Cancel</button>
+
+			<div id="step3" class="form-step" style="display: none;">
+				<h2 style="text-align: center; font-size: var(--font-xl); margin-bottom: 1.5rem; border: none; font-family: var(--font-secondary); color: #1d4046;">Step 3: Background & Bio</h2>
+				<div class="form-row">
+					<div class="field">
+						<label for="religion">Religion / Community (Optional)</label>
+						<input type="text" id="religion" name="religion" placeholder="e.g. Hindu, Brahmin" />
+					</div>
+					<div class="field">
+						<label for="education">Education (Optional)</label>
+						<input type="text" id="education" name="education" placeholder="e.g. B.Tech, MBA" />
+					</div>
+				</div>
+				<div class="form-row">
+					<div class="field">
+						<label for="occupation">Occupation (Optional)</label>
+						<input type="text" id="occupation" name="occupation" placeholder="e.g. Software Engineer" />
+					</div>
+					<div class="field">
+						<label for="income">Annual Income (Optional)</label>
+						<input type="text" id="income" name="income" placeholder="e.g. 15 LPA" />
+					</div>
+				</div>
+				<div class="form-row">
+					<div class="field" style="grid-column: span 2;">
+						<label for="bio">About Me / Bio (Optional)</label>
+						<textarea id="bio" name="bio" rows="3" class="bio-textarea" placeholder="Tell us a bit about yourself..."></textarea>
+					</div>
+				</div>
+				<div class="form-actions">
+					<button type="button" class="btn-reset" id="prev2Btn">Previous</button>
+					<button type="submit" class="btn-submit" id="submitBtn">Submit Details</button>
+					<button type="button" class="btn-reset cancelBtn" style="background: #e2e8f0; color: #1d4046; display: none;">Cancel</button>
+				</div>
 			</div>
 		</form>
 
@@ -199,7 +221,8 @@ import Layout from '../layouts/Layout.astro';
 			const emailInput = document.getElementById('email') as HTMLInputElement;
 			const dobInput = document.getElementById('dob') as HTMLInputElement;
 			const genderInput = document.getElementById('gender') as HTMLSelectElement;
-			const cancelBtn = document.getElementById('cancelBtn') as HTMLButtonElement;
+			const cancelBtns = document.querySelectorAll('.cancelBtn');
+			const cancelBtn = cancelBtns[0] as HTMLButtonElement;
 			const locationInput = document.getElementById('location') as HTMLInputElement;
 			const suggestionsContainer = document.getElementById('suggestions') as HTMLDivElement;
 			const latInput = document.getElementById('lat') as HTMLInputElement;
@@ -220,7 +243,7 @@ import Layout from '../layouts/Layout.astro';
 					try {
 						pageTitle.textContent = 'Edit Your Profile';
 						submitBtn.textContent = 'Update Details';
-						cancelBtn.style.display = 'inline-block';
+						cancelBtns.forEach(btn => (btn as HTMLElement).style.display = 'inline-block');
 
 						const details = JSON.parse(stored);
 						const fields = [
@@ -288,9 +311,9 @@ import Layout from '../layouts/Layout.astro';
 			}
 			autoDetectLocation();
 
-			cancelBtn?.addEventListener('click', () => {
+			cancelBtns.forEach(btn => btn.addEventListener('click', () => {
 				window.location.href = '/dashboard';
-			});
+			}));
 
 			// Location Autocomplete Setup Function
 			const autocompleteCache = new Map<string, any[]>();
@@ -362,74 +385,132 @@ import Layout from '../layouts/Layout.astro';
 			setupAutocomplete(locationInput, suggestionsContainer, latInput, lonInput);
 			setupAutocomplete(currentLocationInput, currentSuggestionsContainer, currentLatInput, currentLonInput);
 
-			form?.addEventListener('submit', async (e) => {
-				e.preventDefault();
 
-				const errorMsgEl = document.getElementById('form-error-message');
+			const errorMsgEl = document.getElementById('form-error-message') as HTMLDivElement;
+
+			const showError = (msg: string, focusEl?: HTMLElement) => {
+				if (errorMsgEl) {
+					errorMsgEl.textContent = msg;
+					errorMsgEl.style.display = 'block';
+					window.scrollTo({ top: 0, behavior: 'smooth' });
+				} else {
+					alert(msg);
+				}
+				if (focusEl) focusEl.focus();
+			};
+
+			const step1 = document.getElementById('step1') as HTMLDivElement;
+			const step2 = document.getElementById('step2') as HTMLDivElement;
+			const step3 = document.getElementById('step3') as HTMLDivElement;
+
+			const next1Btn = document.getElementById('next1Btn') as HTMLButtonElement;
+			const next2Btn = document.getElementById('next2Btn') as HTMLButtonElement;
+			const prev1Btn = document.getElementById('prev1Btn') as HTMLButtonElement;
+			const prev2Btn = document.getElementById('prev2Btn') as HTMLButtonElement;
+
+			const validateStep1 = () => {
 				if (errorMsgEl) errorMsgEl.style.display = 'none';
-
-				const showError = (msg: string, focusEl: HTMLElement | null) => {
-					if (errorMsgEl) {
-						errorMsgEl.textContent = msg;
-						errorMsgEl.style.display = 'block';
-						// Scroll to top to see error
-						window.scrollTo({ top: 0, behavior: 'smooth' });
-					} else {
-						alert(msg);
-					}
-					if (focusEl) focusEl.focus();
-				};
 
 				if (!nameInput.value || nameInput.value.length < 2) {
 					showError('Please enter your full name (at least 2 characters).', nameInput);
-					return;
+					return false;
 				}
 
 				const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 				if (!emailInput.value || !emailRegex.test(emailInput.value)) {
 					showError('Please enter a valid email address.', emailInput);
-					return;
+					return false;
 				}
 
-				const phoneInput = document.getElementById('phone') as HTMLInputElement;
 				const phoneRegex = /^[0-9]{10}$/;
-				if (!phoneInput.value || !phoneRegex.test(phoneInput.value)) {
-					showError('Please enter a valid 10-digit contact number.', phoneInput);
-					return;
+				const phoneInputEl = document.getElementById('phone') as HTMLInputElement;
+				if (!phoneInputEl.value || !phoneRegex.test(phoneInputEl.value)) {
+					showError('Please enter a valid 10-digit contact number.', phoneInputEl);
+					return false;
 				}
+				return true;
+			};
+
+			form.addEventListener('keydown', function(event) {
+				if (event.key === 'Enter') {
+					const target = event.target as HTMLElement;
+					if (target && target.tagName.toLowerCase() !== 'textarea' && target.tagName.toLowerCase() !== 'button') {
+						event.preventDefault();
+					}
+				}
+			});
+
+			const validateStep2 = () => {
+				if (errorMsgEl) errorMsgEl.style.display = 'none';
 
 				if (!dobInput.value) {
 					showError('Please select your Date of Birth.', dobInput);
-					return;
+					return false;
 				}
 
-				// Manual validation for fields that might fail silently or need specific selection
 				if (!tobInput.value) {
 					showError('Please select your complete Time of Birth.', tobInput);
-					return;
+					return false;
 				}
 
 				if (!genderInput.value) {
 					showError('Please select your Gender.', genderInput);
-					return;
+					return false;
 				}
 
 				if (!locationInput.value) {
 					showError('Please enter your birth location.', locationInput);
-					return;
+					return false;
 				}
 
 				if (currentLocationInput.value && (!currentLatInput.value || !currentLonInput.value)) {
 					showError('Please select your current location from the suggestions list to get accurate coordinates.', currentLocationInput);
-					return;
+					return false;
 				}
 
 				if (!latInput.value || !lonInput.value) {
 					showError('Please select a location from the suggestions list to get accurate coordinates.', locationInput);
-					return;
+					return false;
 				}
 
-				const formData = new FormData(form);
+				return true;
+			};
+
+			next1Btn?.addEventListener('click', () => {
+				if (validateStep1()) {
+					step1.style.display = 'none';
+					step2.style.display = 'block';
+					window.scrollTo({ top: 0, behavior: 'smooth' });
+				}
+			});
+
+			prev1Btn?.addEventListener('click', () => {
+				step2.style.display = 'none';
+				step1.style.display = 'block';
+				window.scrollTo({ top: 0, behavior: 'smooth' });
+			});
+
+			next2Btn?.addEventListener('click', () => {
+				if (validateStep2()) {
+					step2.style.display = 'none';
+					step3.style.display = 'block';
+					window.scrollTo({ top: 0, behavior: 'smooth' });
+				}
+			});
+
+			prev2Btn?.addEventListener('click', () => {
+				step3.style.display = 'none';
+				step2.style.display = 'block';
+				window.scrollTo({ top: 0, behavior: 'smooth' });
+			});
+
+			form?.addEventListener('submit', async (e) => {
+				e.preventDefault();
+
+				if (!validateStep1() || !validateStep2()) {
+					return;
+				}
+const formData = new FormData(form);
 				const data = Object.fromEntries(formData.entries());
 				const uid = getOrSetUserId();
 
