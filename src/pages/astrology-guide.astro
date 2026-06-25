@@ -51,27 +51,6 @@ import Layout from '../layouts/Layout.astro';
             font-weight: 700;
             margin-right: 0.5rem;
         }
-        .visual-table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: var(--font-sm);
-            margin: 1rem 0;
-            border: 1px solid #e2e8f0;
-            border-radius: 6px;
-            overflow: hidden;
-        }
-        .visual-table th, .visual-table td {
-            padding: 0.6rem 0.75rem;
-            text-align: left;
-            border-bottom: 1px solid #f1f5f9;
-        }
-        .visual-table th {
-            background-color: #f8fafc;
-            color: black;
-            font-weight: 700;
-            text-transform: uppercase;
-            font-size: var(--font-xs);
-        }
         .score-badge {
             background: #e0e7ff;
             color: #4338ca;
@@ -79,40 +58,6 @@ import Layout from '../layouts/Layout.astro';
             border-radius: 4px;
             font-weight: 700;
             font-size: var(--font-xs);
-        }
-        .dosha-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1rem;
-            margin-top: 1rem;
-        }
-        .dosha-card {
-            background: #fff;
-            background-image: var(--floral-bg);
-            background-size: 300px 300px;
-            border: 1px solid #e2e8f0;
-            padding: 1rem;
-            border-radius: 6px;
-        }
-        .dosha-title {
-            font-weight: 700;
-            color: black;
-            margin-bottom: 0.25rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-        .dosha-desc {
-            font-size: var(--font-sm);
-            color: black;
-            line-height: 1.4;
-        }
-        .highlight-box {
-            background: #f0f9ff;
-            border-left: 4px solid #0ea5e9;
-            padding: 1rem;
-            border-radius: 4px;
-            margin: 1rem 0;
         }
         .contact-box {
             background: #fdf2f2;
@@ -144,61 +89,35 @@ import Layout from '../layouts/Layout.astro';
         </div>
     </section>
 
-    <section class="guide-section">
+    <section class="guide-section" style="margin-bottom: 2rem;">
         <h2>Understanding Your Matches</h2>
-        <p>We use the traditional <strong>Ashta Koota (36 Points)</strong> system, also known as Guna Milan, to calculate compatibility.</p>
+        <p style="text-align: center; font-size: var(--font-sm); margin-bottom: 1rem;">We use the <strong>Ashta Koota (36 Points)</strong> system to calculate compatibility.</p>
 
-        <div style="overflow-x: auto;">
-            <table class="visual-table">
-                <thead>
-                    <tr>
-                        <th>Koota</th>
-                        <th>Compatibility Aspect</th>
-                        <th>Max Points</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr><td><strong>Varna</strong></td><td>Work style and ego matching.</td><td><span class="score-badge">1 Point</span></td></tr>
-                    <tr><td><strong>Vashya</strong></td><td>Mutual attraction and dominance.</td><td><span class="score-badge">2 Points</span></td></tr>
-                    <tr><td><strong>Tara</strong></td><td>Health and well-being.</td><td><span class="score-badge">3 Points</span></td></tr>
-                    <tr><td><strong>Yoni</strong></td><td>Physical chemistry and bonding.</td><td><span class="score-badge">4 Points</span></td></tr>
-                    <tr><td><strong>Maitri</strong></td><td>Friendship and shared values.</td><td><span class="score-badge">5 Points</span></td></tr>
-                    <tr><td><strong>Gana</strong></td><td>Personality type and temperament.</td><td><span class="score-badge">6 Points</span></td></tr>
-                    <tr><td><strong>Bhakoot</strong></td><td>Emotional harmony and prosperity.</td><td><span class="score-badge">7 Points</span></td></tr>
-                    <tr><td><strong>Nadi</strong></td><td>Vital energy and genetic health.</td><td><span class="score-badge">8 Points</span></td></tr>
-                </tbody>
-            </table>
+        <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 0.5rem; margin-bottom: 1rem;">
+            <span class="score-badge">Varna (1)</span>
+            <span class="score-badge">Vashya (2)</span>
+            <span class="score-badge">Tara (3)</span>
+            <span class="score-badge">Yoni (4)</span>
+            <span class="score-badge">Maitri (5)</span>
+            <span class="score-badge">Gana (6)</span>
+            <span class="score-badge">Bhakoot (7)</span>
+            <span class="score-badge">Nadi (8)</span>
         </div>
 
-        <div class="highlight-box">
-            <strong>What is a good score?</strong>
-            <ul style="margin: 0.5rem 0 0 1.2rem; font-size: var(--font-sm);">
-                <li><strong>28 - 36:</strong> Excellent Compatibility 💎</li>
-                <li><strong>21 - 27:</strong> Very Good Compatibility ✨</li>
-                <li><strong>18 - 20:</strong> Good / Average Match 🤝</li>
-                <li><strong>Below 18:</strong> May require astrological consultation ⚠️</li>
-            </ul>
+        <div style="text-align: center; font-size: var(--font-sm); margin-bottom: 1rem; padding: 0.5rem; background: #f0f9ff; border-radius: 4px; border-left: 4px solid #0ea5e9;">
+            <strong>Scores:</strong>
+            <span style="margin: 0 0.5rem;"><strong>28+</strong> Excellent 💎</span>
+            <span style="margin: 0 0.5rem;"><strong>21+</strong> Very Good ✨</span>
+            <span style="margin: 0 0.5rem;"><strong>18+</strong> Good 🤝</span>
+            <span style="margin: 0 0.5rem;"><strong>&lt;18</strong> Consult ⚠️</span>
         </div>
 
-        <h3>Major Challenges (Doshas)</h3>
-        <p>Even with a high score, certain "Doshas" can indicate specific areas that need attention:</p>
-        <div class="dosha-grid">
-            <div class="dosha-card">
-                <div class="dosha-title">🔥 Manglik Dosha</div>
-                <div class="dosha-desc">Fiery energy that can lead to arguments or dominance if not balanced.</div>
-            </div>
-            <div class="dosha-card">
-                <div class="dosha-title">🌑 Bhakoot Dosha</div>
-                <div class="dosha-desc">Mismatch in emotional waves or financial growth.</div>
-            </div>
-            <div class="dosha-card">
-                <div class="dosha-title">🧬 Nadi Dosha</div>
-                <div class="dosha-desc">Core energetic mismatch affecting health or family.</div>
-            </div>
-            <div class="dosha-card">
-                <div class="dosha-title">👹 Gana Dosha</div>
-                <div class="dosha-desc">Fundamental clash in temperament or outlook on life.</div>
-            </div>
+        <div style="text-align: center; font-size: var(--font-sm);">
+            <strong>Major Challenges:</strong>
+            <span style="margin: 0 0.5rem;">🔥 Manglik</span>
+            <span style="margin: 0 0.5rem;">🌑 Bhakoot</span>
+            <span style="margin: 0 0.5rem;">🧬 Nadi</span>
+            <span style="margin: 0 0.5rem;">👹 Gana</span>
         </div>
     </section>
 
