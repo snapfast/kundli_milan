@@ -110,6 +110,7 @@ const { title, description } = Astro.props;
 				padding: 0.1rem 0.5rem;
 				border-radius: 9999px;
 				border: 1px solid #e2e8f0;
+				display: none;
 			}
 			.user-counter strong {
 				color: #c74e23;
@@ -327,9 +328,6 @@ const { title, description } = Astro.props;
 	<body>
 		<div id="nav-loader"></div>
 		<header class="site-header">
-			<div class="user-counter">
-				Users: <strong id="total-users-count">...</strong>
-			</div>
 			<nav class="site-nav">
 				<a href="/" class="nav-link" id="nav-home">Home</a>
 				<a href="/dashboard" class="nav-link" id="nav-dashboard" style="display: none;">moonine</a>
@@ -368,7 +366,10 @@ const { title, description } = Astro.props;
 			</div>
 		</div>
 
-		<footer style="margin-top: 2rem; font-size: var(--font-xs); color: #1d4046; text-align: center; border-top: 1px solid #e2e8f0; padding-top: 1rem;">
+		<footer style="margin-top: 2rem; font-size: var(--font-xs); color: #1d4046; text-align: center; border-top: 1px solid #e2e8f0; padding-top: 1rem; position: relative;">
+			<div class="user-counter" style="position: absolute; top: 1rem; right: 0;">
+				<strong id="total-users-count">...</strong>
+			</div>
 			<p style="margin-bottom: 0.5rem; color: #1d4046; font-weight: 500;">
 				To get contact details, send the <b>User ID</b> of the person to <a href="mailto:rahulbaliastrology@gmail.com" style="color: #c74e23; text-decoration: none;">rahulbaliastrology@gmail.com</a>.
 				<br />
@@ -417,12 +418,16 @@ const { title, description } = Astro.props;
 				const ONE_DAY = 24 * 60 * 60 * 1000;
 
 				const countEl = document.getElementById('total-users-count');
+				const userCounterContainer = document.querySelector('.user-counter') as HTMLElement;
 				const cachedCount = localStorage.getItem(CACHE_KEY);
 				const cachedTimestamp = localStorage.getItem(CACHE_TIME_KEY);
 				const now = Date.now();
 
 				if (cachedCount && cachedTimestamp) {
 					if (countEl) countEl.textContent = cachedCount;
+					if (userCounterContainer && parseInt(cachedCount) >= 1000) {
+						userCounterContainer.style.display = 'block';
+					}
 					if (now - parseInt(cachedTimestamp) < ONE_DAY) {
 						return;
 					}
@@ -432,6 +437,11 @@ const { title, description } = Astro.props;
 					const users = await fetchUsers();
 					const count = users.filter(u => u.name).length;
 					if (countEl) countEl.textContent = count.toString();
+					if (userCounterContainer && count >= 1000) {
+						userCounterContainer.style.display = 'block';
+					} else if (userCounterContainer) {
+						userCounterContainer.style.display = 'none';
+					}
 					localStorage.setItem(CACHE_KEY, count.toString());
 					localStorage.setItem(CACHE_TIME_KEY, now.toString());
 				} catch (err) {
