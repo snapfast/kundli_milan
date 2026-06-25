@@ -192,56 +192,24 @@ import Layout from '../layouts/Layout.astro';
 	</div>
 
 	<div id="dashboard-content" style="display: none;">
-		<div class="section-title">Profile & Panchang</div>
-		<div class="dashboard-grid" id="profile-panchang">
-			<!-- Injected here -->
-		</div>
-
-		<div id="bio-section" style="display: none; margin-bottom: 1.5rem;">
-			<div class="section-title">About Me</div>
-			<div class="info-card">
-				<p id="bio-content" style="margin: 0; font-size: var(--font-sm); white-space: pre-wrap; color: #1d4046; line-height: 1.4;"></p>
+		<details open>
+			<summary class="section-title" style="cursor: pointer; list-style-position: inside;">Matches</summary>
+			<div id="matches-list">
+				<!-- Matches injected here -->
 			</div>
-		</div>
+		</details>
 
-		<div class="section-title">Planetary Positions</div>
-		<div style="overflow-x: auto; margin-bottom: 2rem;">
-			<table class="compact-table" id="planets-table">
-				<thead>
-					<tr>
-						<th>Planet</th>
-						<th>Rasi</th>
-						<th>Degree</th>
-						<th>House</th>
-					</tr>
-				</thead>
-				<tbody>
-					<!-- Injected here -->
-				</tbody>
-			</table>
-		</div>
-
-		<div class="section-title">Your Top moonine - A Vedic Matchmaker Matches</div>
-		<div id="matches-list">
-			<!-- Matches injected here -->
-		</div>
-
-		<div id="nearest-section" style="display: none;">
-			<div class="section-title">Top 10 Nearest People</div>
+		<details id="nearest-section" style="display: none; margin-top: 1rem;">
+			<summary class="section-title" style="cursor: pointer; list-style-position: inside;">Top 10 Nearest People</summary>
 			<div id="nearest-list">
 				<!-- Nearest matches injected here -->
 			</div>
-		</div>
-
-		<div class="btn-group">
-			<a href="/profile" class="btn btn-sm">Edit My Profile</a>
-			<button id="resetProfileBtn" class="btn btn-sm btn-danger">Reset My Profile</button>
-		</div>
+		</details>
 	</div>
 
 	<div id="no-profile" style="display: none;" class="no-data">
 		<p>We couldn't find your moonine - A Vedic Matchmaker profile. Please share your birth details to get started!</p>
-		<a href="/" class="btn">Create Profile</a>
+		<a href="/create-profile" class="btn">Create Profile</a>
 	</div>
 
 	<div id="error-state" style="display: none;" class="no-data">
@@ -264,7 +232,7 @@ import Layout from '../layouts/Layout.astro';
 
 	<script>
 		import { getOrSetUserId, clearUserData, getCookie } from '../lib/user';
-		import { fetchUsers, saveUserProfile, resetUserProfile, type UserProfile } from '../lib/api';
+		import { fetchUsers, saveUserProfile, type UserProfile } from '../lib/api';
 		import { calculateAstrology } from '../lib/astrology';
 		import { calculateCompatibility } from '../lib/compatibility';
 		import { KOOTA_INFO } from '../lib/constants';
@@ -299,7 +267,6 @@ import Layout from '../layouts/Layout.astro';
 			}
 
 			const details = JSON.parse(stored);
-			const resetBtn = document.getElementById('resetProfileBtn') as HTMLButtonElement;
 
 			function formatTime12h(t24: string): string {
 				if (!t24) return "";
@@ -310,14 +277,6 @@ import Layout from '../layouts/Layout.astro';
 				if (h === 0) h = 12;
 				return `${h.toString().padStart(2, '0')}:${m} ${ampm}`;
 			}
-
-			resetBtn?.addEventListener('click', async () => {
-				if (confirm('Are you sure you want to reset your moonine - A Vedic Matchmaker profile? Please note that we do not keep your data after a reset. It will be permanently deleted from our systems as well as your local device.')) {
-					if (uid) await resetUserProfile(uid);
-					clearUserData();
-					window.location.href = '/';
-				}
-			});
 
 			try {
 				const users = await fetchUsers();
@@ -489,61 +448,6 @@ import Layout from '../layouts/Layout.astro';
 						window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
 					});
 				}
-
-				const infoGrid = document.getElementById('profile-panchang')!;
-				const items = [
-					{ label: 'User ID', value: profile.uid },
-					{ label: 'Name', value: profile.name },
-					{ label: 'Email', value: profile.email },
-					{ label: 'Phone', value: profile.phone },
-					{ label: 'Gender', value: profile.gender ? (profile.gender.charAt(0).toUpperCase() + profile.gender.slice(1)) : 'N/A' },
-					{ label: 'Marital Status', value: profile.maritalStatus || 'N/A' },
-					{ label: 'Born', value: `${profile.dob} ${formatTime12h(profile.tob)}` },
-					{ label: 'Birth Location', value: profile.location },
-					{ label: 'Current Location', value: profile.currentLocation || 'N/A' },
-					{ label: 'Nakshatra', value: astroData.panchang.nakshatra },
-					{ label: 'Moon Sign', value: astroData.panchang.moonSign },
-					{ label: 'Day (Vara)', value: `${astroData.panchang.vara} (${astroData.panchang.varaLord})` },
-					{ label: 'Tithi', value: astroData.panchang.tithi },
-					{ label: 'Height', value: profile.height || 'N/A' },
-					{ label: 'Religion', value: profile.religion || 'N/A' },
-					{ label: 'Education', value: profile.education || 'N/A' },
-					{ label: 'Occupation', value: profile.occupation || 'N/A' },
-					{ label: 'Income', value: profile.income || 'N/A' },
-					{ label: 'Lagan Manglik', value: profile.isLaganManglik ? 'Yes' : 'No' },
-					{ label: 'Moon Manglik', value: profile.isMoonManglik ? 'Yes' : 'No' }
-				];
-
-				infoGrid.innerHTML = items.map(i => `
-					<div class="info-card">
-						<div class="info-item">
-							<span class="info-label">${i.label}</span>
-							<span class="info-value">${i.value}</span>
-						</div>
-					</div>
-				`).join('');
-
-				const bioSection = document.getElementById('bio-section')!;
-				const bioContent = document.getElementById('bio-content')!;
-				if (profile.bio) {
-					bioSection.style.display = 'block';
-					bioContent.textContent = profile.bio;
-				} else {
-					bioSection.style.display = 'none';
-				}
-
-				const tbody = document.querySelector('#planets-table tbody')!;
-				tbody.innerHTML = ''; // clear before appending
-				astroData.planets.forEach(p => {
-					const tr = document.createElement('tr');
-					tr.innerHTML = `
-						<td>${p.name}</td>
-						<td>${p.rasi}</td>
-						<td>${p.degree}</td>
-						<td>${p.house}</td>
-					`;
-					tbody.appendChild(tr);
-				});
 
 				const matchesList = document.getElementById('matches-list')!;
 				matchesList.innerHTML = '';
