@@ -478,36 +478,47 @@ import Layout from '../layouts/Layout.astro';
 									maxScore: m.maxScore || 36
 								};
 
-								// Fallback if kootas weren't saved in the backend
-								if (!m.kootas || m.kootas.length === 0) {
-									const uLat = otherUser.lat ? parseFloat(otherUser.lat) : 28.6139;
-									const uLon = otherUser.lon ? parseFloat(otherUser.lon) : 77.2090;
+																	// Fallback if kootas weren't saved in the backend
+									if (!m.kootas || m.kootas.length === 0) {
+										let uNakIdx = otherUser.nakshatraIdx;
+										let uMoonSignIdx = otherUser.moonSignIdx;
+										let uIsMoonManglik = otherUser.isMoonManglik;
+										let uIsLaganManglik = otherUser.isLaganManglik;
 
-									// Ensure dob and tob are in correct format if they came back as ISO strings or something else from backend
-									const uTob = typeof otherUser.tob === 'string' && otherUser.tob.includes('T') ? otherUser.tob.split('T')[1].substring(0, 5) : otherUser.tob;
+										if (uNakIdx === undefined || uMoonSignIdx === undefined || uIsMoonManglik === undefined || uIsLaganManglik === undefined) {
+											const uLat = otherUser.lat ? parseFloat(otherUser.lat) : 28.6139;
+											const uLon = otherUser.lon ? parseFloat(otherUser.lon) : 77.2090;
 
-									const uData = calculateAstrology(uDob, uTob, uLat, uLon);
+											// Ensure dob and tob are in correct format if they came back as ISO strings or something else from backend
+											const uTob = typeof otherUser.tob === 'string' && otherUser.tob.includes('T') ? otherUser.tob.split('T')[1].substring(0, 5) : otherUser.tob;
 
-									// Prioritize pre-calculated indices from profile for consistency
-									compat = calculateCompatibility(
-										{
-											name: profile.name,
-											nakshatraIdx: profile.nakshatraIdx ?? astroData.panchang.nakshatraIdx,
-											moonSignIdx: profile.moonSignIdx ?? astroData.panchang.moonSignIdx,
-											isMoonManglik: profile.isMoonManglik ?? astroData.panchang.isMoonManglik,
-											isLaganManglik: profile.isLaganManglik ?? astroData.panchang.isLaganManglik,
-											gender: profile.gender
-										},
-										{
-											name: otherUser.name,
-											nakshatraIdx: otherUser.nakshatraIdx ?? uData.panchang.nakshatraIdx,
-											moonSignIdx: otherUser.moonSignIdx ?? uData.panchang.moonSignIdx,
-											isMoonManglik: otherUser.isMoonManglik ?? uData.panchang.isMoonManglik,
-											isLaganManglik: otherUser.isLaganManglik ?? uData.panchang.isLaganManglik,
-											gender: otherUser.gender
+											const uData = calculateAstrology(uDob, uTob, uLat, uLon);
+											uNakIdx = uNakIdx ?? uData.panchang.nakshatraIdx;
+											uMoonSignIdx = uMoonSignIdx ?? uData.panchang.moonSignIdx;
+											uIsMoonManglik = uIsMoonManglik ?? uData.panchang.isMoonManglik;
+											uIsLaganManglik = uIsLaganManglik ?? uData.panchang.isLaganManglik;
 										}
-									);
-								}
+
+										// Prioritize pre-calculated indices from profile for consistency
+										compat = calculateCompatibility(
+											{
+												name: profile.name,
+												nakshatraIdx: profile.nakshatraIdx ?? astroData.panchang.nakshatraIdx,
+												moonSignIdx: profile.moonSignIdx ?? astroData.panchang.moonSignIdx,
+												isMoonManglik: profile.isMoonManglik ?? astroData.panchang.isMoonManglik,
+												isLaganManglik: profile.isLaganManglik ?? astroData.panchang.isLaganManglik,
+												gender: profile.gender
+											},
+											{
+												name: otherUser.name,
+												nakshatraIdx: uNakIdx!,
+												moonSignIdx: uMoonSignIdx!,
+												isMoonManglik: uIsMoonManglik,
+												isLaganManglik: uIsLaganManglik,
+												gender: otherUser.gender
+											}
+										);
+									}
 
 								kootaHtml = `
 									<details class="koota-details">
