@@ -183,6 +183,16 @@ function doGet(e) {
     const ss = SpreadsheetApp.openById(CONFIG.SHEET_ID);
     const sheet = ss.getSheetByName(CONFIG.SHEET_NAME);
 
+    // Handle count-only request for performance optimization
+    if (e && e.parameter && e.parameter.action === 'count') {
+      const lastRow = sheet ? sheet.getLastRow() : 0;
+      const count = lastRow > 1 ? lastRow - 1 : 0;
+      return jsonResponse({
+        status: 'success',
+        count: count
+      });
+    }
+
     // If sheet doesn't exist or only has header row, return an empty array gracefully
     if (!sheet || sheet.getLastRow() <= 1) {
       return jsonResponse({
