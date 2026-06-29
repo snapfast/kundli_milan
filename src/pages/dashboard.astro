@@ -193,6 +193,20 @@ import Layout from '../layouts/Layout.astro';
 
 	<div id="dashboard-content" style="display: none;">
 		<details open>
+			<summary class="section-title" style="cursor: pointer; list-style-position: inside;">Matches (Opposite Sex)</summary>
+			<div id="matches-list-opposite">
+				<!-- Opposite sex matches injected here -->
+			</div>
+		</details>
+
+		<details id="nearest-section-opposite" style="display: none; margin-top: 1rem;">
+			<summary class="section-title" style="cursor: pointer; list-style-position: inside;">Top 10 Nearest People (Opposite Sex)</summary>
+			<div id="nearest-list-opposite">
+				<!-- Nearest opposite sex matches injected here -->
+			</div>
+		</details>
+
+		<details style="margin-top: 1rem;">
 			<summary class="section-title" style="cursor: pointer; list-style-position: inside;">Matches</summary>
 			<div id="matches-list">
 				<!-- Matches injected here -->
@@ -311,8 +325,10 @@ import Layout from '../layouts/Layout.astro';
 
 					// Check if nearest is missing but user has location set
 					const nearestMissing = (!profile.nearest || profile.nearest.length === 0) && (details.currentLat && details.currentLon) && otherUsersCount > 0;
+					const matchesOppositeMissing = (!profile.matchesOppositeSex || profile.matchesOppositeSex.length === 0) && otherUsersCount > 0;
+					const nearestOppositeMissing = (!profile.nearestOppositeSex || profile.nearestOppositeSex.length === 0) && (details.currentLat && details.currentLon) && otherUsersCount > 0;
 
-					if (detailsChanged || matchesMissing || nearestMissing) {
+					if (detailsChanged || matchesMissing || nearestMissing || matchesOppositeMissing || nearestOppositeMissing) {
 						needsUpdate = true;
 					}
 				}
@@ -380,11 +396,19 @@ import Layout from '../layouts/Layout.astro';
 					resultsWithScores.sort((a, b) => b.compat.score - a.compat.score);
 					const top10 = resultsWithScores.slice(0, 10);
 
+					const oppositeSexScores = resultsWithScores.filter(r => r.user.gender && details.gender && r.user.gender.toLowerCase() !== details.gender.toLowerCase());
+					const top10OppositeSex = oppositeSexScores.slice(0, 10);
+
 					let top10Nearest: any[] = [];
+					let top10NearestOppositeSex: any[] = [];
 					if (hasCurrentLocation) {
 						const withDistance = resultsWithScores.filter(r => r.distance !== undefined);
 						withDistance.sort((a, b) => a.distance! - b.distance!);
 						top10Nearest = withDistance.slice(0, 10);
+
+						const withDistanceOpp = oppositeSexScores.filter(r => r.distance !== undefined);
+						withDistanceOpp.sort((a, b) => a.distance! - b.distance!);
+						top10NearestOppositeSex = withDistanceOpp.slice(0, 10);
 					}
 
 					const updatedProfile: UserProfile = {
@@ -405,6 +429,27 @@ import Layout from '../layouts/Layout.astro';
 							doshas: m.compat.doshas
 						})),
 						nearest: top10Nearest.map(m => ({
+							uid: m.user.uid,
+							name: m.user.name,
+							score: m.compat.score,
+							category: m.compat.category,
+							description: m.compat.description,
+							distance: m.distance,
+							maxScore: m.compat.maxScore,
+							kootas: m.compat.kootas,
+							doshas: m.compat.doshas
+						})),
+						matchesOppositeSex: top10OppositeSex.map(m => ({
+							uid: m.user.uid,
+							name: m.user.name,
+							score: m.compat.score,
+							category: m.compat.category,
+							description: m.compat.description,
+							maxScore: m.compat.maxScore,
+							kootas: m.compat.kootas,
+							doshas: m.compat.doshas
+						})),
+						nearestOppositeSex: top10NearestOppositeSex.map(m => ({
 							uid: m.user.uid,
 							name: m.user.name,
 							score: m.compat.score,
@@ -582,9 +627,21 @@ import Layout from '../layouts/Layout.astro';
 					matchesList.innerHTML = '<p>No matches found yet. They will appear here as more people join!</p>';
 				}
 
+				const matchesListOpposite = document.getElementById('matches-list-opposite')!;
+				matchesListOpposite.innerHTML = '';
+				if (profile.matchesOppositeSex) {
+					renderMatches(matchesListOpposite, profile.matchesOppositeSex);
+				} else {
+					matchesListOpposite.innerHTML = '<p>No opposite sex matches found yet. They will appear here as more people join!</p>';
+				}
+
 				const nearestSection = document.getElementById('nearest-section')!;
 				const nearestList = document.getElementById('nearest-list')!;
 				nearestList.innerHTML = '';
+
+				const nearestSectionOpposite = document.getElementById('nearest-section-opposite')!;
+				const nearestListOpposite = document.getElementById('nearest-list-opposite')!;
+				nearestListOpposite.innerHTML = '';
 
 				if (profile.currentLat && profile.currentLon) {
 					nearestSection.style.display = 'block';
@@ -593,10 +650,17 @@ import Layout from '../layouts/Layout.astro';
 					} else {
 						nearestList.innerHTML = '<p>No people found nearby yet.</p>';
 					}
+
+					nearestSectionOpposite.style.display = 'block';
+					if (profile.nearestOppositeSex) {
+						renderMatches(nearestListOpposite, profile.nearestOppositeSex, true);
+					} else {
+						nearestListOpposite.innerHTML = '<p>No people of opposite sex found nearby yet.</p>';
+					}
 				} else {
 					nearestSection.style.display = 'none';
+					nearestSectionOpposite.style.display = 'none';
 				}
-
 
 			} catch (error) {
 				console.error("Dashboard error:", error);

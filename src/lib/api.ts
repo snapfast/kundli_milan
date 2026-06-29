@@ -68,6 +68,49 @@ export interface UserProfile {
             isCancelled: boolean;
         }[];
     }[];
+    matchesOppositeSex?: {
+        uid: string;
+        name: string;
+        score: number;
+        category: string;
+        description?: string;
+        maxScore?: number;
+        kootas?: {
+            name: string;
+            score: number;
+            max: number;
+            areaOfLife: string;
+            girlValue: string;
+            boyValue: string;
+        }[];
+        doshas?: {
+            name: string;
+            description: string;
+            isCancelled: boolean;
+        }[];
+    }[];
+    nearestOppositeSex?: {
+        uid: string;
+        name: string;
+        score: number;
+        category: string;
+        description?: string;
+        distance: number;
+        maxScore?: number;
+        kootas?: {
+            name: string;
+            score: number;
+            max: number;
+            areaOfLife: string;
+            girlValue: string;
+            boyValue: string;
+        }[];
+        doshas?: {
+            name: string;
+            description: string;
+            isCancelled: boolean;
+        }[];
+    }[];
 }
 
 let usersCache: UserProfile[] | null = null;
