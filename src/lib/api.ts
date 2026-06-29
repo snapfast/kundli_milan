@@ -84,6 +84,28 @@ export function invalidateUsersCache() {
     }
 }
 
+export async function fetchUserCount(): Promise<number> {
+    // If we already have users in cache, just return the count from there
+    if (usersCache) return usersCache.length;
+
+    try {
+        const response = await fetch(`${BACKEND_URL}?action=count`);
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const result = await response.json();
+        if (result && result.status === 'success' && typeof result.count === 'number') {
+            return result.count;
+        }
+        return 0;
+    } catch (error) {
+        console.error('Error fetching user count:', error);
+        // Fallback to full fetch if count-only fails or if backend isn't updated yet
+        const users = await fetchUsers();
+        return users.length;
+    }
+}
+
 export async function fetchUsers(): Promise<UserProfile[]> {
     if (usersCache) return usersCache;
 

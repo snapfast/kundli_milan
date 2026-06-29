@@ -387,7 +387,7 @@ const { title, description } = Astro.props;
 
 		<script>
 			import { getCookie } from '../lib/user';
-			import { fetchUsers } from '../lib/api';
+			import { fetchUserCount } from '../lib/api';
 
 			function updateNavigation() {
 				const userDetails = getCookie('user_details');
@@ -437,8 +437,7 @@ const { title, description } = Astro.props;
 				}
 
 				try {
-					const users = await fetchUsers();
-					const count = users.filter(u => u.name).length;
+					const count = await fetchUserCount();
 					if (countEl) countEl.textContent = count.toString();
 					if (userCounterContainer && count >= 1000) {
 						userCounterContainer.style.display = 'block';
@@ -451,7 +450,21 @@ const { title, description } = Astro.props;
 					console.error('Failed to fetch total users:', err);
 				}
 			}
-			updateTotalUsers();
+
+			// Fully lazy and non-blocking initialization
+			const initTotalUsers = () => {
+				if ('requestIdleCallback' in window) {
+					(window as any).requestIdleCallback(() => updateTotalUsers(), { timeout: 2000 });
+				} else {
+					setTimeout(updateTotalUsers, 2000);
+				}
+			};
+
+			if (document.readyState === 'complete') {
+				initTotalUsers();
+			} else {
+				window.addEventListener('load', initTotalUsers);
+			}
 
 			// Optional: Re-check navigation if user details might have been updated
 			window.addEventListener('storage', updateNavigation);
