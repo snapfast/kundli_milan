@@ -46,7 +46,7 @@ function parseJsonData(e) {
  */
 function getHeaders(sheet, incomingData) {
   const lastColumn = sheet.getLastColumn();
-  const baselineHeaders = ["uid", "name", "email", "phone", "dob", "tob", "gender", "location", "lat", "lon", "currentLocation", "currentLat", "currentLon", "height", "maritalStatus", "education", "occupation", "income", "religion", "bio", "nakshatraIdx", "moonSignIdx", "isMoonManglik", "isLaganManglik", "matches", "nearest", "updatedAt"];
+  const baselineHeaders = ["uid", "name", "email", "phone", "dob", "tob", "gender", "location", "lat", "lon", "currentLocation", "currentLat", "currentLon", "height", "maritalStatus", "education", "occupation", "income", "religion", "bio", "nakshatraIdx", "moonSignIdx", "isMoonManglik", "isLaganManglik", "matches", "nearest", "matchesOppositeSex", "nearestOppositeSex", "updatedAt"];
 
   // Initialize completely empty sheet with baseline headers
   if (lastColumn === 0) {
@@ -75,8 +75,7 @@ function getHeaders(sheet, incomingData) {
 function jsonToRow(data, headers) {
   return headers.map(header => {
     if (header === 'updatedAt') return new Date();
-    if (header === 'matches') return JSON.stringify(data[header] || []);
-    if (header === 'nearest') return JSON.stringify(data[header] || []);
+    if (header === 'matches' || header === 'nearest' || header === 'matchesOppositeSex' || header === 'nearestOppositeSex') return JSON.stringify(data[header] || []);
     return data[header] ?? '';
   });
 }
@@ -91,7 +90,7 @@ function rowsToJson(values) {
     headers.reduce((obj, header, i) => {
       let val = row[i] ?? '';
       // Parse stringified arrays back to standard JSON object structures
-      if ((header === 'matches' || header === 'nearest') && typeof val === 'string' && val !== '') {
+      if ((header === 'matches' || header === 'nearest' || header === 'matchesOppositeSex' || header === 'nearestOppositeSex') && typeof val === 'string' && val !== '') {
         try { val = JSON.parse(val); } catch(err) { val = []; }
       }
       obj[header] = val;
