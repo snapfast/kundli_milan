@@ -193,14 +193,14 @@ import Layout from '../layouts/Layout.astro';
 
 	<div id="dashboard-content" style="display: none;">
 		<details open>
-			<summary class="section-title" style="cursor: pointer; list-style-position: inside;">Matches (Opposite Sex)</summary>
+			<summary id="matches-opposite-title" class="section-title" style="cursor: pointer; list-style-position: inside;">Matches (Opposite Sex)</summary>
 			<div id="matches-list-opposite">
 				<!-- Opposite sex matches injected here -->
 			</div>
 		</details>
 
 		<details id="nearest-section-opposite" style="display: none; margin-top: 1rem;">
-			<summary class="section-title" style="cursor: pointer; list-style-position: inside;">Top 10 Nearest People (Opposite Sex)</summary>
+			<summary id="nearest-opposite-title" class="section-title" style="cursor: pointer; list-style-position: inside;">Top 10 Nearest People (Opposite Sex)</summary>
 			<div id="nearest-list-opposite">
 				<!-- Nearest opposite sex matches injected here -->
 			</div>
@@ -281,6 +281,23 @@ import Layout from '../layouts/Layout.astro';
 			}
 
 			const details = JSON.parse(stored);
+
+			let oppositeGenderText = 'Opposite Sex';
+			if (details.gender) {
+				const g = details.gender.toLowerCase();
+				if (g === 'male') oppositeGenderText = 'Females';
+				else if (g === 'female') oppositeGenderText = 'Males';
+			}
+
+			const matchesOppositeTitle = document.getElementById('matches-opposite-title');
+			if (matchesOppositeTitle) {
+				matchesOppositeTitle.textContent = `Matches (${oppositeGenderText})`;
+			}
+
+			const nearestOppositeTitle = document.getElementById('nearest-opposite-title');
+			if (nearestOppositeTitle) {
+				nearestOppositeTitle.textContent = `Top 10 Nearest People (${oppositeGenderText})`;
+			}
 
 			function formatTime12h(t24: string): string {
 				if (!t24) return "";
@@ -632,7 +649,7 @@ import Layout from '../layouts/Layout.astro';
 				if (profile.matchesOppositeSex) {
 					renderMatches(matchesListOpposite, profile.matchesOppositeSex);
 				} else {
-					matchesListOpposite.innerHTML = '<p>No opposite sex matches found yet. They will appear here as more people join!</p>';
+					matchesListOpposite.innerHTML = `<p>No ${oppositeGenderText.toLowerCase()} matches found yet. They will appear here as more people join!</p>`;
 				}
 
 				const nearestSection = document.getElementById('nearest-section')!;
@@ -655,7 +672,7 @@ import Layout from '../layouts/Layout.astro';
 					if (profile.nearestOppositeSex) {
 						renderMatches(nearestListOpposite, profile.nearestOppositeSex, true);
 					} else {
-						nearestListOpposite.innerHTML = '<p>No people of opposite sex found nearby yet.</p>';
+						nearestListOpposite.innerHTML = `<p>No ${oppositeGenderText.toLowerCase()} found nearby yet.</p>`;
 					}
 				} else {
 					nearestSection.style.display = 'none';
