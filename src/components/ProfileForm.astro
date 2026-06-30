@@ -196,6 +196,9 @@ const { isEdit = false } = Astro.props;
 					<textarea id="bio" name="bio" rows="3" class="bio-textarea" placeholder="Tell us a bit about yourself..."></textarea>
 				</div>
 			</div>
+
+			<p style="font-size: var(--font-xs); color: #64748b; text-align: center; margin-top: 1rem; margin-bottom: 0.5rem;">By submitting your details, you agree to our <a href="/terms" style="color: #c74e23; text-decoration: underline;">Terms of Service</a>.</p>
+
 			<div class="form-actions">
 				<button type="button" class="btn-reset" id="prev1Btn">Previous</button>
 				<button type="submit" class="btn-submit" id="submitBtn">{isEdit ? 'Update Details' : 'Submit Details'}</button>
