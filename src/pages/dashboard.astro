@@ -24,14 +24,14 @@ import Layout from '../layouts/Layout.astro';
 		}
 		.info-label {
 			font-weight: 700;
-			color: #1d4046;
+			color: #4a3c31;
 			font-size: var(--font-xs);
 			text-transform: uppercase;
 			letter-spacing: 0.05em;
 		}
 		.info-value {
 			font-size: var(--font-sm);
-			color: #1d4046;
+			color: #4a3c31;
 			font-weight: 500;
 			word-break: normal;
 			overflow-wrap: break-word;
@@ -43,7 +43,7 @@ import Layout from '../layouts/Layout.astro';
 			border-bottom: 1px solid #f1f5f9;
 			padding-bottom: 0.15rem;
 			font-weight: 700;
-			color: #1d4046;
+			color: #4a3c31;
 		}
 		.compact-table {
 			width: 100%;
@@ -61,7 +61,7 @@ import Layout from '../layouts/Layout.astro';
 		}
 		.compact-table th {
 			background-color: #f8fafc;
-			color: #1d4046;
+			color: #4a3c31;
 			font-weight: 700;
 		}
 		.loading-container {
@@ -111,18 +111,18 @@ import Layout from '../layouts/Layout.astro';
 		}
 		.dosha-name {
 			font-weight: 700;
-			color: #1d4046;
+			color: #4a3c31;
 			font-size: var(--font-xs);
 		}
 		.dosha-description {
 			font-size: var(--font-xs);
-			color: #1d4046;
+			color: #4a3c31;
 			line-height: 1.25;
 		}
 		.no-data {
 			text-align: center;
 			padding: 3rem;
-			color: #1d4046;
+			color: #4a3c31;
 		}
 		.btn-group {
 			margin: 2rem 0;
@@ -144,13 +144,13 @@ import Layout from '../layouts/Layout.astro';
 		.koota-summary {
 			font-size: var(--font-xs);
 			font-weight: 600;
-			color: #1d4046;
+			color: #4a3c31;
 			cursor: pointer;
 			padding: 0.25rem 0;
 			display: list-item;
 		}
 		.koota-summary:hover {
-			color: #1d4046;
+			color: #4a3c31;
 		}
 		.floating-scroll-btns {
 			position: fixed;
@@ -165,7 +165,7 @@ import Layout from '../layouts/Layout.astro';
 			width: 2.5rem;
 			height: 2.5rem;
 			border-radius: 50%;
-			background-color: #c74e23;
+			background-color: #b59a83;
 			color: white;
 			border: none;
 			cursor: pointer;
@@ -625,7 +625,7 @@ import Layout from '../layouts/Layout.astro';
 								`;
 
 								const distanceHtml = showDistance && m.distance !== undefined ?
-									`<div style="font-size: var(--font-sm); color: #1d4046; margin-top: 0.5rem; font-weight: 600;">📍 Approx. ${Math.round(m.distance)} km away</div>` : '';
+									`<div style="font-size: var(--font-sm); color: #4a3c31; margin-top: 0.5rem; font-weight: 600;">📍 Approx. ${Math.round(m.distance)} km away</div>` : '';
 
 								const card = document.createElement('div');
 								card.className = 'match-card';
