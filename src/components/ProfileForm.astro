@@ -484,7 +484,8 @@ const { isEdit = false } = Astro.props;
 
 			const payload = {
 				...data,
-				uid: uid
+				uid: uid,
+				maritalStatus: 'available'
 			};
 
 			// Save to cookie immediately for dashboard use
