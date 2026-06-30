@@ -104,8 +104,8 @@ const { isEdit = false } = Astro.props;
 			</div>
 			<div class="form-row">
 				<div class="field">
-					<label for="phone">Contact Number (10 digits)</label>
-					<input type="tel" id="phone" name="phone" required pattern="[0-9]{10}" placeholder="e.g. 9876543210" maxlength="10" />
+					<label for="phone">Contact Number <small style="font-weight: normal; font-size: 0.8em; color: #666;">(Optional, useful for faster better communication)</small></label>
+					<input type="tel" id="phone" name="phone" pattern="[0-9]{10}" placeholder="e.g. 9876543210" maxlength="10" />
 				</div>
 				<div class="field">
 					<label for="dob">Date of Birth</label>
@@ -416,7 +416,7 @@ const { isEdit = false } = Astro.props;
 
 			const phoneRegex = /^[0-9]{10}$/;
 			const phoneInputEl = document.getElementById('phone') as HTMLInputElement;
-			if (!phoneInputEl.value || !phoneRegex.test(phoneInputEl.value)) {
+			if (phoneInputEl.value && !phoneRegex.test(phoneInputEl.value)) {
 				showError('Please enter a valid 10-digit contact number.', phoneInputEl);
 				return false;
 			}
