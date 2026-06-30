@@ -104,19 +104,15 @@ const { isEdit = false } = Astro.props;
 			</div>
 			<div class="form-row">
 				<div class="field">
-					<label for="phone">Contact Number (10 digits)</label>
-					<input type="tel" id="phone" name="phone" required pattern="[0-9]{10}" placeholder="e.g. 9876543210" maxlength="10" />
-				</div>
-				<div class="field">
 					<label for="dob">Date of Birth</label>
 					<input type="date" id="dob" name="dob" required max={new Date().toISOString().split('T')[0]} />
 				</div>
-			</div>
-			<div class="form-row">
 				<div class="field">
 					<label for="tob">Time of Birth</label>
 					<input type="time" id="tob" name="tob" required style="width: 100%;" />
 				</div>
+			</div>
+			<div class="form-row">
 				<div class="field">
 					<label for="gender">Gender</label>
 					<select id="gender" name="gender" required>
@@ -126,8 +122,6 @@ const { isEdit = false } = Astro.props;
 						<option value="other">Other</option>
 					</select>
 				</div>
-			</div>
-			<div class="form-row">
 				<div class="field">
 					<label for="location">Birth Location (City, Country)</label>
 					<input type="text" id="location" name="location" required placeholder="e.g. New Delhi, India" autocomplete="off" />
@@ -145,17 +139,6 @@ const { isEdit = false } = Astro.props;
 		<div id="step2" class="form-step" style="display: none;">
 			<h2 style="text-align: center; font-size: var(--font-xl); margin-bottom: 1.5rem; border: none; font-family: var(--font-secondary); color: #4a3c31;">Stage 2: Additional Details</h2>
 			<div class="form-row">
-				<div class="field">
-					<label for="maritalStatus">Marital Status (Optional)</label>
-					<select id="maritalStatus" name="maritalStatus">
-						<option value="">Select status</option>
-						<option value="Never Married">Never Married</option>
-						<option value="Awaiting Divorce">Awaiting Divorce</option>
-						<option value="Divorced">Divorced</option>
-						<option value="Widowed">Widowed</option>
-						<option value="Annulled">Annulled</option>
-					</select>
-				</div>
 				<div class="field">
 					<label for="height">Height (Optional)</label>
 					<input type="text" id="height" name="height" placeholder="e.g. 5'8'' or 173 cm" />
@@ -189,6 +172,10 @@ const { isEdit = false } = Astro.props;
 					<label for="income">Annual Income (Optional)</label>
 					<input type="text" id="income" name="income" placeholder="e.g. 15 LPA" />
 				</div>
+				<div class="field">
+					<label for="phone">Contact Number <small style="font-weight: normal; font-size: 0.8em; color: #666;">(Optional, useful for faster better communication)</small></label>
+					<input type="tel" id="phone" name="phone" pattern="[0-9]{10}" placeholder="e.g. 9876543210" maxlength="10" />
+				</div>
 			</div>
 			<div class="form-row">
 				<div class="field" style="grid-column: span 2;">
@@ -196,6 +183,9 @@ const { isEdit = false } = Astro.props;
 					<textarea id="bio" name="bio" rows="3" class="bio-textarea" placeholder="Tell us a bit about yourself..."></textarea>
 				</div>
 			</div>
+
+			<p style="font-size: var(--font-xs); color: #64748b; text-align: center; margin-top: 1rem; margin-bottom: 0.5rem;">By submitting your details, you agree to our <a href="/terms" style="color: #b59a83; text-decoration: underline;">Terms of Service</a>.</p>
+
 			<div class="form-actions">
 				<button type="button" class="btn-reset" id="prev1Btn">Previous</button>
 				<button type="submit" class="btn-submit" id="submitBtn">{isEdit ? 'Update Details' : 'Submit Details'}</button>
@@ -243,7 +233,7 @@ const { isEdit = false } = Astro.props;
 					const details = JSON.parse(stored);
 					const fields = [
 						'name', 'email', 'phone', 'dob', 'tob', 'gender', 'location', 'lat', 'lon',
-						'currentLocation', 'currentLat', 'currentLon', 'height', 'maritalStatus',
+						'currentLocation', 'currentLat', 'currentLon', 'height',
 						'education', 'occupation', 'income', 'religion', 'bio'
 					];
 					fields.forEach(field => {
@@ -414,13 +404,6 @@ const { isEdit = false } = Astro.props;
 				return false;
 			}
 
-			const phoneRegex = /^[0-9]{10}$/;
-			const phoneInputEl = document.getElementById('phone') as HTMLInputElement;
-			if (!phoneInputEl.value || !phoneRegex.test(phoneInputEl.value)) {
-				showError('Please enter a valid 10-digit contact number.', phoneInputEl);
-				return false;
-			}
-
 			if (!dobInput.value) {
 				showError('Please select your Date of Birth.', dobInput);
 				return false;
@@ -466,6 +449,13 @@ const { isEdit = false } = Astro.props;
 				return false;
 			}
 
+			const phoneRegex = /^[0-9]{10}$/;
+			const phoneInputEl = document.getElementById('phone') as HTMLInputElement;
+			if (phoneInputEl.value && !phoneRegex.test(phoneInputEl.value)) {
+				showError('Please enter a valid 10-digit contact number.', phoneInputEl);
+				return false;
+			}
+
 			return true;
 		};
 
@@ -495,7 +485,8 @@ const { isEdit = false } = Astro.props;
 
 			const payload = {
 				...data,
-				uid: uid
+				uid: uid,
+				maritalStatus: 'available'
 			};
 
 			// Save to cookie immediately for dashboard use
