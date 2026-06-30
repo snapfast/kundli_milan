@@ -104,19 +104,15 @@ const { isEdit = false } = Astro.props;
 			</div>
 			<div class="form-row">
 				<div class="field">
-					<label for="phone">Contact Number (10 digits)</label>
-					<input type="tel" id="phone" name="phone" required pattern="[0-9]{10}" placeholder="e.g. 9876543210" maxlength="10" />
-				</div>
-				<div class="field">
 					<label for="dob">Date of Birth</label>
 					<input type="date" id="dob" name="dob" required max={new Date().toISOString().split('T')[0]} />
 				</div>
-			</div>
-			<div class="form-row">
 				<div class="field">
 					<label for="tob">Time of Birth</label>
 					<input type="time" id="tob" name="tob" required style="width: 100%;" />
 				</div>
+			</div>
+			<div class="form-row">
 				<div class="field">
 					<label for="gender">Gender</label>
 					<select id="gender" name="gender" required>
@@ -126,8 +122,6 @@ const { isEdit = false } = Astro.props;
 						<option value="other">Other</option>
 					</select>
 				</div>
-			</div>
-			<div class="form-row">
 				<div class="field">
 					<label for="location">Birth Location (City, Country)</label>
 					<input type="text" id="location" name="location" required placeholder="e.g. New Delhi, India" autocomplete="off" />
@@ -188,6 +182,10 @@ const { isEdit = false } = Astro.props;
 				<div class="field">
 					<label for="income">Annual Income (Optional)</label>
 					<input type="text" id="income" name="income" placeholder="e.g. 15 LPA" />
+				</div>
+				<div class="field">
+					<label for="phone">Contact Number <small style="font-weight: normal; font-size: 0.8em; color: #666;">(Optional, useful for faster better communication)</small></label>
+					<input type="tel" id="phone" name="phone" pattern="[0-9]{10}" placeholder="e.g. 9876543210" maxlength="10" />
 				</div>
 			</div>
 			<div class="form-row">
@@ -414,13 +412,6 @@ const { isEdit = false } = Astro.props;
 				return false;
 			}
 
-			const phoneRegex = /^[0-9]{10}$/;
-			const phoneInputEl = document.getElementById('phone') as HTMLInputElement;
-			if (!phoneInputEl.value || !phoneRegex.test(phoneInputEl.value)) {
-				showError('Please enter a valid 10-digit contact number.', phoneInputEl);
-				return false;
-			}
-
 			if (!dobInput.value) {
 				showError('Please select your Date of Birth.', dobInput);
 				return false;
@@ -463,6 +454,13 @@ const { isEdit = false } = Astro.props;
 
 			if (currentLocationInput.value && (!currentLatInput.value || !currentLonInput.value)) {
 				showError('Please select your current location from the suggestions list to get accurate coordinates.', currentLocationInput);
+				return false;
+			}
+
+			const phoneRegex = /^[0-9]{10}$/;
+			const phoneInputEl = document.getElementById('phone') as HTMLInputElement;
+			if (phoneInputEl.value && !phoneRegex.test(phoneInputEl.value)) {
+				showError('Please enter a valid 10-digit contact number.', phoneInputEl);
 				return false;
 			}
 
