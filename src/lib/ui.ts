@@ -17,6 +17,47 @@ export function generateMatchCardHtml(uid: string, name: string, age: number | u
         `;
     }
 
+    let descriptionHtml = '';
+    if (description) {
+        let highlightIcon = 'ℹ️';
+        let highlightColor = '#4b5563';
+        let highlightBg = '#f3f4f6';
+        let highlightBorder = '#e5e7eb';
+        let categoryTitle = category + ' Match';
+
+        if (category === "Excellent") {
+            highlightIcon = '🌟';
+            highlightColor = '#059669';
+            highlightBg = '#ecfdf5';
+            highlightBorder = '#a7f3d0';
+        } else if (category === "Very Good") {
+            highlightIcon = '✨';
+            highlightColor = '#10b981';
+            highlightBg = '#f0fdf4';
+            highlightBorder = '#bbf7d0';
+        } else if (category === "Good") {
+            highlightIcon = '👍';
+            highlightColor = '#d97706';
+            highlightBg = '#fffbeb';
+            highlightBorder = '#fde68a';
+        } else if (category === "Not Good" || category === "Bad") {
+            highlightIcon = '⚠️';
+            highlightColor = '#dc2626';
+            highlightBg = '#fef2f2';
+            highlightBorder = '#fecaca';
+        }
+
+        descriptionHtml = `
+            <div class="match-highlight" style="background: ${highlightBg}; border: 1px solid ${highlightBorder};">
+                <div class="match-highlight-icon">${highlightIcon}</div>
+                <div class="match-highlight-content">
+                    <span class="match-highlight-title" style="color: ${highlightColor};">${categoryTitle}</span>
+                    ${description}
+                </div>
+            </div>
+        `;
+    }
+
     return `
         <div class="match-header">
             <div style="display: flex; flex-direction: column;">
@@ -34,7 +75,7 @@ export function generateMatchCardHtml(uid: string, name: string, age: number | u
                 <div class="progress-bar-fill" style="width: ${percentage}%; background-color: ${progressColor};"></div>
             </div>
         </div>
-        ${description ? `<div class="match-description">${description}</div>` : ''}
+        ${descriptionHtml}
         ${doshaHtml}
         ${kootaHtml}
     `;
