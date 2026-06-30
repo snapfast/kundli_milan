@@ -19,7 +19,7 @@ import Layout from '../layouts/Layout.astro';
 			margin: 0 auto 2rem auto;
 			line-height: 1.6;
 		}
-		.hero .btn-cta {
+		.btn-cta {
 			font-size: var(--font-lg);
 			padding: 0.75rem 2rem;
 			border-radius: 9999px;
@@ -30,7 +30,7 @@ import Layout from '../layouts/Layout.astro';
 			box-shadow: 0 4px 6px rgba(199, 78, 35, 0.25);
 			transition: all 0.2s ease-in-out;
 		}
-		.hero .btn-cta:hover {
+		.btn-cta:hover {
 			background-color: #a6401c;
 			transform: translateY(-2px);
 			box-shadow: 0 6px 8px rgba(199, 78, 35, 0.3);
@@ -84,7 +84,7 @@ import Layout from '../layouts/Layout.astro';
 			<div class="logo" data-text="moonine"><span class="logo-text">moonine</span></div>
 			<p>discover verified local profiles and find the right life partner.</p>
 			<div style="margin-top: 2rem;">
-				<a href="/create-profile" id="cta-btn" class="btn-cta" style="display: inline-block;">Get Started</a>
+				<a href="/create-profile" id="cta-btn" class="btn-cta" style="display: inline-block;">Sign Up</a>
 			</div>
 			<p style="margin-top: 1rem; color: #64748b; font-size: var(--font-sm); text-align: center;">
 				join our growing community · discover verified local profiles · connect with mindful individuals · personal vetting · privacy first
@@ -113,6 +113,10 @@ import Layout from '../layouts/Layout.astro';
 		<p style="text-align: center; margin-top: 1.5rem;">
 			<a href="/about" class="btn">About moonine &rarr;</a>
 		</p>
+
+		<div style="text-align: center; margin-top: 3rem; margin-bottom: 2rem;">
+			<a href="/create-profile" id="cta-btn-bottom" class="btn-cta" style="display: inline-block;">Sign Up</a>
+		</div>
 	</section>
 
 	</div>
@@ -127,9 +131,16 @@ import Layout from '../layouts/Layout.astro';
 
 			function updateCtaButton(name) {
 				const ctaBtn = document.getElementById('cta-btn');
+				const ctaBtnBottom = document.getElementById('cta-btn-bottom');
+
 				if (ctaBtn && name) {
 					ctaBtn.textContent = `Welcome ${name}`;
 					ctaBtn.href = '/dashboard';
+				}
+
+				if (ctaBtnBottom && name) {
+					ctaBtnBottom.textContent = `Welcome ${name}`;
+					ctaBtnBottom.href = '/dashboard';
 				}
 			}
 
