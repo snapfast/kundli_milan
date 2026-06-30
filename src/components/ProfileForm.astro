@@ -146,17 +146,6 @@ const { isEdit = false } = Astro.props;
 			<h2 style="text-align: center; font-size: var(--font-xl); margin-bottom: 1.5rem; border: none; font-family: var(--font-secondary); color: #1d4046;">Stage 2: Additional Details</h2>
 			<div class="form-row">
 				<div class="field">
-					<label for="maritalStatus">Marital Status (Optional)</label>
-					<select id="maritalStatus" name="maritalStatus">
-						<option value="">Select status</option>
-						<option value="Never Married">Never Married</option>
-						<option value="Awaiting Divorce">Awaiting Divorce</option>
-						<option value="Divorced">Divorced</option>
-						<option value="Widowed">Widowed</option>
-						<option value="Annulled">Annulled</option>
-					</select>
-				</div>
-				<div class="field">
 					<label for="height">Height (Optional)</label>
 					<input type="text" id="height" name="height" placeholder="e.g. 5'8'' or 173 cm" />
 				</div>
@@ -243,7 +232,7 @@ const { isEdit = false } = Astro.props;
 					const details = JSON.parse(stored);
 					const fields = [
 						'name', 'email', 'phone', 'dob', 'tob', 'gender', 'location', 'lat', 'lon',
-						'currentLocation', 'currentLat', 'currentLon', 'height', 'maritalStatus',
+						'currentLocation', 'currentLat', 'currentLon', 'height',
 						'education', 'occupation', 'income', 'religion', 'bio'
 					];
 					fields.forEach(field => {
