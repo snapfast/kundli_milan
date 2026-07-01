@@ -186,18 +186,19 @@ const { title, description } = Astro.props;
 				color: #4a3c31;
 				font-size: var(--font-xs);
 			}
-			input, select {
+			input, select, textarea {
 				width: 100%;
-				padding: 0.35rem 0.5rem;
+				padding: 0.75rem 1rem;
 				border: 1px solid #cbd5e1;
-				border-radius: 4px;
-				font-size: var(--font-sm);
-				transition: all 0.1s;
+				border-radius: 8px;
+				font-size: var(--font-base);
+				transition: all 0.2s ease-in-out;
+				background-color: #fff;
 			}
-			input:focus, select:focus {
+			input:focus, select:focus, textarea:focus {
 				border-color: #b59a83;
 				outline: none;
-				box-shadow: 0 0 0 1px #b59a83;
+				box-shadow: 0 0 0 3px rgba(181, 154, 131, 0.25);
 			}
 			button, .btn, .nav-link {
 				padding: 0.4rem 0.75rem;
