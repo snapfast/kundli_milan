@@ -42,23 +42,34 @@ function parseJsonData(e) {
 }
 
 /**
- * Ensures the target sheet has the baseline headers or dynamically appends new incoming keys.
+ * Ensures the target sheet has headers or dynamically appends new incoming keys.
  */
 function getHeaders(sheet, incomingData) {
   const lastColumn = sheet.getLastColumn();
-  const baselineHeaders = ["uid", "name", "email", "phone", "dob", "tob", "gender", "location", "lat", "lon", "currentLocation", "currentLat", "currentLon", "height", "maritalStatus", "education", "occupation", "income", "religion", "bio", "nakshatraIdx", "moonSignIdx", "isMoonManglik", "isLaganManglik", "matches", "nearest", "matchesOppositeSex", "nearestOppositeSex", "updatedAt"];
 
-  // Initialize completely empty sheet with baseline headers
+  // Filter out any operational keys like 'action'
+  const incomingKeys = Object.keys(incomingData).filter(key => key !== 'action');
+
+  // Build header list: 'uid' first, followed by incoming keys (except 'uid' and 'updatedAt'), and 'updatedAt' last
+  const initialHeaders = [];
+  initialHeaders.push('uid');
+  incomingKeys.forEach(key => {
+    if (key !== 'uid' && key !== 'updatedAt') {
+      initialHeaders.push(key);
+    }
+  });
+  initialHeaders.push('updatedAt');
+
+  // Initialize completely empty sheet with these headers
   if (lastColumn === 0) {
-    sheet.getRange(1, 1, 1, baselineHeaders.length).setValues([baselineHeaders]);
-    return baselineHeaders;
+    sheet.getRange(1, 1, 1, initialHeaders.length).setValues([initialHeaders]);
+    return initialHeaders;
   }
 
   const existingHeaders = sheet.getRange(1, 1, 1, lastColumn).getValues()[0];
 
   // Dynamically catch any unexpected extra parameters passed in payload to prevent data loss
-  const incomingKeys = new Set(Object.keys(incomingData));
-  const newHeaders = Array.from(incomingKeys).filter(key => !existingHeaders.includes(key));
+  const newHeaders = incomingKeys.filter(key => !existingHeaders.includes(key));
 
   if (newHeaders.length > 0) {
     const updatedHeaders = existingHeaders.concat(newHeaders);
@@ -75,8 +86,19 @@ function getHeaders(sheet, incomingData) {
 function jsonToRow(data, headers) {
   return headers.map(header => {
     if (header === 'updatedAt') return new Date();
-    if (header === 'matches' || header === 'nearest' || header === 'matchesOppositeSex' || header === 'nearestOppositeSex') return JSON.stringify(data[header] || []);
-    return data[header] ?? '';
+
+    const val = data[header];
+
+    // Auto-detect array or object fields and serialize them to JSON string
+    if (val !== undefined && val !== null && typeof val === 'object' && !(val instanceof Date)) {
+      try {
+        return JSON.stringify(val);
+      } catch (err) {
+        return '';
+      }
+    }
+
+    return val ?? '';
   });
 }
 
@@ -89,9 +111,19 @@ function rowsToJson(values) {
   return rows.map(row =>
     headers.reduce((obj, header, i) => {
       let val = row[i] ?? '';
-      // Parse stringified arrays back to standard JSON object structures
-      if ((header === 'matches' || header === 'nearest' || header === 'matchesOppositeSex' || header === 'nearestOppositeSex') && typeof val === 'string' && val !== '') {
-        try { val = JSON.parse(val); } catch(err) { val = []; }
+
+      // Auto-detect if a string value represents an array or object, and parse it back
+      if (typeof val === 'string' && val !== '') {
+        const trimmed = val.trim();
+        const startsWithSquare = trimmed.indexOf('[') === 0;
+        const startsWithCurly = trimmed.indexOf('{') === 0;
+        if (startsWithSquare || startsWithCurly) {
+          try {
+            val = JSON.parse(trimmed);
+          } catch (err) {
+            // Keep original string if it is not valid JSON
+          }
+        }
       }
       obj[header] = val;
       return obj;
