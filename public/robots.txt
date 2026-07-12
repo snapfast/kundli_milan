@@ -1,4 +1,11 @@
 User-agent: *
 Allow: /
+Allow: /about
+Allow: /login
+Allow: /create-profile
+Allow: /terms
+Disallow: /dashboard
+Disallow: /profile
+Disallow: /edit-profile
 
-Sitemap: /sitemap-index.xml
+Sitemap: https://moonine.netlify.app/sitemap-index.xml
