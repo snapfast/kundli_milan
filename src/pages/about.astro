@@ -5,7 +5,7 @@ import Layout from '../layouts/Layout.astro';
 <Layout title="About moonine - Philosophy of Vedic Astrology Matchmaking" description="Learn how moonine uses the traditional 36-point Ashta Koota system, Guna Milan, and planetary alignments to help you find your celestial partner.">
     <style>
         .guide-section {
-            margin-bottom: 3rem;
+            margin-bottom: 2.5rem;
         }
         .guide-section h1 {
             text-align: center;
@@ -18,32 +18,34 @@ import Layout from '../layouts/Layout.astro';
         .guide-section h2 {
             text-align: center;
             border-bottom: none;
-            margin-top: 2.5rem;
-            margin-bottom: 1.5rem;
+            margin-top: 2rem;
+            margin-bottom: 1.25rem;
             color: var(--bumble-text);
             font-family: var(--font-secondary);
             font-size: var(--font-2xl);
             font-weight: 800;
         }
-        .guide-section h3 {
-            border-bottom: none;
-            margin-top: 1.5rem;
-            color: var(--bumble-text);
-            font-size: var(--font-lg);
-            font-weight: 800;
-        }
         .step-card {
             background: #fff;
             border: 2px solid var(--bumble-border);
-            padding: 1.75rem;
+            padding: 1.5rem;
             border-radius: 18px;
-            margin-bottom: 1.25rem;
+            margin-bottom: 1rem;
             box-shadow: 0 4px 12px rgba(143,118,99,0.01);
             transition: all 0.2s ease;
         }
         .step-card:hover {
             border-color: var(--bumble-yellow);
             transform: translateY(-2px);
+        }
+        .tagline {
+            display: block;
+            font-size: var(--font-xs);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--bumble-text-light);
+            font-weight: 800;
+            margin-bottom: 0.25rem;
         }
         .step-number {
             display: inline-block;
@@ -59,15 +61,6 @@ import Layout from '../layouts/Layout.astro';
             margin-right: 0.75rem;
             box-shadow: 2px 2px 0 var(--bumble-yellow);
         }
-        .score-badge {
-            background: var(--bumble-cream);
-            color: var(--bumble-text);
-            padding: 0.2rem 0.5rem;
-            border-radius: 6px;
-            font-weight: 800;
-            font-size: var(--font-xs);
-            border: 1px solid var(--bumble-border);
-        }
         .contact-box {
             background: var(--bumble-cream);
             border: 2px dashed var(--bumble-yellow);
@@ -75,61 +68,102 @@ import Layout from '../layouts/Layout.astro';
             border-radius: 20px;
             text-align: center;
         }
+        .contact-link {
+            color: #b59a83;
+            font-weight: 800;
+            text-decoration: underline;
+        }
+        .contact-link:hover {
+            opacity: 0.8;
+        }
     </style>
 
     <section class="guide-section">
         <h1>The moonine Philosophy</h1>
-        <p style="text-align: center; font-style: italic; color: var(--bumble-text-light); margin-bottom: 2rem; font-weight: 600;">Vedic Wisdom, Modern Connections</p>
-        <p style="text-align: center; margin-bottom: 2rem; font-size: var(--font-base); font-weight: 500; line-height: 1.6;">In a world of endless swipes and superficial matches, moonine stands for something different. We bridge the gap between ancient Vedic compatibility and modern-day intentionality. We don't just match profiles; we look for alignment.</p>
+        <p style="text-align: center; font-style: italic; color: var(--bumble-text-light); margin-bottom: 1.5rem; font-weight: 600;">Vedic Wisdom, Modern Connections</p>
+        <p style="text-align: center; margin-bottom: 1.5rem; font-size: var(--font-base); font-weight: 500; line-height: 1.6; max-width: 650px; margin-left: auto; margin-right: auto;">
+            We bridge the gap between ancient Vedic compatibility and modern matchmaking. By rejecting casual swipes and superficial listings, moonine is a trustworthy haven for those seeking genuine, lifelong alignment.
+        </p>
     </section>
 
     <section class="guide-section">
         <h2>Why moonine?</h2>
-        <p style="text-align: center; margin-bottom: 1.5rem; font-weight: 500; color: var(--bumble-text-light);">We are not a casual dating app. We are a dedicated space for those who value tradition, planetary alignment, and meaningful, long-term partnerships.</p>
 
         <div class="step-card">
-            <p style="margin: 0; line-height: 1.6; font-weight: 500;"><strong style="font-weight: 800; color: var(--bumble-text);">Vedic Precision:</strong> Every match is filtered through the Ashta Koota (36-point) system. We prioritize compatibility that goes deeper than surface-level interests, considering factors like Varna, Nadi, and Gana to ensure lasting harmony.</p>
+            <span class="tagline">🌟 Celestial Harmony, Deeply Calculated</span>
+            <p style="margin: 0; line-height: 1.6; font-weight: 500;">
+                <strong style="font-weight: 800; color: var(--bumble-text);">Ashta Koota Matching:</strong>
+                Every match undergoes high-precision 36-point Guna Milan, evaluating Varna, Nadi, and Gana for genuine spiritual and physiological compatibility. We also automatically detect and explain key Doshas (like Nadi and Bhakoot Dosha) to ensure lasting harmony.
+            </p>
         </div>
+
         <div class="step-card">
-            <p style="margin: 0; line-height: 1.6; font-weight: 500;"><strong style="font-weight: 800; color: var(--bumble-text);">Safety Through Human Verification:</strong> Your privacy is non-negotiable. By keeping our connection process personal and mediated, we eliminate the noise of automated bots and casual browsers.</p>
-        </div>
-        <div class="step-card">
-            <p style="margin: 0; line-height: 1.6; font-weight: 500;"><strong style="font-weight: 800; color: var(--bumble-text);">Thoughtful Introductions:</strong> We believe a Rishta deserves care. We personally facilitate introductions only after mutual interest is confirmed.</p>
+            <span class="tagline">🛡️ Genuine, Gracious & Secure</span>
+            <p style="margin: 0; line-height: 1.6; font-weight: 500;">
+                <strong style="font-weight: 800; color: var(--bumble-text);">Polite Human Verification:</strong>
+                To protect your peace and privacy, we reject automated bots and casual browsers. Every profile is manually vetted, and introductions are facilitated politely and securely.
+            </p>
         </div>
     </section>
 
     <section class="guide-section">
-        <h2>How to Find Your Match</h2>
-        <p style="text-align: center; margin-bottom: 1.5rem; font-weight: 500; color: var(--bumble-text-light);">We’ve kept the path to your future partner simple, dignified, and secure:</p>
+        <h2>Our Simple 3-Step Journey</h2>
 
         <div class="step-card">
-            <p style="margin: 0; line-height: 1.6; font-weight: 500;"><span class="step-number">1</span><strong style="font-weight: 800; color: var(--bumble-text);">Explore & Discover:</strong> Browse profiles to find a match whose values and astrological compatibility align with yours.</p>
-        </div>
-        <div class="step-card">
-            <p style="margin: 0; line-height: 1.6; font-weight: 500;"><span class="step-number">2</span><strong style="font-weight: 800; color: var(--bumble-text);">Express Interest:</strong> Found someone? Simply email their User ID to <a href="mailto:rahulbaliastrology@gmail.com" style="color: var(--bumble-text); font-weight: 800; text-decoration: underline;">rahulbaliastrology@gmail.com</a>.</p>
-        </div>
-        <div class="step-card">
-            <p style="margin: 0; line-height: 1.6; font-weight: 500;"><span class="step-number">3</span><strong style="font-weight: 800; color: var(--bumble-text);">Vetted Introduction:</strong> Our team will reach out to ensure mutual interest. Both parties always retain the full choice to accept or decline the connection.</p>
+            <span class="tagline">✨ Step 1: Discover Alignment</span>
+            <p style="margin: 0; line-height: 1.6; font-weight: 500;">
+                <span class="step-number">1</span>
+                <strong style="font-weight: 800; color: var(--bumble-text);">Explore Profiles:</strong>
+                Browse verified profiles with high-compatibility scores and explore mutual astrological benefits.
+            </p>
         </div>
 
-        <p style="text-align: center; font-style: italic; color: var(--bumble-text-light); margin-top: 1.5rem; font-weight: 600;">We ensure a vetted, private, and respectful introduction process from the first message to the final match.</p>
+        <div class="step-card">
+            <span class="tagline">📬 Step 2: Express Interest Safely</span>
+            <p style="margin: 0; line-height: 1.6; font-weight: 500;">
+                <span class="step-number">2</span>
+                <strong style="font-weight: 800; color: var(--bumble-text);">Send an Email:</strong>
+                Simply email the User ID of your preferred profile to our primary contact, Rahul Bali, at <a href="mailto:rahulbaliastrology@gmail.com" style="color: var(--bumble-text); font-weight: 800; text-decoration: underline;">rahulbaliastrology@gmail.com</a>.
+            </p>
+        </div>
+
+        <div class="step-card">
+            <span class="tagline">🤝 Step 3: Gentle Introduction</span>
+            <p style="margin: 0; line-height: 1.6; font-weight: 500;">
+                <span class="step-number">3</span>
+                <strong style="font-weight: 800; color: var(--bumble-text);">Mutual Choice:</strong>
+                We politely verify interest with the other party. We coordinate a secure introduction only after mutual consent.
+            </p>
+        </div>
     </section>
 
     <section class="guide-section">
-        <h2>A Note on Your Experience</h2>
+        <h2>A Trustworthy Experience</h2>
+
         <div class="step-card">
-            <p style="margin: 0; line-height: 1.6; font-weight: 500;"><strong style="font-weight: 800; color: var(--bumble-text);">Device & Browser Profile:</strong> For your privacy and simplicity, your profile is securely tied to the specific device and browser you used to create it. Please return using this same device and browser to check back as more people join our growing community.</p>
+            <span class="tagline">🔑 Simple & Reliable Security</span>
+            <p style="margin: 0; line-height: 1.6; font-weight: 500;">
+                <strong style="font-weight: 800; color: var(--bumble-text);">Secure Logins:</strong>
+                Your profile is protected by your 10-digit mobile number and a private 4-digit PIN, avoiding fragile browser-only cookies while keeping access straightforward and secure.
+            </p>
         </div>
+
         <div class="step-card">
-            <p style="margin: 0; line-height: 1.6; font-weight: 500;"><strong style="font-weight: 800; color: var(--bumble-text);">Thoughtful Calculations:</strong> Our compatibility scores are based on the traditional Ashta Koota system. These deep planetary and Kundli calculations are complex and take time to process, which may result in a slight delay while loading your matches. We appreciate your patience as we find the most meaningful connections for you.</p>
+            <span class="tagline">⏳ Mindful & Precise Math</span>
+            <p style="margin: 0; line-height: 1.6; font-weight: 500;">
+                <strong style="font-weight: 800; color: var(--bumble-text);">Calculations Latency:</strong>
+                Determining true Kundli planetary degrees and 36-point compatibility requires robust mathematical computing, which may result in a brief calculation delay. We appreciate your mindful patience.
+            </p>
         </div>
     </section>
 
     <section class="guide-section" style="margin-bottom: 2rem;">
         <div class="contact-box">
-            <p style="font-size: var(--font-lg); font-weight: 800; color: var(--bumble-text); margin-bottom: 0.75rem; text-transform: uppercase; letter-spacing: 0.02em;">Ready to find someone aligned with your life path?</p>
-            <p style="margin-bottom: 2rem; font-weight: 500; color: var(--bumble-text);">Don’t leave your future to chance. Join a community that values your time, your values, and your future.</p>
-            <a href="/create-profile" style="display: inline-block; background: var(--bumble-yellow); color: var(--bumble-text); padding: 0.9rem 1.75rem; border-radius: 9999px; font-weight: 800; text-decoration: none; border: 2px solid var(--bumble-yellow); box-shadow: 3px 3px 0 var(--bumble-yellow); text-transform: uppercase; letter-spacing: 0.05em;">👉 Create Your Account and View Matches</a>
+            <p style="font-size: var(--font-lg); font-weight: 800; color: var(--bumble-text); margin-bottom: 0.75rem; text-transform: uppercase; letter-spacing: 0.02em;">Ready to find your celestial alignment?</p>
+            <p style="margin-bottom: 1.5rem; font-weight: 500; color: var(--bumble-text); line-height: 1.5;">
+                Join a polite, values-driven community today. For inquiries or custom assistance, feel free to contact <strong style="font-weight: 800;">Rahul Bali</strong> at <a href="mailto:rahulbaliastrology@gmail.com" class="contact-link">rahulbaliastrology@gmail.com</a>.
+            </p>
+            <a href="/create-profile" style="display: inline-block; background: var(--bumble-yellow); color: var(--bumble-text); padding: 0.9rem 1.75rem; border-radius: 9999px; font-weight: 800; text-decoration: none; border: 2px solid var(--bumble-yellow); box-shadow: 3px 3px 0 var(--bumble-yellow); text-transform: uppercase; letter-spacing: 0.05em;">👉 Create Profile & View Matches</a>
         </div>
     </section>
 
