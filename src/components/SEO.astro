@@ -5,6 +5,7 @@ interface Props {
   image?: string;
   canonicalURL?: string;
   type?: string;
+  noindex?: boolean;
 }
 
 const {
@@ -13,6 +14,7 @@ const {
   image = "/favicon.png",
   canonicalURL = Astro.url.href,
   type = "website",
+  noindex = false,
 } = Astro.props;
 
 const siteName = "moonine - A Vedic Matchmaker";
@@ -44,18 +46,38 @@ const siteName = "moonine - A Vedic Matchmaker";
   "@context": "https://schema.org",
   "@type": "WebApplication",
   "name": siteName,
+  "alternateName": "moonine",
   "description": description,
   "url": Astro.url.origin,
   "applicationCategory": "AstrologyApplication",
   "operatingSystem": "All",
+  "browserRequirements": "Requires JavaScript. Requires HTML5.",
+  "inLanguage": "en",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  },
   "author": {
     "@type": "Organization",
-    "name": "moonine - A Vedic Matchmaker Team"
+    "name": "moonine - A Vedic Matchmaker Team",
+    "url": Astro.url.origin
   }
 })} />
 
 <!-- Additional SEO Meta Tags -->
-<meta name="robots" content="index, follow" />
-<meta name="googlebot" content="index, follow" />
-<meta name="theme-color" content="#6c5ce7" />
-<meta name="keywords" content="vedic astrology, matchmaking, guna milan, ashta koota, kundli milan, astrology compatibility, zodiac signs, nakshatra, manglik dosha" />
+{noindex ? (
+  <>
+    <meta name="robots" content="noindex, nofollow" />
+    <meta name="googlebot" content="noindex, nofollow" />
+    <meta name="bingbot" content="noindex, nofollow" />
+  </>
+) : (
+  <>
+    <meta name="robots" content="index, follow" />
+    <meta name="googlebot" content="index, follow" />
+    <meta name="bingbot" content="index, follow" />
+  </>
+)}
+<meta name="theme-color" content="#ffcb37" />
+<meta name="keywords" content="vedic astrology, matchmaking, guna milan, ashta koota, kundli milan, astrology compatibility, zodiac signs, nakshatra, manglik dosha, free kundali matching, horoscope matching for marriage, find life partner, vedic matchmaker, kundli matching, guna milan online, marriage compatibility, moonine" />
