@@ -5,6 +5,7 @@ export interface UserProfile {
     name: string;
     email: string;
     phone: string;
+    pin?: string;
     dob: string;
     tob: string;
     gender: string;
@@ -204,6 +205,7 @@ export async function fetchUsers(): Promise<UserProfile[]> {
                 currentLat: u.currentLat !== undefined ? String(u.currentLat) : undefined,
                 currentLon: u.currentLon !== undefined ? String(u.currentLon) : undefined,
                 phone: u.phone !== undefined ? String(u.phone) : '',
+                pin: u.pin !== undefined ? String(u.pin) : '',
                 height: u.height !== undefined ? String(u.height) : undefined,
                 maritalStatus: u.maritalStatus !== undefined ? String(u.maritalStatus) : undefined,
                 education: u.education !== undefined ? String(u.education) : undefined,

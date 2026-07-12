@@ -1,0 +1,185 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Log In - moonine">
+	<style>
+		.login-container {
+			max-width: 400px;
+			margin: 4rem auto;
+			padding: 2rem;
+			background: white;
+			border: 1px solid #e2d5c4;
+			border-radius: 8px;
+			box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+		}
+		.login-title {
+			font-family: var(--font-secondary);
+			font-size: var(--font-2xl);
+			color: #4a3c31;
+			text-align: center;
+			margin-bottom: 2rem;
+			border: none;
+			padding-bottom: 0;
+		}
+		.form-actions {
+			margin-top: 1.5rem;
+		}
+		.btn-submit {
+			width: 100%;
+			font-size: var(--font-base);
+			padding: 0.75rem;
+			border-radius: 6px;
+			background-color: #b59a83;
+			color: white;
+			font-weight: 600;
+			cursor: pointer;
+			border: none;
+			transition: background-color 0.2s;
+		}
+		.btn-submit:hover {
+			background-color: #a0846e;
+		}
+		.btn-submit:disabled {
+			background-color: #cbd5e1;
+			cursor: not-allowed;
+		}
+		.signup-prompt {
+			text-align: center;
+			margin-top: 1.5rem;
+			font-size: var(--font-sm);
+			color: #4a3c31;
+		}
+		.signup-prompt a {
+			color: #b59a83;
+			text-decoration: underline;
+			font-weight: 600;
+		}
+	</style>
+
+	<div class="login-container">
+		<h1 class="login-title">Log In to moonine</h1>
+
+		<div id="form-error-message" style="display: none; background-color: #fef2f2; border: 1px solid #ef4444; color: #b91c1c; padding: 0.75rem; border-radius: 4px; margin-bottom: 1.5rem; font-size: var(--font-sm); text-align: center;"></div>
+
+		<form id="loginForm" novalidate style="background: none; border: none; padding: 0; gap: 1rem;">
+			<div class="field">
+				<label for="phone">Mobile Number</label>
+				<input type="tel" id="phone" name="phone" required pattern="[0-9]{10}" placeholder="Enter your 10-digit mobile number" maxlength="10" />
+			</div>
+			<div class="field">
+				<label for="pin">4-digit PIN</label>
+				<input type="password" id="pin" name="pin" required pattern="[0-9]{4}" placeholder="Enter your 4-digit PIN" maxlength="4" inputmode="numeric" />
+			</div>
+			<div class="form-actions">
+				<button type="submit" id="submitBtn" class="btn-submit">Log In</button>
+			</div>
+		</form>
+
+		<p class="signup-prompt">
+			Don't have an profile yet? <a href="/create-profile">Sign Up</a>
+		</p>
+	</div>
+
+	<script>
+		import { setCookie, clearUserData } from '../lib/user';
+		import { fetchUsers, invalidateUsersCache } from '../lib/api';
+
+		const form = document.getElementById('loginForm') as HTMLFormElement;
+		const submitBtn = document.getElementById('submitBtn') as HTMLButtonElement;
+		const phoneInput = document.getElementById('phone') as HTMLInputElement;
+		const pinInput = document.getElementById('pin') as HTMLInputElement;
+		const errorMsgEl = document.getElementById('form-error-message') as HTMLDivElement;
+
+		const showError = (msg: string, focusEl?: HTMLElement) => {
+			if (errorMsgEl) {
+				errorMsgEl.textContent = msg;
+				errorMsgEl.style.display = 'block';
+			} else {
+				alert(msg);
+			}
+			if (focusEl) focusEl.focus();
+		};
+
+		form?.addEventListener('submit', async (e) => {
+			e.preventDefault();
+
+			if (errorMsgEl) errorMsgEl.style.display = 'none';
+
+			const phoneVal = phoneInput.value.trim();
+			const pinVal = pinInput.value.trim();
+
+			const phoneRegex = /^[0-9]{10}$/;
+			if (!phoneVal || !phoneRegex.test(phoneVal)) {
+				showError('Please enter a valid 10-digit mobile number.', phoneInput);
+				return;
+			}
+
+			const pinRegex = /^[0-9]{4}$/;
+			if (!pinVal || !pinRegex.test(pinVal)) {
+				showError('Please enter a valid 4-digit numeric PIN.', pinInput);
+				return;
+			}
+
+			submitBtn.disabled = true;
+			submitBtn.textContent = 'Logging in...';
+
+			try {
+				// Clear any previous session details
+				clearUserData();
+				invalidateUsersCache();
+
+				const users = await fetchUsers();
+
+				// Find user profile with exact matching mobile and PIN
+				const foundUser = users.find(u => u.phone === phoneVal && u.pin === pinVal);
+
+				if (foundUser) {
+					// Prepare user_details cookie payload
+					const userDetailsPayload = {
+						uid: foundUser.uid,
+						name: foundUser.name,
+						email: foundUser.email,
+						phone: foundUser.phone,
+						pin: foundUser.pin,
+						dob: foundUser.dob,
+						tob: foundUser.tob,
+						gender: foundUser.gender,
+						location: foundUser.location,
+						lat: foundUser.lat,
+						lon: foundUser.lon,
+						currentLocation: foundUser.currentLocation,
+						currentLat: foundUser.currentLat,
+						currentLon: foundUser.currentLon,
+						height: foundUser.height,
+						maritalStatus: foundUser.maritalStatus || 'available',
+						education: foundUser.education,
+						occupation: foundUser.occupation,
+						income: foundUser.income,
+						religion: foundUser.religion,
+						bio: foundUser.bio
+					};
+
+					// Save credentials to standard cookies
+					setCookie('uid', foundUser.uid, 365);
+					setCookie('user_details', JSON.stringify(userDetailsPayload), 365);
+
+					// Force invalidate API cache to reload with new context
+					invalidateUsersCache();
+
+					window.location.href = '/dashboard';
+				} else {
+					showError('Profile not found or incorrect 4-digit PIN. Please try again.', pinInput);
+					submitBtn.disabled = false;
+					submitBtn.textContent = 'Log In';
+				}
+
+			} catch (err) {
+				console.error('Login process failure:', err);
+				showError('Connection error. Please try again later.');
+				submitBtn.disabled = false;
+				submitBtn.textContent = 'Log In';
+			}
+		});
+	</script>
+</Layout>
