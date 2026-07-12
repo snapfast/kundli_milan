@@ -4,6 +4,7 @@ Allow: /about
 Allow: /login
 Allow: /create-profile
 Allow: /terms
+Allow: /privacy
 Disallow: /dashboard
 Disallow: /profile
 Disallow: /edit-profile
