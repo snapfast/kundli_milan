@@ -10,14 +10,14 @@ import Layout from '../layouts/Layout.astro';
 			flex-direction: column;
 			align-items: center;
 			text-align: center;
-			background: radial-gradient(circle at center, #2c2a24 0%, #121212 100%);
-			color: white;
-			padding: 4rem 2rem;
+			background: linear-gradient(135deg, var(--bumble-yellow) 0%, var(--bumble-light-yellow) 100%);
+			color: var(--bumble-text);
+			padding: 4.5rem 2rem;
 			border-radius: 28px;
 			margin-bottom: 2rem;
 			position: relative;
 			overflow: hidden;
-			box-shadow: 0 12px 36px rgba(0,0,0,0.3);
+			box-shadow: 0 12px 36px rgba(143,118,99,0.08);
 			border: 2px solid var(--bumble-yellow);
 		}
 
@@ -26,11 +26,11 @@ import Layout from '../layouts/Layout.astro';
 			content: "";
 			position: absolute;
 			top: 0; left: 0; right: 0; bottom: 0;
-			opacity: 0.08;
+			opacity: 0.12;
 			background-color: transparent;
 			background-image:
-				radial-gradient(circle, var(--bumble-yellow) 2px, transparent 3px),
-				radial-gradient(circle, var(--bumble-yellow) 2px, transparent 3px);
+				radial-gradient(circle, var(--bumble-yellow-hover) 2px, transparent 3px),
+				radial-gradient(circle, var(--bumble-yellow-hover) 2px, transparent 3px);
 			background-size: 30px 30px;
 			background-position: 0 0, 15px 15px;
 			pointer-events: none;
@@ -38,11 +38,11 @@ import Layout from '../layouts/Layout.astro';
 
 		.bumble-landing p.subtitle {
 			font-size: var(--font-xl);
-			color: #e4e4e2;
+			color: var(--bumble-text);
 			max-width: 600px;
 			margin: 1.5rem auto 2.5rem auto;
 			line-height: 1.5;
-			font-weight: 500;
+			font-weight: 700;
 		}
 
 		/* Dual CTAs must share .btn-cta class */
@@ -51,39 +51,40 @@ import Layout from '../layouts/Layout.astro';
 			padding: 0.9rem 2.5rem;
 			border-radius: 9999px;
 			background-color: var(--bumble-yellow);
-			color: var(--bumble-black);
+			color: var(--bumble-text);
 			text-decoration: none;
 			font-weight: 800;
-			box-shadow: 0 6px 20px rgba(255, 203, 55, 0.4);
+			box-shadow: 0 6px 20px rgba(255, 203, 55, 0.3);
 			transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 			display: inline-block;
 			text-transform: uppercase;
 			letter-spacing: 0.05em;
-			border: 2px solid var(--bumble-black);
+			border: 2px solid var(--bumble-yellow);
 		}
 		.btn-cta:hover {
-			background-color: white;
+			background-color: var(--bumble-white);
 			transform: scale(1.05);
-			box-shadow: 0 8px 24px rgba(255, 255, 255, 0.4);
+			box-shadow: 0 8px 24px rgba(255, 203, 55, 0.45);
+			border-color: var(--bumble-yellow-hover);
 		}
 
 		.growing-community-tag {
 			margin-top: 2rem;
-			color: #c4c4c2;
+			color: var(--bumble-text-light);
 			font-size: var(--font-sm);
 			text-align: center;
 			max-width: 550px;
 			line-height: 1.6;
-			font-weight: 500;
+			font-weight: 600;
 		}
 
 		.info-card {
-			background: #fff;
-			border: 2px solid var(--bumble-light-grey);
+			background: var(--bumble-white);
+			border: 2px solid var(--bumble-border);
 			padding: 2rem 1.5rem;
 			border-radius: 20px;
 			text-align: center;
-			box-shadow: 0 6px 16px rgba(0,0,0,0.02);
+			box-shadow: 0 6px 16px rgba(143,118,99,0.03);
 			transition: transform 0.2s ease;
 		}
 		.info-card:hover {
@@ -94,7 +95,7 @@ import Layout from '../layouts/Layout.astro';
 			font-weight: 800;
 			font-size: var(--font-base);
 			text-transform: uppercase;
-			color: var(--bumble-black);
+			color: var(--bumble-text);
 			margin-bottom: 0.75rem;
 			position: relative;
 			display: inline-block;
@@ -116,7 +117,7 @@ import Layout from '../layouts/Layout.astro';
 
 	<div id="main-content">
 		<section class="bumble-landing">
-			<div class="logo" data-text="moonine"><span class="logo-text">moonine</span></div>
+			<div class="logo" data-text="moonine"><span class="logo-text" style="color: var(--bumble-text);">moonine</span></div>
 			<!-- Explicit starting lowercase letter per preferred memory -->
 			<p class="subtitle">discover verified local profiles and find the right life partner.</p>
 			<div>
@@ -127,8 +128,8 @@ import Layout from '../layouts/Layout.astro';
 			</p>
 		</section>
 
-		<section class="visual-guide" style="margin-top: 3rem; border-top: 2px solid var(--bumble-light-grey); padding-top: 2.5rem;">
-			<h2 style="font-family: var(--font-secondary); font-size: var(--font-2xl); border-bottom: none; text-align: center; margin-bottom: 2rem;">Trusted by Families. Rooted in Tradition.</h2>
+		<section class="visual-guide" style="margin-top: 3rem; border-top: 2px solid var(--bumble-border); padding-top: 2.5rem;">
+			<h2 style="font-family: var(--font-secondary); font-size: var(--font-2xl); border-bottom: none; text-align: center; margin-bottom: 2rem; color: var(--bumble-text);">Trusted by Families. Rooted in Tradition.</h2>
 
 			<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.5rem; margin-bottom: 2.5rem;">
 				<div class="info-card">
@@ -146,7 +147,7 @@ import Layout from '../layouts/Layout.astro';
 			</div>
 
 			<p style="text-align: center; margin-top: 2rem;">
-				<a href="/about" class="btn" style="background-color: var(--bumble-black); color: white; padding: 0.75rem 1.75rem;">About moonine &rarr;</a>
+				<a href="/about" class="btn" style="background-color: var(--bumble-yellow); color: var(--bumble-text); padding: 0.75rem 1.75rem;">About moonine &rarr;</a>
 			</p>
 
 			<div style="text-align: center; margin-top: 4rem; margin-bottom: 3rem;">

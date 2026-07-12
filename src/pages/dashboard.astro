@@ -12,10 +12,10 @@ import Layout from '../layouts/Layout.astro';
 		}
 		.info-card {
 			background: #fff;
-			border: 2px solid var(--bumble-light-grey);
+			border: 2px solid var(--bumble-border);
 			padding: 0.75rem 1rem;
 			border-radius: 14px;
-			box-shadow: 0 4px 12px rgba(0,0,0,0.01);
+			box-shadow: 0 4px 12px rgba(143,118,99,0.01);
 		}
 		.info-item {
 			display: flex;
@@ -23,7 +23,7 @@ import Layout from '../layouts/Layout.astro';
 		}
 		.info-label {
 			font-weight: 800;
-			color: var(--bumble-black);
+			color: var(--bumble-text-light);
 			font-size: var(--font-xs);
 			text-transform: uppercase;
 			letter-spacing: 0.05em;
@@ -43,7 +43,7 @@ import Layout from '../layouts/Layout.astro';
 			border-bottom: 2.5px solid var(--bumble-yellow);
 			padding-bottom: 0.35rem;
 			font-weight: 800;
-			color: var(--bumble-black);
+			color: var(--bumble-text);
 			text-transform: uppercase;
 			letter-spacing: 0.03em;
 		}
@@ -54,16 +54,17 @@ import Layout from '../layouts/Layout.astro';
 			background: #fff;
 			border-radius: 12px;
 			overflow: hidden;
-			border: 2px solid var(--bumble-light-grey);
+			border: 2px solid var(--bumble-border);
 		}
 		.compact-table th, .compact-table td {
 			padding: 0.5rem 0.75rem;
 			text-align: left;
-			border-bottom: 1px solid var(--bumble-light-grey);
+			border-bottom: 1px solid var(--bumble-border);
+			color: var(--bumble-text);
 		}
 		.compact-table th {
 			background-color: var(--bumble-light-grey);
-			color: var(--bumble-black);
+			color: var(--bumble-text);
 			font-weight: 800;
 			text-transform: uppercase;
 			font-size: 0.75rem;
@@ -74,7 +75,7 @@ import Layout from '../layouts/Layout.astro';
 			padding: 4rem 2rem;
 		}
 		.loader {
-			border: 4px solid var(--bumble-light-grey);
+			border: 4px solid var(--bumble-border);
 			border-top: 4px solid var(--bumble-yellow);
 			border-radius: 50%;
 			width: 44px;
@@ -116,21 +117,21 @@ import Layout from '../layouts/Layout.astro';
 		}
 		.dosha-name {
 			font-weight: 700;
-			color: var(--bumble-black);
+			color: var(--bumble-text);
 			font-size: var(--font-xs);
 		}
 		.dosha-description {
 			font-size: var(--font-xs);
-			color: var(--bumble-text);
+			color: var(--bumble-text-light);
 			line-height: 1.3;
 		}
 		.no-data {
 			text-align: center;
 			padding: 4rem 2rem;
-			color: var(--bumble-black);
+			color: var(--bumble-text);
 			background-color: white;
 			border-radius: 20px;
-			border: 2px solid var(--bumble-light-grey);
+			border: 2px solid var(--bumble-border);
 		}
 		.btn-group {
 			margin: 2.5rem 0;
@@ -154,7 +155,7 @@ import Layout from '../layouts/Layout.astro';
 		.koota-summary {
 			font-size: var(--font-xs);
 			font-weight: 700;
-			color: var(--bumble-black);
+			color: var(--bumble-text);
 			cursor: pointer;
 			padding: 0.4rem 0;
 			display: list-item;
@@ -178,13 +179,13 @@ import Layout from '../layouts/Layout.astro';
 			height: 3rem;
 			border-radius: 50%;
 			background-color: var(--bumble-yellow);
-			color: var(--bumble-black);
-			border: 2px solid var(--bumble-black);
+			color: var(--bumble-text);
+			border: 2px solid var(--bumble-yellow);
 			cursor: pointer;
 			display: flex;
 			align-items: center;
 			justify-content: center;
-			box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+			box-shadow: 0 4px 12px rgba(143,118,99,0.15);
 			transition: all 0.2s;
 		}
 		.scroll-btn:hover {
@@ -200,7 +201,7 @@ import Layout from '../layouts/Layout.astro';
 
 	<div id="loading" class="loading-container">
 		<div class="loader"></div>
-		<p style="font-weight: 600; color: var(--bumble-black);">Matching your stars and calculating Kundli Milan with other users...</p>
+		<p style="font-weight: 600; color: var(--bumble-text);">Matching your stars and calculating Kundli Milan with other users...</p>
 	</div>
 
 	<div id="dashboard-content" style="display: none;">
@@ -625,7 +626,7 @@ import Layout from '../layouts/Layout.astro';
 													`).join('')}
 												</tbody>
 												<tfoot>
-													<tr style="background: var(--bumble-light-grey); font-weight: 800; color: var(--bumble-black);">
+													<tr style="background: var(--bumble-light-grey); font-weight: 800; color: var(--bumble-text);">
 														<td colspan="4" style="text-align: right;">Total Guna Milan Points</td>
 														<td>${compat.score}</td>
 														<td>${compat.maxScore}</td>
@@ -638,7 +639,7 @@ import Layout from '../layouts/Layout.astro';
 								`;
 
 								const distanceHtml = showDistance && m.distance !== undefined ?
-									`<div style="font-size: var(--font-sm); color: var(--bumble-black); margin-bottom: 0.75rem; font-weight: 800; display: inline-flex; align-items: center; gap: 0.25rem; background-color: var(--bumble-yellow); padding: 0.25rem 0.75rem; border-radius: 9999px; border: 1.5px solid var(--bumble-black); box-shadow: 1.5px 1.5px 0 var(--bumble-black);">📍 Approx. ${Math.round(m.distance)} km away</div>` : '';
+									`<div style="font-size: var(--font-sm); color: var(--bumble-text); margin-bottom: 0.75rem; font-weight: 800; display: inline-flex; align-items: center; gap: 0.25rem; background-color: var(--bumble-yellow); padding: 0.25rem 0.75rem; border-radius: 9999px; border: 1.5px solid var(--bumble-text); box-shadow: 1.5px 1.5px 0 var(--bumble-text);">📍 Approx. ${Math.round(m.distance)} km away</div>` : '';
 
 								const card = document.createElement('div');
 								card.className = 'match-card';

@@ -20,13 +20,13 @@ const { isEdit = false } = Astro.props;
 		overflow-y: auto;
 		display: none;
 		border-radius: 0 0 12px 12px;
-		box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+		box-shadow: 0 8px 16px rgba(143,118,99,0.06);
 	}
 	.suggestion-item {
 		padding: 0.75rem 1rem;
 		cursor: pointer;
 		border-bottom: 1px solid var(--bumble-light-grey);
-		color: var(--bumble-black);
+		color: var(--bumble-text);
 		font-weight: 500;
 		font-size: var(--font-sm);
 	}
@@ -51,14 +51,14 @@ const { isEdit = false } = Astro.props;
 	.btn-submit {
 		flex: 2;
 		background-color: var(--bumble-yellow);
-		color: var(--bumble-black);
+		color: var(--bumble-text);
 		font-weight: 800;
-		border: 2px solid var(--bumble-black);
+		border: 2px solid var(--bumble-yellow);
 	}
 	.btn-reset {
 		flex: 1;
 		background-color: var(--bumble-light-grey);
-		color: var(--bumble-black);
+		color: var(--bumble-text);
 		font-weight: 700;
 		border: 2px solid transparent;
 	}
@@ -75,7 +75,7 @@ const { isEdit = false } = Astro.props;
 		margin-bottom: 0.5rem;
 	}
 	.gender-tile {
-		border: 2px solid var(--bumble-light-grey);
+		border: 2px solid var(--bumble-border);
 		border-radius: 16px;
 		padding: 1rem 0.5rem;
 		text-align: center;
@@ -87,6 +87,7 @@ const { isEdit = false } = Astro.props;
 		align-items: center;
 		justify-content: center;
 		gap: 0.5rem;
+		color: var(--bumble-text);
 	}
 	.gender-tile:hover {
 		border-color: var(--bumble-yellow);
@@ -95,11 +96,11 @@ const { isEdit = false } = Astro.props;
 	.gender-tile.selected {
 		border-color: var(--bumble-yellow);
 		background-color: var(--bumble-yellow);
-		color: var(--bumble-black);
+		color: var(--bumble-text);
 		box-shadow: 0 4px 12px rgba(255, 203, 55, 0.2);
 	}
 	.gender-tile.selected .gender-icon {
-		color: var(--bumble-black);
+		color: var(--bumble-text);
 	}
 	.gender-icon {
 		font-size: 1.75rem;
@@ -121,9 +122,9 @@ const { isEdit = false } = Astro.props;
 
 {isEdit ? (
 	/* EDIT PROFILE FORM */
-	<form id="detailsForm" data-is-edit="true" novalidate style="background: white; border: 2px solid var(--bumble-light-grey); border-radius: 24px; padding: 2rem; box-shadow: 0 8px 24px rgba(0,0,0,0.02);">
+	<form id="detailsForm" data-is-edit="true" novalidate style="background: white; border: 2px solid var(--bumble-border); border-radius: 24px; padding: 2rem; box-shadow: 0 8px 24px rgba(143,118,99,0.02);">
 		<div id="step1" class="form-step">
-			<h2 style="text-align: center; font-size: var(--font-xl); margin-bottom: 2rem; border-bottom: 2px solid var(--bumble-yellow); font-family: var(--font-secondary); color: var(--bumble-black); padding-bottom: 0.5rem;">Stage 1: Basic Details</h2>
+			<h2 style="text-align: center; font-size: var(--font-xl); margin-bottom: 2rem; border-bottom: 2px solid var(--bumble-yellow); font-family: var(--font-secondary); color: var(--bumble-text); padding-bottom: 0.5rem;">Stage 1: Basic Details</h2>
 			<div class="form-row">
 				<div class="field">
 					<label for="name">Full Name</label>
@@ -192,7 +193,7 @@ const { isEdit = false } = Astro.props;
 		</div>
 
 		<div id="step2" class="form-step" style="display: none;">
-			<h2 style="text-align: center; font-size: var(--font-xl); margin-bottom: 2rem; border-bottom: 2px solid var(--bumble-yellow); font-family: var(--font-secondary); color: var(--bumble-black); padding-bottom: 0.5rem;">Stage 2: Additional Details</h2>
+			<h2 style="text-align: center; font-size: var(--font-xl); margin-bottom: 2rem; border-bottom: 2px solid var(--bumble-yellow); font-family: var(--font-secondary); color: var(--bumble-text); padding-bottom: 0.5rem;">Stage 2: Additional Details</h2>
 			<div class="form-row">
 				<div class="field" style="grid-column: span 2;">
 					<label for="height">Height (Optional)</label>
@@ -235,7 +236,7 @@ const { isEdit = false } = Astro.props;
 				</div>
 			</div>
 
-			<p style="font-size: var(--font-xs); color: var(--bumble-text-light); text-align: center; margin-top: 1.5rem; margin-bottom: 0.5rem; font-weight: 500;">By submitting your details, you agree to our <a href="/terms" style="color: var(--bumble-black); text-decoration: underline; font-weight: 700;">Terms of Service</a>.</p>
+			<p style="font-size: var(--font-xs); color: var(--bumble-text-light); text-align: center; margin-top: 1.5rem; margin-bottom: 0.5rem; font-weight: 500;">By submitting your details, you agree to our <a href="/terms" style="color: var(--bumble-text); text-decoration: underline; font-weight: 700;">Terms of Service</a>.</p>
 
 			<div class="form-actions">
 				<button type="button" class="btn btn-reset" id="prev1Btn">Previous</button>
@@ -246,9 +247,9 @@ const { isEdit = false } = Astro.props;
 	</form>
 ) : (
 	/* SIGNUP FORM */
-	<form id="detailsForm" data-is-edit="false" novalidate style="background: white; border: 2px solid var(--bumble-light-grey); border-radius: 24px; padding: 2rem; box-shadow: 0 8px 24px rgba(0,0,0,0.02);">
+	<form id="detailsForm" data-is-edit="false" novalidate style="background: white; border: 2px solid var(--bumble-border); border-radius: 24px; padding: 2rem; box-shadow: 0 8px 24px rgba(143,118,99,0.02);">
 		<div id="step1" class="form-step">
-			<h2 style="text-align: center; font-size: var(--font-xl); margin-bottom: 2rem; border-bottom: 2px solid var(--bumble-yellow); font-family: var(--font-secondary); color: var(--bumble-black); padding-bottom: 0.5rem;">Stage 1: Account Setup</h2>
+			<h2 style="text-align: center; font-size: var(--font-xl); margin-bottom: 2rem; border-bottom: 2px solid var(--bumble-yellow); font-family: var(--font-secondary); color: var(--bumble-text); padding-bottom: 0.5rem;">Stage 1: Account Setup</h2>
 			<div class="form-row">
 				<div class="field">
 					<label for="phone">Mobile Number</label>
@@ -263,12 +264,12 @@ const { isEdit = false } = Astro.props;
 				<button type="button" class="btn btn-submit" id="next1Btn" style="width: 100%;">Next</button>
 			</div>
 			<p style="text-align: center; margin-top: 2rem; font-size: var(--font-sm); font-weight: 500; color: var(--bumble-text-light);">
-				Already have an account? <a href="/login" style="color: var(--bumble-black); font-weight: 700; text-decoration: underline;">Log In</a>
+				Already have an account? <a href="/login" style="color: var(--bumble-text); font-weight: 700; text-decoration: underline;">Log In</a>
 			</p>
 		</div>
 
 		<div id="step2" class="form-step" style="display: none;">
-			<h2 style="text-align: center; font-size: var(--font-xl); margin-bottom: 2rem; border-bottom: 2px solid var(--bumble-yellow); font-family: var(--font-secondary); color: var(--bumble-black); padding-bottom: 0.5rem;">Stage 2: Basic Details</h2>
+			<h2 style="text-align: center; font-size: var(--font-xl); margin-bottom: 2rem; border-bottom: 2px solid var(--bumble-yellow); font-family: var(--font-secondary); color: var(--bumble-text); padding-bottom: 0.5rem;">Stage 2: Basic Details</h2>
 			<div class="form-row">
 				<div class="field">
 					<label for="name">Full Name</label>
@@ -321,7 +322,7 @@ const { isEdit = false } = Astro.props;
 				</div>
 			</div>
 
-			<p style="font-size: var(--font-xs); color: var(--bumble-text-light); text-align: center; margin-top: 2rem; margin-bottom: 0.5rem; font-weight: 500;">By submitting your details, you agree to our <a href="/terms" style="color: var(--bumble-black); text-decoration: underline; font-weight: 700;">Terms of Service</a>.</p>
+			<p style="font-size: var(--font-xs); color: var(--bumble-text-light); text-align: center; margin-top: 2rem; margin-bottom: 0.5rem; font-weight: 500;">By submitting your details, you agree to our <a href="/terms" style="color: var(--bumble-text); text-decoration: underline; font-weight: 700;">Terms of Service</a>.</p>
 
 			<div class="form-actions">
 				<button type="button" class="btn btn-reset" id="prev1Btn">Previous</button>
@@ -333,12 +334,12 @@ const { isEdit = false } = Astro.props;
 
 {/* Custom Mobile Verification Overlay Modal */}
 {!isEdit && (
-<div id="mobile-verify-modal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.6); z-index: 10000; align-items: center; justify-content: center; padding: 1rem; backdrop-filter: blur(4px);">
-  <div style="background: white; border: 2.5px solid var(--bumble-yellow); border-radius: 24px; padding: 2rem; max-width: 420px; width: 100%; box-shadow: 0 12px 36px rgba(0,0,0,0.15); text-align: center;">
-    <h3 style="margin-top: 0; font-family: var(--font-secondary); color: var(--bumble-black); border-bottom: none; font-size: var(--font-lg); text-align: center; font-weight: 800;">Verify Your Mobile Number</h3>
+<div id="mobile-verify-modal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(143,118,99,0.3); z-index: 10000; align-items: center; justify-content: center; padding: 1rem; backdrop-filter: blur(4px);">
+  <div style="background: white; border: 2.5px solid var(--bumble-yellow); border-radius: 24px; padding: 2rem; max-width: 420px; width: 100%; box-shadow: 0 12px 36px rgba(143,118,99,0.12); text-align: center;">
+    <h3 style="margin-top: 0; font-family: var(--font-secondary); color: var(--bumble-text); border-bottom: none; font-size: var(--font-lg); text-align: center; font-weight: 800;">Verify Your Mobile Number</h3>
     <p style="font-size: var(--font-sm); color: var(--bumble-text); margin-bottom: 2rem; line-height: 1.6; text-align: center; font-weight: 500;">
       Please confirm that your mobile number is correct:<br/>
-      <strong id="modal-phone-display" style="font-size: var(--font-xl); color: var(--bumble-black); display: block; margin: 1rem 0; letter-spacing: 1.5px; background-color: var(--bumble-yellow); padding: 0.5rem; border-radius: 12px; border: 1.5px solid var(--bumble-black);"></strong>
+      <strong id="modal-phone-display" style="font-size: var(--font-xl); color: var(--bumble-text); display: block; margin: 1rem 0; letter-spacing: 1.5px; background-color: var(--bumble-yellow); padding: 0.5rem; border-radius: 12px; border: 1.5px solid var(--bumble-yellow);"></strong>
       We do not allow changing your mobile number once your account is created.
     </p>
     <div style="display: flex; gap: 0.75rem; justify-content: center;">
