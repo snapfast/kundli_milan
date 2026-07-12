@@ -421,11 +421,13 @@ const { title, description, noindex } = Astro.props;
 			<p style="margin-bottom: 1rem; font-weight: 500;">
 				&copy; {new Date().getFullYear()} moonine - A Vedic Matchmaker v{packageJson.version}.
 			</p>
-			<p style="margin-top: 0.5rem; font-size: 0.75rem;">
-				Location data &copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" style="color: var(--bumble-text-light);">OpenStreetMap</a> contributors.
+			<p style="margin-top: 0.5rem; font-size: 0.75rem; display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap;">
+				<a href="/privacy" style="color: var(--bumble-text); text-decoration: underline; font-weight: 700;">Privacy Policy</a>
+				<a href="/terms" style="color: var(--bumble-text); text-decoration: underline; font-weight: 700;">Terms of Service</a>
+				<a href="https://forms.gle/48T3MwV6LD7yPyed9" target="_blank" style="color: var(--bumble-text); text-decoration: underline; font-weight: 700;">Feature Request</a>
 			</p>
 			<p style="margin-top: 0.5rem; font-size: 0.75rem;">
-				<a href="https://forms.gle/48T3MwV6LD7yPyed9" target="_blank" style="color: var(--bumble-text); text-decoration: underline; font-weight: 700;">Feature Request</a>
+				Location data &copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" style="color: var(--bumble-text-light);">OpenStreetMap</a> contributors.
 			</p>
 		</footer>
 

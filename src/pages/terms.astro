@@ -2,17 +2,46 @@
 import Layout from '../layouts/Layout.astro';
 ---
 
-<Layout title="Terms of Service - moonine" description="Read the Terms of Service for using moonine Vedic Matchmaking service.">
-	<h1>Terms of Service</h1>
+<Layout title="Terms of Service - moonine" description="Read the Terms of Service for using moonine Vedic Matchmaking service. Learn about eligibility, user responsibilities, and our vetting process.">
+	<h1 style="border-bottom: 3px solid var(--bumble-yellow); padding-bottom: 0.4rem; margin-top: 0.5rem; margin-bottom: 1rem; font-size: var(--font-lg); font-weight: 800; letter-spacing: -0.02em;">Terms of Service</h1>
 
-	<div style="font-size: var(--font-sm); color: #4a3c31; line-height: 1.6; margin-top: 1rem;">
-		<p style="margin-top: 0; margin-bottom: 1rem;">By using moonine, you acknowledge and agree to the following terms:</p>
+	<div style="font-size: var(--font-sm); color: var(--bumble-text); line-height: 1.6; margin-top: 1rem;">
+		<p style="margin-top: 0; margin-bottom: 1.5rem;">Last Updated: {new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
 
-		<ul style="padding-left: 1.5rem; margin-bottom: 1rem; margin-top: 0;">
-			<li style="margin-bottom: 0.5rem;"><strong>Consent:</strong> You consent to provide and share your information on this public platform.</li>
-			<li style="margin-bottom: 0.5rem;"><strong>Contact Sharing:</strong> Information you enter is shared with other interested users.</li>
-			<li style="margin-bottom: 0.5rem;"><strong>Privacy:</strong> All information remains private between requesting parties via secure email.</li>
-			<li style="margin-bottom: 0.5rem;"><strong>Liability:</strong> We are not liable for miscommunication, disputes, or legal situations arising from the use of this service.</li>
+		<p style="margin-bottom: 1.5rem;">Welcome to <strong>moonine - A Vedic Matchmaker</strong>. By creating a profile, logging in, or accessing our services, you acknowledge and agree to the following terms and conditions. Please read them carefully.</p>
+
+		<h2 style="font-size: var(--font-base); border-bottom: 1px solid var(--bumble-border); padding-bottom: 0.25rem; margin-top: 1.5rem; margin-bottom: 0.75rem; color: var(--bumble-text); font-weight: 800;">1. Eligibility</h2>
+		<p style="margin-bottom: 1rem;">To use our matchmaking platform, you must satisfy the following conditions:</p>
+		<ul style="padding-left: 1.5rem; margin-bottom: 1.5rem;">
+			<li style="margin-bottom: 0.5rem;">You must be at least 18 years of age (or the legal age of majority in your jurisdiction).</li>
+			<li style="margin-bottom: 0.5rem;">You must be genuinely seeking a meaningful long-term relationship or marriage aligned with Vedic matchmaking standards.</li>
+			<li style="margin-bottom: 0.5rem;">You must provide truthful, complete, and accurate information, including your mobile number, birth date, time, and location.</li>
 		</ul>
+
+		<h2 style="font-size: var(--font-base); border-bottom: 1px solid var(--bumble-border); padding-bottom: 0.25rem; margin-top: 1.5rem; margin-bottom: 0.75rem; color: var(--bumble-text); font-weight: 800;">2. User Responsibilities & Conduct</h2>
+		<p style="margin-bottom: 1rem;">As a member of moonine, you agree to:</p>
+		<ul style="padding-left: 1.5rem; margin-bottom: 1.5rem;">
+			<li style="margin-bottom: 0.5rem;">Maintain the confidentiality of your 4-digit PIN. Do not share your login credentials with anyone else.</li>
+			<li style="margin-bottom: 0.5rem;">Respect other users of the platform. Harassment, abuse, or fraudulent activity of any kind will result in immediate termination of your profile.</li>
+			<li style="margin-bottom: 0.5rem;">Refrain from copying, scraping, or distributing information or profile data from our platform without explicit permission.</li>
+		</ul>
+
+		<h2 style="font-size: var(--font-base); border-bottom: 1px solid var(--bumble-border); padding-bottom: 0.25rem; margin-top: 1.5rem; margin-bottom: 0.75rem; color: var(--bumble-text); font-weight: 800;">3. Astrological Insights & Compatibility Accuracy</h2>
+		<p style="margin-bottom: 1rem;">Moonine provides compatibility scores using high-precision calculations based on the traditional Ashta Koota (36-point Guna Milan) system:</p>
+		<ul style="padding-left: 1.5rem; margin-bottom: 1.5rem;">
+			<li style="margin-bottom: 0.5rem;">Calculations are based strictly on the birth coordinates, date, and time you enter. We do not guarantee marital success or relationship outcomes.</li>
+			<li style="margin-bottom: 0.5rem;">Vedic astrology guidance is educational and cultural in nature, and should be used as a helpful guide rather than a definitive decision-maker.</li>
+		</ul>
+
+		<h2 style="font-size: var(--font-base); border-bottom: 1px solid var(--bumble-border); padding-bottom: 0.25rem; margin-top: 1.5rem; margin-bottom: 0.75rem; color: var(--bumble-text); font-weight: 800;">4. Contact Sharing & Vetting Promise</h2>
+		<p style="margin-bottom: 1rem;">To ensure the utmost safety and build user trust:</p>
+		<ul style="padding-left: 1.5rem; margin-bottom: 1.5rem;">
+			<li style="margin-bottom: 0.5rem;">All public match profiles omit direct contact numbers and email addresses.</li>
+			<li style="margin-bottom: 0.5rem;">Contact details are only shared after a manual request is sent to our coordinator at <a href="mailto:rahulbaliastrology@gmail.com" style="color: var(--bumble-text-light); text-decoration: underline; font-weight: bold;">rahulbaliastrology@gmail.com</a> specifying the recipient's User ID.</li>
+			<li style="margin-bottom: 0.5rem;">We reserve the absolute right to refuse contact sharing if we believe a match request does not meet our safety or quality standards.</li>
+		</ul>
+
+		<h2 style="font-size: var(--font-base); border-bottom: 1px solid var(--bumble-border); padding-bottom: 0.25rem; margin-top: 1.5rem; margin-bottom: 0.75rem; color: var(--bumble-text); font-weight: 800;">5. Limitation of Liability</h2>
+		<p style="margin-bottom: 1.5rem;">We strive to keep the platform secure and functional. However, moonine and its coordinator (Rahul Bali) are not liable for any miscommunications, disputes, personal conduct, or legal situations arising between users outside of the platform. Users are fully responsible for performing their own due diligence before entering into any relationship or commitment.</p>
 	</div>
 </Layout>
