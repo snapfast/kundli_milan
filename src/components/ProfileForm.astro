@@ -7,7 +7,7 @@ const { isEdit = false } = Astro.props;
 ---
 
 <style>
-	#suggestions {
+	#suggestions, #currentSuggestions {
 		position: absolute;
 		top: 100%;
 		left: 0;
@@ -26,6 +26,10 @@ const { isEdit = false } = Astro.props;
 		padding: 0.75rem;
 		cursor: pointer;
 		border-bottom: 1px solid #eee;
+		color: #4a3c31;
+	}
+	.suggestion-item:hover {
+		background-color: #f8fafc;
 	}
 	.suggestion-item:last-child {
 		border-bottom: none;
@@ -47,49 +51,14 @@ const { isEdit = false } = Astro.props;
 	.btn-reset {
 		flex: 1;
 	}
-	.visual-guide h2, .visual-guide h3 {
-		border-bottom: none;
-		text-align: center;
-		margin-top: 1rem;
-	}
-	.info-card {
-		background: #fff;
-
-
-		border: 1px solid #e2e8f0;
-		padding: 0.5rem 0.75rem;
-		border-radius: 6px;
-		text-align: center;
-	}
-	.info-label {
-		font-weight: 700;
-		font-size: var(--font-xs);
-		text-transform: uppercase;
-		color: #b59a83;
-		margin-bottom: 0.25rem;
-	}
-	.compact-table {
-		width: 100%;
-		border-collapse: collapse;
-		font-size: var(--font-sm);
-	}
-	.compact-table th, .compact-table td {
-		padding: 0.35rem 0.5rem;
-		text-align: left;
-		border-bottom: 1px solid #f1f5f9;
-	}
-	.compact-table th {
-		background-color: #f8fafc;
-		color: #4a3c31;
-		font-weight: 700;
-	}
 </style>
 
 <h1 id="page-title" style="font-family: var(--font-secondary); font-size: var(--font-3xl); border-bottom: none; text-align: center;">{isEdit ? 'Edit Your Profile' : 'Create Your Profile'}</h1>
 <div id="form-error-message" style="display: none; background-color: #fef2f2; border: 1px solid #ef4444; color: #b91c1c; padding: 0.75rem; border-radius: 4px; margin-bottom: 1.5rem; font-size: var(--font-sm); text-align: center;"></div>
 
-
-	<form id="detailsForm" novalidate>
+{isEdit ? (
+	/* EDIT PROFILE FORM */
+	<form id="detailsForm" data-is-edit="true" novalidate>
 		<div id="step1" class="form-step">
 			<h2 style="text-align: center; font-size: var(--font-xl); margin-bottom: 1.5rem; border: none; font-family: var(--font-secondary); color: #4a3c31;">Stage 1: Basic Details</h2>
 			<div class="form-row">
@@ -130,9 +99,19 @@ const { isEdit = false } = Astro.props;
 					<input type="hidden" id="lon" name="lon" />
 				</div>
 			</div>
-			<div class="form-actions">
+			<div class="form-row">
+				<div class="field">
+					<label for="phone">Mobile Number</label>
+					<input type="tel" id="phone" name="phone" readonly style="background-color: #e2e8f0; cursor: not-allowed; color: #64748b;" />
+				</div>
+				<div class="field">
+					<label for="pin">4-digit PIN</label>
+					<input type="password" id="pin" name="pin" required pattern="[0-9]{4}" placeholder="Enter 4-digit PIN to update" maxlength="4" inputmode="numeric" />
+				</div>
+			</div>
+			<div class="form-actions" style="margin-top: 1.5rem;">
 				<button type="button" class="btn-submit" id="next1Btn">Next</button>
-				<button type="button" class="btn-reset cancelBtn" style={`background: #e2e8f0; color: #4a3c31; display: ${isEdit ? 'inline-block' : 'none'};`}>Cancel</button>
+				<button type="button" class="btn-reset cancelBtn" style="background: #e2e8f0; color: #4a3c31;">Cancel</button>
 			</div>
 		</div>
 
@@ -168,13 +147,9 @@ const { isEdit = false } = Astro.props;
 				</div>
 			</div>
 			<div class="form-row">
-				<div class="field">
+				<div class="field" style="grid-column: span 2;">
 					<label for="income">Annual Income (Optional)</label>
 					<input type="text" id="income" name="income" placeholder="e.g. 15 LPA" />
-				</div>
-				<div class="field">
-					<label for="phone">Contact Number <small style="font-weight: normal; font-size: 0.8em; color: #666;">(Optional, useful for faster better communication)</small></label>
-					<input type="tel" id="phone" name="phone" pattern="[0-9]{10}" placeholder="e.g. 9876543210" maxlength="10" />
 				</div>
 			</div>
 			<div class="form-row">
@@ -188,24 +163,116 @@ const { isEdit = false } = Astro.props;
 
 			<div class="form-actions">
 				<button type="button" class="btn-reset" id="prev1Btn">Previous</button>
-				<button type="submit" class="btn-submit" id="submitBtn">{isEdit ? 'Update Details' : 'Submit Details'}</button>
-				<button type="button" class="btn-reset cancelBtn" style={`background: #e2e8f0; color: #4a3c31; display: ${isEdit ? 'inline-block' : 'none'};`}>Cancel</button>
+				<button type="submit" class="btn-submit" id="submitBtn">Update Details</button>
+				<button type="button" class="btn-reset cancelBtn" style="background: #e2e8f0; color: #4a3c31;">Cancel</button>
 			</div>
 		</div>
 	</form>
+) : (
+	/* SIGNUP FORM */
+	<form id="detailsForm" data-is-edit="false" novalidate>
+		<div id="step1" class="form-step">
+			<h2 style="text-align: center; font-size: var(--font-xl); margin-bottom: 1.5rem; border: none; font-family: var(--font-secondary); color: #4a3c31;">Stage 1: Account Setup</h2>
+			<div class="form-row">
+				<div class="field">
+					<label for="phone">Mobile Number</label>
+					<input type="tel" id="phone" name="phone" required pattern="[0-9]{10}" placeholder="Enter 10-digit mobile number" maxlength="10" />
+				</div>
+				<div class="field">
+					<label for="pin">4-digit PIN</label>
+					<input type="password" id="pin" name="pin" required pattern="[0-9]{4}" placeholder="Enter 4-digit PIN" maxlength="4" inputmode="numeric" />
+				</div>
+			</div>
+			<div class="form-actions" style="margin-top: 1.5rem;">
+				<button type="button" class="btn-submit" id="next1Btn">Next</button>
+			</div>
+			<p style="text-align: center; margin-top: 1.5rem; font-size: var(--font-sm);">
+				Already have an account? <a href="/login" style="color: #b59a83; font-weight: 600; text-decoration: underline;">Log In</a>
+			</p>
+		</div>
+
+		<div id="step2" class="form-step" style="display: none;">
+			<h2 style="text-align: center; font-size: var(--font-xl); margin-bottom: 1.5rem; border: none; font-family: var(--font-secondary); color: #4a3c31;">Stage 2: Basic Details</h2>
+			<div class="form-row">
+				<div class="field">
+					<label for="name">Full Name</label>
+					<input type="text" id="name" name="name" required minlength="2" maxlength="50" placeholder="Enter your full name" />
+				</div>
+				<div class="field">
+					<label for="email">Email Address</label>
+					<input type="email" id="email" name="email" required placeholder="your.email@example.com" />
+				</div>
+			</div>
+			<div class="form-row">
+				<div class="field">
+					<label for="dob">Date of Birth</label>
+					<input type="date" id="dob" name="dob" required max={new Date().toISOString().split('T')[0]} />
+				</div>
+				<div class="field">
+					<label for="tob">Time of Birth</label>
+					<input type="time" id="tob" name="tob" required style="width: 100%;" />
+				</div>
+			</div>
+			<div class="form-row">
+				<div class="field">
+					<label for="gender">Gender</label>
+					<select id="gender" name="gender" required>
+						<option value="">Select Gender</option>
+						<option value="male">Male</option>
+						<option value="female">Female</option>
+						<option value="other">Other</option>
+					</select>
+				</div>
+				<div class="field">
+					<label for="location">Birth Location (City, Country)</label>
+					<input type="text" id="location" name="location" required placeholder="e.g. New Delhi, India" autocomplete="off" />
+					<div id="suggestions"></div>
+					<input type="hidden" id="lat" name="lat" />
+					<input type="hidden" id="lon" name="lon" />
+				</div>
+			</div>
+
+			<p style="font-size: var(--font-xs); color: #64748b; text-align: center; margin-top: 1.5rem; margin-bottom: 0.5rem;">By submitting your details, you agree to our <a href="/terms" style="color: #b59a83; text-decoration: underline;">Terms of Service</a>.</p>
+
+			<div class="form-actions">
+				<button type="button" class="btn-reset" id="prev1Btn">Previous</button>
+				<button type="submit" class="btn-submit" id="submitBtn">Submit Details</button>
+			</div>
+		</div>
+	</form>
+)}
+
+{/* Custom Mobile Verification Overlay Modal */}
+{!isEdit && (
+<div id="mobile-verify-modal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 10000; align-items: center; justify-content: center; padding: 1rem;">
+  <div style="background: #fdfbf7; border: 2px solid #b59a83; border-radius: 8px; padding: 1.5rem; max-width: 400px; width: 100%; box-shadow: 0 4px 15px rgba(0,0,0,0.15); text-align: center;">
+    <h3 style="margin-top: 0; font-family: var(--font-secondary); color: #4a3c31; border-bottom: none; font-size: var(--font-lg); text-align: center;">Check Your Mobile Number</h3>
+    <p style="font-size: var(--font-sm); color: #4a3c31; margin-bottom: 1.5rem; line-height: 1.5; text-align: center;">
+      Is your mobile number correct?<br/>
+      <strong id="modal-phone-display" style="font-size: var(--font-lg); color: #b59a83; display: block; margin: 0.5rem 0; letter-spacing: 1px;"></strong>
+      We do not allow changing the mobile number once registered.
+    </p>
+    <div style="display: flex; gap: 0.75rem; justify-content: center;">
+      <button type="button" id="modal-cancel-btn" style="background: #e2e8f0; color: #4a3c31; flex: 1; border-radius: 4px; padding: 0.5rem;">Edit Number</button>
+      <button type="button" id="modal-confirm-btn" style="background: #b59a83; color: white; flex: 1; font-weight: 600; border-radius: 4px; padding: 0.5rem;">Confirm</button>
+    </div>
+  </div>
+</div>
+)}
 
 <script>
 		import { getOrSetUserId, getCookie, setCookie, clearUserData } from '../lib/user';
-		import { fetchUsers, resetUserProfile } from '../lib/api';
-
-		const storedDetails = getCookie('user_details');
+		import { fetchUsers, invalidateUsersCache, saveUserProfile } from '../lib/api';
 
 		const form = document.getElementById('detailsForm') as HTMLFormElement;
+		const isEditMode = form?.getAttribute('data-is-edit') === 'true';
+
 		const pageTitle = document.getElementById('page-title') as HTMLHeadingElement;
 		const submitBtn = document.getElementById('submitBtn') as HTMLButtonElement;
 		const nameInput = document.getElementById('name') as HTMLInputElement;
 		const emailInput = document.getElementById('email') as HTMLInputElement;
 		const dobInput = document.getElementById('dob') as HTMLInputElement;
+		const tobInput = document.getElementById('tob') as HTMLInputElement;
 		const genderInput = document.getElementById('gender') as HTMLSelectElement;
 		const cancelBtns = document.querySelectorAll('.cancelBtn');
 		const locationInput = document.getElementById('location') as HTMLInputElement;
@@ -216,47 +283,51 @@ const { isEdit = false } = Astro.props;
 		const currentSuggestionsContainer = document.getElementById('currentSuggestions') as HTMLDivElement;
 		const currentLatInput = document.getElementById('currentLat') as HTMLInputElement;
 		const currentLonInput = document.getElementById('currentLon') as HTMLInputElement;
-		const tobInput = document.getElementById('tob') as HTMLInputElement;
+		const phoneInput = document.getElementById('phone') as HTMLInputElement;
+		const pinInput = document.getElementById('pin') as HTMLInputElement;
 
-		// Ensure user ID is set on load
+		// Modal Elements for Signup
+		const verifyModal = document.getElementById('mobile-verify-modal') as HTMLDivElement;
+		const modalPhoneDisplay = document.getElementById('modal-phone-display') as HTMLElement;
+		const modalCancelBtn = document.getElementById('modal-cancel-btn') as HTMLButtonElement;
+		const modalConfirmBtn = document.getElementById('modal-confirm-btn') as HTMLButtonElement;
+
+		// Generate or retrieve the standard User ID
 		const uid = getOrSetUserId();
 
-		// Pre-fill form from cookies
+		// Pre-fill form from cookies in Edit mode
 		function preFillForm() {
-			const stored = getCookie('user_details');
-			if (stored) {
-				try {
-					pageTitle.textContent = 'Edit Your Profile';
-					submitBtn.textContent = 'Update Details';
-					cancelBtns.forEach(btn => (btn as HTMLElement).style.display = 'inline-block');
+			if (isEditMode) {
+				const stored = getCookie('user_details');
+				if (stored) {
+					try {
+						const details = JSON.parse(stored);
+						const fields = [
+							'name', 'email', 'phone', 'pin', 'dob', 'tob', 'gender', 'location', 'lat', 'lon',
+							'currentLocation', 'currentLat', 'currentLon', 'height',
+							'education', 'occupation', 'income', 'religion', 'bio'
+						];
+						fields.forEach(field => {
+							const element = document.getElementById(field) as HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement;
+							if (element && details[field] !== undefined) {
+								element.value = details[field];
+							}
+						});
 
-					const details = JSON.parse(stored);
-					const fields = [
-						'name', 'email', 'phone', 'dob', 'tob', 'gender', 'location', 'lat', 'lon',
-						'currentLocation', 'currentLat', 'currentLon', 'height',
-						'education', 'occupation', 'income', 'religion', 'bio'
-					];
-					fields.forEach(field => {
-						const element = document.getElementById(field) as HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement;
-						if (element && details[field]) {
-							element.value = details[field];
+						if (details.tob && tobInput) {
+							tobInput.value = details.tob;
 						}
-					});
-
-					if (details.tob && tobInput) {
-						tobInput.value = details.tob;
+					} catch (e) {
+						console.error('Error parsing user_details cookie:', e);
 					}
-
-				} catch (e) {
-					console.error('Error parsing user_details cookie:', e);
 				}
 			}
 		}
 		preFillForm();
 
-		// Auto-detect current location via IP if blank
+		// Auto-detect current location via IP if blank and in edit mode
 		async function autoDetectLocation() {
-			if (!currentLocationInput.value) {
+			if (isEditMode && currentLocationInput && !currentLocationInput.value) {
 				const SESSION_CACHE_KEY = 'auto_detected_location';
 				const cached = sessionStorage.getItem(SESSION_CACHE_KEY);
 				if (cached) {
@@ -272,7 +343,6 @@ const { isEdit = false } = Astro.props;
 				}
 
 				try {
-					// Using ipapi.co (free tier, no key required for low volume)
 					const response = await fetch('https://ipapi.co/json/');
 					if (response.ok) {
 						const data = await response.json();
@@ -303,8 +373,9 @@ const { isEdit = false } = Astro.props;
 		// Location Autocomplete Setup Function
 		const autocompleteCache = new Map<string, any[]>();
 		function setupAutocomplete(inputEl: HTMLInputElement, suggestionsEl: HTMLDivElement, latEl: HTMLInputElement, lonEl: HTMLInputElement) {
+			if (!inputEl) return;
 			let timeout: ReturnType<typeof setTimeout>;
-			inputEl?.addEventListener('input', () => {
+			inputEl.addEventListener('input', () => {
 				clearTimeout(timeout);
 				const query = inputEl.value.trim().toLowerCase();
 				if (query.length < 3) {
@@ -349,7 +420,6 @@ const { isEdit = false } = Astro.props;
 							latEl.value = item.lat;
 							lonEl.value = item.lon;
 							suggestionsEl.style.display = 'none';
-								// Ensure lat/lon are saved
 						});
 						suggestionsEl.appendChild(div);
 					});
@@ -370,7 +440,6 @@ const { isEdit = false } = Astro.props;
 		setupAutocomplete(locationInput, suggestionsContainer, latInput, lonInput);
 		setupAutocomplete(currentLocationInput, currentSuggestionsContainer, currentLatInput, currentLonInput);
 
-
 		const errorMsgEl = document.getElementById('form-error-message') as HTMLDivElement;
 
 		const showError = (msg: string, focusEl?: HTMLElement) => {
@@ -390,49 +459,155 @@ const { isEdit = false } = Astro.props;
 		const next1Btn = document.getElementById('next1Btn') as HTMLButtonElement;
 		const prev1Btn = document.getElementById('prev1Btn') as HTMLButtonElement;
 
-		const validateStep1 = () => {
+		// Validation logic based on form type (Signup vs Edit)
+		const validateStage1 = async (): Promise<boolean> => {
 			if (errorMsgEl) errorMsgEl.style.display = 'none';
 
-			if (!nameInput.value || nameInput.value.length < 2) {
-				showError('Please enter your full name (at least 2 characters).', nameInput);
-				return false;
-			}
+			if (!isEditMode) {
+				// SIGNUP: Validate phone and pin
+				const phoneRegex = /^[0-9]{10}$/;
+				if (!phoneInput.value || !phoneRegex.test(phoneInput.value)) {
+					showError('Please enter a valid 10-digit mobile number.', phoneInput);
+					return false;
+				}
 
-			const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-			if (!emailInput.value || !emailRegex.test(emailInput.value)) {
-				showError('Please enter a valid email address.', emailInput);
-				return false;
-			}
+				const pinRegex = /^[0-9]{4}$/;
+				if (!pinInput.value || !pinRegex.test(pinInput.value)) {
+					showError('Please enter a valid 4-digit numeric PIN.', pinInput);
+					return false;
+				}
 
-			if (!dobInput.value) {
-				showError('Please select your Date of Birth.', dobInput);
-				return false;
-			}
+				// Check if the mobile number is already registered in the system
+				next1Btn.disabled = true;
+				const originalText = next1Btn.textContent;
+				next1Btn.textContent = 'Verifying...';
 
-			if (!tobInput.value) {
-				showError('Please select your complete Time of Birth.', tobInput);
-				return false;
-			}
+				try {
+					invalidateUsersCache();
+					const users = await fetchUsers();
+					const phoneExists = users.some(u => u.phone === phoneInput.value);
+					if (phoneExists) {
+						showError('This mobile number is already registered. Please log in.', phoneInput);
+						next1Btn.disabled = false;
+						next1Btn.textContent = originalText;
+						return false;
+					}
+				} catch (err) {
+					console.error('Failed to verify phone uniqueness:', err);
+				}
 
-			if (!genderInput.value) {
-				showError('Please select your Gender.', genderInput);
-				return false;
-			}
+				next1Btn.disabled = false;
+				next1Btn.textContent = originalText;
 
-			if (!locationInput.value) {
-				showError('Please enter your birth location.', locationInput);
-				return false;
-			}
+				// Show Custom Mobile Verification Modal
+				if (verifyModal && modalPhoneDisplay) {
+					modalPhoneDisplay.textContent = phoneInput.value;
+					verifyModal.style.display = 'flex';
+					return false; // Don't proceed to Stage 2 yet; wait for modal confirmation
+				}
 
-			if (!latInput.value || !lonInput.value) {
-				showError('Please select a location from the suggestions list to get accurate coordinates.', locationInput);
-				return false;
-			}
+				return true;
+			} else {
+				// EDIT MODE: Validate Basic Details
+				if (!nameInput.value || nameInput.value.length < 2) {
+					showError('Please enter your full name (at least 2 characters).', nameInput);
+					return false;
+				}
 
-			return true;
+				const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+				if (!emailInput.value || !emailRegex.test(emailInput.value)) {
+					showError('Please enter a valid email address.', emailInput);
+					return false;
+				}
+
+				if (!dobInput.value) {
+					showError('Please select your Date of Birth.', dobInput);
+					return false;
+				}
+
+				if (!tobInput.value) {
+					showError('Please select your complete Time of Birth.', tobInput);
+					return false;
+				}
+
+				if (!genderInput.value) {
+					showError('Please select your Gender.', genderInput);
+					return false;
+				}
+
+				if (!locationInput.value) {
+					showError('Please enter your birth location.', locationInput);
+					return false;
+				}
+
+				if (!latInput.value || !lonInput.value) {
+					showError('Please select a location from the suggestions list to get accurate coordinates.', locationInput);
+					return false;
+				}
+
+				const pinRegex = /^[0-9]{4}$/;
+				if (!pinInput.value || !pinRegex.test(pinInput.value)) {
+					showError('Please enter a valid 4-digit numeric PIN.', pinInput);
+					return false;
+				}
+
+				return true;
+			}
 		};
 
-		form.addEventListener('keydown', function(event) {
+		const validateStage2 = () => {
+			if (errorMsgEl) errorMsgEl.style.display = 'none';
+
+			if (!isEditMode) {
+				// SIGNUP STAGE 2: Validate Basic Details
+				if (!nameInput.value || nameInput.value.length < 2) {
+					showError('Please enter your full name (at least 2 characters).', nameInput);
+					return false;
+				}
+
+				const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+				if (!emailInput.value || !emailRegex.test(emailInput.value)) {
+					showError('Please enter a valid email address.', emailInput);
+					return false;
+				}
+
+				if (!dobInput.value) {
+					showError('Please select your Date of Birth.', dobInput);
+					return false;
+				}
+
+				if (!tobInput.value) {
+					showError('Please select your complete Time of Birth.', tobInput);
+					return false;
+				}
+
+				if (!genderInput.value) {
+					showError('Please select your Gender.', genderInput);
+					return false;
+				}
+
+				if (!locationInput.value) {
+					showError('Please enter your birth location.', locationInput);
+					return false;
+				}
+
+				if (!latInput.value || !lonInput.value) {
+					showError('Please select a location from the suggestions list to get accurate coordinates.', locationInput);
+					return false;
+				}
+
+				return true;
+			} else {
+				// EDIT STAGE 2: Validate Optional Details
+				if (currentLocationInput.value && (!currentLatInput.value || !currentLonInput.value)) {
+					showError('Please select your current location from the suggestions list to get accurate coordinates.', currentLocationInput);
+					return false;
+				}
+				return true;
+			}
+		};
+
+		form?.addEventListener('keydown', function(event) {
 			if (event.key === 'Enter') {
 				const target = event.target as HTMLElement;
 				if (target && target.tagName.toLowerCase() !== 'textarea' && target.tagName.toLowerCase() !== 'button') {
@@ -441,26 +616,22 @@ const { isEdit = false } = Astro.props;
 			}
 		});
 
-		const validateStep2 = () => {
-			if (errorMsgEl) errorMsgEl.style.display = 'none';
+		// Modal button listeners (Signup only)
+		modalCancelBtn?.addEventListener('click', () => {
+			if (verifyModal) verifyModal.style.display = 'none';
+		});
 
-			if (currentLocationInput.value && (!currentLatInput.value || !currentLonInput.value)) {
-				showError('Please select your current location from the suggestions list to get accurate coordinates.', currentLocationInput);
-				return false;
-			}
+		modalConfirmBtn?.addEventListener('click', () => {
+			if (verifyModal) verifyModal.style.display = 'none';
+			// Proceed to Stage 2
+			step1.style.display = 'none';
+			step2.style.display = 'block';
+			window.scrollTo({ top: 0, behavior: 'smooth' });
+		});
 
-			const phoneRegex = /^[0-9]{10}$/;
-			const phoneInputEl = document.getElementById('phone') as HTMLInputElement;
-			if (phoneInputEl.value && !phoneRegex.test(phoneInputEl.value)) {
-				showError('Please enter a valid 10-digit contact number.', phoneInputEl);
-				return false;
-			}
-
-			return true;
-		};
-
-		next1Btn?.addEventListener('click', () => {
-			if (validateStep1()) {
+		next1Btn?.addEventListener('click', async () => {
+			const success = await validateStage1();
+			if (success) {
 				step1.style.display = 'none';
 				step2.style.display = 'block';
 				window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -476,38 +647,36 @@ const { isEdit = false } = Astro.props;
 		form?.addEventListener('submit', async (e) => {
 			e.preventDefault();
 
-			if (!validateStep1() || !validateStep2()) {
+			if (!validateStage2()) {
 				return;
 			}
+
 			const formData = new FormData(form);
 			const data = Object.fromEntries(formData.entries());
-			const uid = getOrSetUserId();
 
-			const payload = {
+			// Construct the profile payload
+			const payload: any = {
 				...data,
 				uid: uid,
-				maritalStatus: 'available'
+				maritalStatus: isEditMode ? (data.maritalStatus || 'available') : 'available'
 			};
 
-			// Save to cookie immediately for dashboard use
+			// Save to local cookie immediately for dashboard use
 			setCookie('user_details', JSON.stringify(payload), 365);
 
-			// Show loading state on button
-			const submitBtn = form.querySelector('button[type="submit"]') as HTMLButtonElement;
+			// Show loading state on submit button
 			submitBtn.disabled = true;
+			const originalBtnText = submitBtn.textContent;
 			submitBtn.textContent = 'Saving...';
 
 			try {
-				// We import saveUserProfile here or at the top
 				const { saveUserProfile } = await import('../lib/api');
 				const { calculateAstrology } = await import('../lib/astrology');
 
-				const dataPayload = payload as any;
-
 				// Calculate basic astrology for the user to store it
-				const lat = dataPayload.lat ? parseFloat(dataPayload.lat as string) : 28.6139;
-				const lon = dataPayload.lon ? parseFloat(dataPayload.lon as string) : 77.2090;
-				const astroData = calculateAstrology(dataPayload.dob as string, dataPayload.tob as string, lat, lon);
+				const lat = payload.lat ? parseFloat(payload.lat as string) : 28.6139;
+				const lon = payload.lon ? parseFloat(payload.lon as string) : 77.2090;
+				const astroData = calculateAstrology(payload.dob as string, payload.tob as string, lat, lon);
 
 				const profileToSave = {
 					...payload,
@@ -515,14 +684,14 @@ const { isEdit = false } = Astro.props;
 					moonSignIdx: astroData.panchang.moonSignIdx,
 					isMoonManglik: astroData.panchang.isMoonManglik,
 					isLaganManglik: astroData.panchang.isLaganManglik,
-					matches: [] // Will be populated by dashboard
-				} as any;
+					matches: [] // populated by dashboard
+				};
 
 				await saveUserProfile(profileToSave);
 				window.location.href = '/dashboard';
 			} catch (error) {
 				console.error('Error saving profile:', error);
-				// Even if save fails, we go to dashboard because we have local cookies
+				// Even if save fails, redirect because we have local cookies set
 				window.location.href = '/dashboard';
 			}
 		});
