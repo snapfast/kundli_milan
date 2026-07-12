@@ -39,6 +39,19 @@ const { title, description } = Astro.props;
 			:root {
 				--font-primary: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
 				--font-secondary: 'Merriweather', serif;
+
+				/* Bumble-inspired Palette - Strictly Light & Bright */
+				--bumble-yellow: #ffcb37;
+				--bumble-yellow-hover: #ffb800;
+				--bumble-light-yellow: #fffaea;
+				--bumble-cream: #faf8f2; /* Beautiful off-white cream background */
+				--bumble-white: #ffffff;
+				--bumble-light-grey: #f3f3f2;
+				--bumble-border: #e8e6e1;
+				--bumble-text: #4a3c31; /* Warm elegant dark brown/taupe instead of black */
+				--bumble-text-light: #8f7663; /* Dark taupe accent */
+				--bumble-accent: #ffcb37;
+
 				--font-xs: 0.85rem;
 				--font-sm: 0.95rem;
 				--font-base: 1rem;
@@ -50,37 +63,19 @@ const { title, description } = Astro.props;
 			}
 			.logo {
 				font-family: 'Dancing Script', cursive;
-				font-size: clamp(4rem, 15vw, 12rem);
+				font-size: clamp(3rem, 12vw, 8rem);
 				font-weight: bold;
 				margin-bottom: 0.5rem;
 				line-height: 1;
 				display: inline-block;
-				transform: rotate(-5deg);
+				transform: rotate(-3deg);
 				position: relative;
 				z-index: 1;
-			}
-			.logo::before {
-				content: attr(data-text);
-				position: absolute;
-				left: 0;
-				top: 0;
-				z-index: -1;
-				color: #6e5949;
-				text-shadow:
-					1px 1px 0 #6e5949,
-					2px 2px 0 #6e5949,
-					3px 3px 0 #6e5949,
-					4px 4px 0 #6e5949;
-			}
-			.logo-text {
-				background: linear-gradient(to right, #d5c1b0, #b59a83);
-				-webkit-background-clip: text;
-				color: transparent;
-				position: relative;
-				z-index: 2;
+				color: var(--bumble-yellow);
+				text-shadow: 2px 2px 0px rgba(143, 118, 99, 0.15);
 			}
 			.logo-sm {
-				font-size: clamp(3rem, 10vw, 6rem);
+				font-size: clamp(2.5rem, 8vw, 5rem);
 				margin-bottom: 0;
 			}
 			#nav-loader {
@@ -89,90 +84,102 @@ const { title, description } = Astro.props;
 				left: 0;
 				height: 3px;
 				width: 0%;
-				background-color: #8f7663;
+				background-color: #8f7663; /* Required dark taupe by memory */
 				z-index: 10000;
 				transition: width 0.3s ease-out, opacity 0.3s ease-in;
-				box-shadow: 0 1px 3px rgba(55, 48, 163, 0.4);
+				box-shadow: 0 1px 3px rgba(143, 118, 99, 0.4);
 			}
 			.site-header {
 				position: relative;
-				margin-bottom: 1.5rem;
-				padding-top: 0.5rem;
+				margin-bottom: 2rem;
+				padding-top: 1rem;
+				display: flex;
+				justify-content: center;
 			}
 			.user-counter {
 				position: absolute;
 				right: 0.5rem;
 				top: 0.5rem;
 				font-size: var(--font-xs);
-				color: #4a3c31;
+				color: var(--bumble-text);
 				line-height: 1.8;
-				background: #f8fafc;
-				padding: 0.1rem 0.5rem;
+				background: var(--bumble-yellow);
+				padding: 0.2rem 0.75rem;
 				border-radius: 9999px;
-				border: 1px solid #e2e8f0;
+				border: 1.5px solid var(--bumble-yellow);
 				display: none;
+				font-weight: bold;
 			}
 			.user-counter strong {
-				color: #b59a83;
+				color: var(--bumble-text);
 			}
 			.site-nav {
 				display: flex;
-				gap: 0.75rem;
+				gap: 0.5rem;
 				flex-wrap: wrap;
 				justify-content: center;
 				align-items: center;
+				background: var(--bumble-white);
+				padding: 0.4rem;
+				border-radius: 9999px;
+				box-shadow: 0 4px 12px rgba(143,118,99,0.08);
+				border: 1.5px solid var(--bumble-border);
 			}
 			/* Base Styles */
 			html {
 				font-size: 16px;
+				background-color: var(--bumble-cream);
 			}
 			body {
 				font-family: var(--font-primary);
 				font-size: var(--font-base);
 				max-width: 800px;
-				margin: 0.5rem auto;
-				padding: 0 0.25rem;
-				line-height: 1.35;
-				background-color: #fdfbf7;
-
-
-				color: #4a3c31;
+				margin: 1rem auto;
+				padding: 0 0.75rem;
+				line-height: 1.45;
+				background-color: var(--bumble-cream);
+				color: var(--bumble-text);
 			}
 			.container {
 				background: white;
-				padding: 0.75rem 1rem;
-				border-radius: 6px;
-				box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+				padding: 1.5rem 2rem;
+				border-radius: 24px;
+				box-shadow: 0 8px 24px rgba(0,0,0,0.04);
+				border: 1px solid var(--bumble-light-grey);
 			}
 			h1, h2 {
-				color: #4a3c31;
-				border-bottom: 1.5px solid #b59a83;
-				padding-bottom: 0.2rem;
-				margin-top: 0.25rem;
-				margin-bottom: 0.5rem;
+				color: var(--bumble-text);
+				border-bottom: 3px solid var(--bumble-yellow);
+				padding-bottom: 0.4rem;
+				margin-top: 0.5rem;
+				margin-bottom: 1rem;
 				font-size: var(--font-lg);
-				font-weight: 700;
+				font-weight: 800;
+				letter-spacing: -0.02em;
 			}
 
 			/* Form & Buttons */
 			form {
 				display: flex;
 				flex-direction: column;
-				gap: 0.5rem;
-				background: #f8fafc;
-				padding: 0.75rem;
-				border-radius: 4px;
-				border: 1px solid #e2e8f0;
+				gap: 1rem;
+				background: var(--bumble-light-grey);
+				padding: 1.5rem;
+				border-radius: 18px;
+				border: none;
 			}
 			.form-row {
 				display: grid;
 				grid-template-columns: 1fr 1fr;
-				gap: 0.75rem;
+				gap: 1rem;
 			}
 			@media (max-width: 600px) {
 				.form-row {
 					grid-template-columns: 1fr;
-					gap: 0.75rem;
+					gap: 1rem;
+				}
+				.container {
+					padding: 1rem 1.25rem;
 				}
 			}
 			.field {
@@ -181,107 +188,141 @@ const { title, description } = Astro.props;
 				position: relative;
 			}
 			label {
-				font-weight: 600;
-				margin-bottom: 0.15rem;
-				color: #4a3c31;
+				font-weight: 700;
+				margin-bottom: 0.4rem;
+				color: var(--bumble-text);
 				font-size: var(--font-xs);
+				text-transform: uppercase;
+				letter-spacing: 0.05em;
 			}
 			input, select, textarea {
 				width: 100%;
 				padding: 0.75rem 1rem;
-				border: 1px solid #cbd5e1;
-				border-radius: 8px;
+				border: 2px solid var(--bumble-border);
+				border-radius: 12px;
 				font-size: var(--font-base);
 				transition: all 0.2s ease-in-out;
 				background-color: #fff;
+				color: var(--bumble-text);
+				font-weight: 500;
 			}
 			input:focus, select:focus, textarea:focus {
-				border-color: #b59a83;
+				border-color: var(--bumble-yellow);
 				outline: none;
-				box-shadow: 0 0 0 3px rgba(181, 154, 131, 0.25);
+				box-shadow: 0 0 0 3px rgba(255, 203, 55, 0.25);
 			}
 			button, .btn, .nav-link {
-				padding: 0.4rem 0.75rem;
-				background-color: #b59a83;
-				color: white;
+				padding: 0.6rem 1.25rem;
+				background-color: var(--bumble-yellow);
+				color: var(--bumble-text);
 				border: none;
-				border-radius: 4px;
+				border-radius: 9999px;
 				cursor: pointer;
 				font-size: var(--font-sm);
-				font-weight: 500;
+				font-weight: 700;
 				text-decoration: none;
 				display: inline-block;
 				text-align: center;
+				transition: all 0.2s ease;
+			}
+			button:hover, .btn:hover {
+				background-color: var(--bumble-yellow-hover);
+				transform: translateY(-1px);
+			}
+			.nav-link {
+				background-color: transparent;
+				color: var(--bumble-text-light);
+				padding: 0.5rem 1rem;
+			}
+			.nav-link:hover {
+				color: var(--bumble-text);
+				background-color: rgba(143,118,99,0.05);
 			}
 			.nav-link.active {
-				background-color: #a0846e;
-				box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
-				transform: translateY(1px);
+				background-color: var(--bumble-yellow);
+				color: var(--bumble-text);
+				box-shadow: 0 2px 8px rgba(255, 203, 55, 0.3);
 			}
 			.btn-danger {
-				background-color: #dc3545;
+				background-color: #ff4444;
+				color: white;
+			}
+			.btn-danger:hover {
+				background-color: #e03333;
 			}
 
-			/* Match Card Styles (Global) */
+			/* Match Card Styles (Global Overhaul for Bumble Card Layout) */
 			.matches-section {
-				margin-top: 1rem;
+				margin-top: 1.5rem;
 			}
 			.match-card {
 				background: #fff;
-
-
-				border: 1px solid #e2e8f0;
-				border-radius: 6px;
-				padding: 0.75rem;
-				margin-bottom: 0.5rem;
-				box-shadow: 0 1px 2px rgba(0,0,0,0.02);
+				border: 2px solid var(--bumble-border);
+				border-radius: 20px;
+				padding: 1.5rem;
+				margin-bottom: 1.5rem;
+				box-shadow: 0 6px 18px rgba(143,118,99,0.04);
+				transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+				overflow: hidden;
+				position: relative;
+			}
+			.match-card:hover {
+				transform: translateY(-4px);
+				box-shadow: 0 12px 28px rgba(143,118,99,0.08);
+				border-color: var(--bumble-yellow);
 			}
 			.match-header {
 				display: flex;
 				justify-content: space-between;
-				align-items: center;
-				margin-bottom: 0.25rem;
+				align-items: flex-start;
+				margin-bottom: 1rem;
 			}
 			.match-name {
-				font-size: var(--font-base);
-				font-weight: 700;
-				color: #4a3c31;
+				font-size: var(--font-xl);
+				font-weight: 800;
+				color: var(--bumble-text);
+				letter-spacing: -0.02em;
 			}
 			.match-category {
-				background: #b59a83;
-				color: white;
-				padding: 0.1rem 0.4rem;
-				border-radius: 4px;
+				background: var(--bumble-yellow);
+				color: var(--bumble-text);
+				padding: 0.25rem 0.75rem;
+				border-radius: 9999px;
 				font-size: var(--font-xs);
-				font-weight: 700;
+				font-weight: 800;
 				text-transform: uppercase;
+				letter-spacing: 0.05em;
+				border: 1.5px solid var(--bumble-yellow);
 			}
 			.match-score-container {
-				margin: 0.4rem 0;
+				margin: 1rem 0;
+				background: var(--bumble-light-grey);
+				padding: 0.75rem 1rem;
+				border-radius: 12px;
 			}
 			.match-score-header {
 				display: flex;
 				justify-content: space-between;
 				align-items: baseline;
-				margin-bottom: 1px;
+				margin-bottom: 0.4rem;
 			}
 			.match-score-value {
-				font-size: var(--font-base);
+				font-size: var(--font-lg);
 				font-weight: 800;
-				color: #4a3c31;
+				color: var(--bumble-text);
 			}
 			.match-score-max {
 				font-size: var(--font-xs);
-				color: #4a3c31;
+				color: var(--bumble-text-light);
 			}
 			.match-percentage {
-				font-size: var(--font-xs);
-				font-weight: 700;
+				font-size: var(--font-sm);
+				font-weight: 800;
 			}
 			.progress-bar-bg {
-				background: #f1f5f9;
-				height: 5px;
-				border-radius: 2.5px;
+				background: #e4e4e2;
+				height: 8px;
+				border-radius: 9999px;
 				overflow: hidden;
 			}
 			.progress-bar-fill {
@@ -289,38 +330,42 @@ const { title, description } = Astro.props;
 				transition: width 0.5s ease-out;
 			}
 			.match-description {
-				font-style: italic;
-				color: #4a3c31;
+				color: var(--bumble-text);
 				font-size: var(--font-sm);
-				margin-bottom: 0.4rem;
+				margin-bottom: 1rem;
+				line-height: 1.5;
+				font-weight: 500;
 			}
 			.match-highlight {
 				display: flex;
 				align-items: flex-start;
 				gap: 0.75rem;
-				padding: 0.75rem;
-				border-radius: 6px;
-				margin-bottom: 0.75rem;
+				padding: 1rem;
+				border-radius: 14px;
+				margin-bottom: 1rem;
 			}
 			.match-highlight-icon {
-				font-size: 1.5rem;
+				font-size: 1.75rem;
 				line-height: 1;
 			}
 			.match-highlight-content {
 				font-size: var(--font-sm);
-				color: #1d4046;
+				color: var(--bumble-text);
 				line-height: 1.4;
 			}
 			.match-highlight-title {
-				font-weight: 700;
+				font-weight: 800;
 				margin-bottom: 0.25rem;
 				display: block;
+				font-size: var(--font-sm);
+				text-transform: uppercase;
+				letter-spacing: 0.02em;
 			}
 			.koota-grid {
 				display: grid;
 				grid-template-columns: repeat(4, 1fr);
-				gap: 0.25rem;
-				margin-top: 0.5rem;
+				gap: 0.4rem;
+				margin-top: 0.75rem;
 			}
 			@media (max-width: 500px) {
 				.koota-grid {
@@ -329,21 +374,22 @@ const { title, description } = Astro.props;
 			}
 			.koota-item {
 				font-size: var(--font-xs);
-				color: #4a3c31;
-				background: #f8fafc;
-				padding: 0.25rem;
-				border-radius: 3px;
+				color: var(--bumble-text);
+				background: var(--bumble-cream);
+				padding: 0.5rem;
+				border-radius: 8px;
 				text-align: center;
-				border: 1px solid #e2e8f0;
+				border: 1px solid var(--bumble-border);
+				font-weight: 600;
 			}
 			.koota-explanation {
 				display: block;
-				margin-top: 0.15rem;
-				color: #4a3c31;
+				margin-top: 0.25rem;
+				color: var(--bumble-text-light);
 				font-size: var(--font-xs);
 				text-align: left;
-				border-top: 1px solid #f1f5f9;
-				padding-top: 0.15rem;
+				border-top: 1px solid var(--bumble-border);
+				padding-top: 0.25rem;
 			}
 		</style>
 	</head>
@@ -364,21 +410,21 @@ const { title, description } = Astro.props;
 			<slot />
 		</div>
 
-		<footer style="margin-top: 2rem; font-size: var(--font-xs); color: #4a3c31; text-align: center; border-top: 1px solid #e2e8f0; padding-top: 1rem; position: relative;">
-			<div class="user-counter" style="position: absolute; top: 1rem; right: 0;">
+		<footer style="margin-top: 3rem; font-size: var(--font-xs); color: var(--bumble-text-light); text-align: center; border-top: 1px solid var(--bumble-border); padding-top: 2rem; position: relative;">
+			<div class="user-counter" style="position: absolute; top: 1.5rem; right: 0;">
 				<strong id="total-users-count">...</strong>
 			</div>
-			<p style="margin-bottom: 0.5rem; color: #4a3c31; font-weight: 500;">
-				To get contact details, send the <b>User ID</b> of the person to <a href="mailto:rahulbaliastrology@gmail.com" style="color: #b59a83; text-decoration: none;">rahulbaliastrology@gmail.com</a>.
+			<p style="margin-bottom: 0.75rem; color: var(--bumble-text); font-weight: 700; font-size: var(--font-sm);">
+				To get contact details, send the <b>User ID</b> of the person to <a href="mailto:rahulbaliastrology@gmail.com" style="color: var(--bumble-text-light); text-decoration: underline; font-weight: 800;">rahulbaliastrology@gmail.com</a>.
 			</p>
-			<p style="margin-bottom: 0.75rem;">
+			<p style="margin-bottom: 1rem; font-weight: 500;">
 				&copy; {new Date().getFullYear()} moonine - A Vedic Matchmaker v{packageJson.version}.
 			</p>
 			<p style="margin-top: 0.5rem; font-size: 0.75rem;">
-				Location data &copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" style="color: #4a3c31;">OpenStreetMap</a> contributors.
+				Location data &copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" style="color: var(--bumble-text-light);">OpenStreetMap</a> contributors.
 			</p>
 			<p style="margin-top: 0.5rem; font-size: 0.75rem;">
-				<a href="https://forms.gle/48T3MwV6LD7yPyed9" target="_blank" style="color: #4a3c31; text-decoration: underline;">Feature Request</a>
+				<a href="https://forms.gle/48T3MwV6LD7yPyed9" target="_blank" style="color: var(--bumble-text); text-decoration: underline; font-weight: 700;">Feature Request</a>
 			</p>
 		</footer>
 

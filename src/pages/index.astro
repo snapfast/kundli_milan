@@ -4,121 +4,156 @@ import Layout from '../layouts/Layout.astro';
 
 <Layout title="moonine - A Vedic Matchmaker - Astrology Matchmaker">
 	<style>
-		.hero {
+		/* Custom Honeycomb & Bumble landing page styles */
+		.bumble-landing {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
 			text-align: center;
-			padding: 3rem 1rem;
-			background: linear-gradient(to bottom, #f4efe6, #fdfbf7);
-			border-radius: 8px;
+			background: linear-gradient(135deg, var(--bumble-yellow) 0%, var(--bumble-light-yellow) 100%);
+			color: var(--bumble-text);
+			padding: 4.5rem 2rem;
+			border-radius: 28px;
 			margin-bottom: 2rem;
-			border: 1px solid #e2d5c4;
+			position: relative;
+			overflow: hidden;
+			box-shadow: 0 12px 36px rgba(143,118,99,0.08);
+			border: 2px solid var(--bumble-yellow);
 		}
-		.hero p {
+
+		/* Simple pure CSS honeycomb overlay background pattern */
+		.bumble-landing::before {
+			content: "";
+			position: absolute;
+			top: 0; left: 0; right: 0; bottom: 0;
+			opacity: 0.12;
+			background-color: transparent;
+			background-image:
+				radial-gradient(circle, var(--bumble-yellow-hover) 2px, transparent 3px),
+				radial-gradient(circle, var(--bumble-yellow-hover) 2px, transparent 3px);
+			background-size: 30px 30px;
+			background-position: 0 0, 15px 15px;
+			pointer-events: none;
+		}
+
+		.bumble-landing p.subtitle {
 			font-size: var(--font-xl);
-			color: #4a3c31;
+			color: var(--bumble-text);
 			max-width: 600px;
-			margin: 0 auto 2rem auto;
-			line-height: 1.6;
+			margin: 1.5rem auto 2.5rem auto;
+			line-height: 1.5;
+			font-weight: 700;
 		}
+
+		/* Dual CTAs must share .btn-cta class */
 		.btn-cta {
 			font-size: var(--font-lg);
-			padding: 0.75rem 2rem;
+			padding: 0.9rem 2.5rem;
 			border-radius: 9999px;
-			background-color: #b59a83;
-			color: white;
+			background-color: var(--bumble-yellow);
+			color: var(--bumble-text);
 			text-decoration: none;
-			font-weight: 600;
-			box-shadow: 0 4px 6px rgba(199, 78, 35, 0.25);
-			transition: all 0.2s ease-in-out;
+			font-weight: 800;
+			box-shadow: 0 6px 20px rgba(255, 203, 55, 0.3);
+			transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+			display: inline-block;
+			text-transform: uppercase;
+			letter-spacing: 0.05em;
+			border: 2px solid var(--bumble-yellow);
 		}
 		.btn-cta:hover {
-			background-color: #a0846e;
-			transform: translateY(-2px);
-			box-shadow: 0 6px 8px rgba(199, 78, 35, 0.3);
+			background-color: var(--bumble-white);
+			transform: scale(1.05);
+			box-shadow: 0 8px 24px rgba(255, 203, 55, 0.45);
+			border-color: var(--bumble-yellow-hover);
 		}
-		.visual-guide h2, .visual-guide h3 {
-			border-bottom: none;
+
+		.growing-community-tag {
+			margin-top: 2rem;
+			color: var(--bumble-text-light);
+			font-size: var(--font-sm);
 			text-align: center;
-			margin-top: 1rem;
+			max-width: 550px;
+			line-height: 1.6;
+			font-weight: 600;
 		}
+
 		.info-card {
-			background: #fff;
-
-
-			border: 1px solid #e2e8f0;
-			padding: 1.5rem;
-			border-radius: 6px;
+			background: var(--bumble-white);
+			border: 2px solid var(--bumble-border);
+			padding: 2rem 1.5rem;
+			border-radius: 20px;
 			text-align: center;
-			box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+			box-shadow: 0 6px 16px rgba(143,118,99,0.03);
+			transition: transform 0.2s ease;
+		}
+		.info-card:hover {
+			transform: translateY(-4px);
+			border-color: var(--bumble-yellow);
 		}
 		.info-label {
-			font-weight: 700;
+			font-weight: 800;
 			font-size: var(--font-base);
 			text-transform: uppercase;
-			color: #b59a83;
-			margin-bottom: 0.5rem;
+			color: var(--bumble-text);
+			margin-bottom: 0.75rem;
+			position: relative;
+			display: inline-block;
+		}
+		.info-label::after {
+			content: '';
+			position: absolute;
+			left: 0; right: 0; bottom: -3px;
+			height: 3px;
+			background-color: var(--bumble-yellow);
 		}
 		.info-value {
 			font-size: var(--font-sm);
-			color: #4a3c31;
-			line-height: 1.5;
-		}
-		.compact-table {
-			width: 100%;
-			border-collapse: collapse;
-			font-size: var(--font-sm);
-		}
-		.compact-table th, .compact-table td {
-			padding: 0.5rem 0.75rem;
-			text-align: left;
-			border-bottom: 1px solid #f1f5f9;
-		}
-		.compact-table th {
-			background-color: #f8fafc;
-			color: #4a3c31;
-			font-weight: 700;
+			color: var(--bumble-text);
+			line-height: 1.6;
+			font-weight: 500;
 		}
 	</style>
 
 	<div id="main-content">
-		<section class="hero">
-			<div class="logo" data-text="moonine"><span class="logo-text">moonine</span></div>
-			<p>discover verified local profiles and find the right life partner.</p>
-			<div style="margin-top: 2rem;">
-				<a href="/create-profile" id="cta-btn" class="btn-cta" style="display: inline-block;">Sign Up</a>
+		<section class="bumble-landing">
+			<div class="logo" data-text="moonine"><span class="logo-text" style="color: var(--bumble-text);">moonine</span></div>
+			<!-- Explicit starting lowercase letter per preferred memory -->
+			<p class="subtitle">discover verified local profiles and find the right life partner.</p>
+			<div>
+				<a href="/create-profile" id="cta-btn" class="btn-cta">Sign Up</a>
 			</div>
-			<p style="margin-top: 1rem; color: #64748b; font-size: var(--font-sm); text-align: center;">
+			<p class="growing-community-tag">
 				join our growing community · discover verified local profiles · connect with mindful individuals · personal vetting · privacy first
 			</p>
 		</section>
 
-	<section class="visual-guide" style="margin-top: 2rem; border-top: 1px solid #e2e8f0; padding-top: 1.5rem;">
-		<h2 style="font-family: var(--font-secondary); font-size: var(--font-2xl); border-bottom: none; text-align: center;">Trusted by Families. Rooted in Tradition.</h2>
+		<section class="visual-guide" style="margin-top: 3rem; border-top: 2px solid var(--bumble-border); padding-top: 2.5rem;">
+			<h2 style="font-family: var(--font-secondary); font-size: var(--font-2xl); border-bottom: none; text-align: center; margin-bottom: 2rem; color: var(--bumble-text);">Trusted by Families. Rooted in Tradition.</h2>
 
-		<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 2rem;">
-			<div class="info-card">
-				<div class="info-label">Deep Compatibility</div>
-				<div class="info-value" style="font-size: var(--font-sm);">Ensure a harmonious future with traditional 36-point Ashta Koota Milan. We look beyond the surface.</div>
+			<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.5rem; margin-bottom: 2.5rem;">
+				<div class="info-card">
+					<div class="info-label">Deep Compatibility</div>
+					<div class="info-value">Ensure a harmonious future with traditional 36-point Ashta Koota Milan. We look beyond the surface.</div>
+				</div>
+				<div class="info-card">
+					<div class="info-label">Peace of Mind</div>
+					<div class="info-value">Careful analysis of Manglik and other doshas so you can proceed with confidence.</div>
+				</div>
+				<div class="info-card">
+					<div class="info-label">Verified Matches</div>
+					<div class="info-value">Every profile is treated with respect and privacy, giving you a secure space to connect.</div>
+				</div>
 			</div>
-			<div class="info-card">
-				<div class="info-label">Peace of Mind</div>
-				<div class="info-value" style="font-size: var(--font-sm);">Careful analysis of Manglik and other doshas so you can proceed with confidence.</div>
+
+			<p style="text-align: center; margin-top: 2rem;">
+				<a href="/about" class="btn" style="background-color: var(--bumble-yellow); color: var(--bumble-text); padding: 0.75rem 1.75rem;">About moonine &rarr;</a>
+			</p>
+
+			<div style="text-align: center; margin-top: 4rem; margin-bottom: 3rem;">
+				<a href="/create-profile" id="cta-btn-bottom" class="btn-cta">Sign Up</a>
 			</div>
-			<div class="info-card">
-				<div class="info-label">Verified Matches</div>
-				<div class="info-value" style="font-size: var(--font-sm);">Every profile is treated with respect and privacy, giving you a secure space to connect.</div>
-			</div>
-		</div>
-
-
-		<p style="text-align: center; margin-top: 1.5rem;">
-			<a href="/about" class="btn">About moonine &rarr;</a>
-		</p>
-
-		<div style="text-align: center; margin-top: 3rem; margin-bottom: 2rem;">
-			<a href="/create-profile" id="cta-btn-bottom" class="btn-cta" style="display: inline-block;">Sign Up</a>
-		</div>
-	</section>
-
+		</section>
 	</div>
 
 	<script>

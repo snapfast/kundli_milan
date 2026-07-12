@@ -13,54 +13,118 @@ const { isEdit = false } = Astro.props;
 		left: 0;
 		right: 0;
 		background: white;
-		border: 1px solid #ccc;
+		border: 2px solid var(--bumble-yellow);
 		border-top: none;
 		z-index: 1000;
 		max-height: 200px;
 		overflow-y: auto;
 		display: none;
-		border-radius: 0 0 4px 4px;
-		box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+		border-radius: 0 0 12px 12px;
+		box-shadow: 0 8px 16px rgba(143,118,99,0.06);
 	}
 	.suggestion-item {
-		padding: 0.75rem;
+		padding: 0.75rem 1rem;
 		cursor: pointer;
-		border-bottom: 1px solid #eee;
-		color: #4a3c31;
+		border-bottom: 1px solid var(--bumble-light-grey);
+		color: var(--bumble-text);
+		font-weight: 500;
+		font-size: var(--font-sm);
 	}
 	.suggestion-item:hover {
-		background-color: #f8fafc;
+		background-color: var(--bumble-cream);
 	}
 	.suggestion-item:last-child {
 		border-bottom: none;
+		border-radius: 0 0 10px 10px;
 	}
 	footer {
 		margin-top: 2rem;
 		font-size: var(--font-xs);
-		color: #4a3c31;
+		color: var(--bumble-text-light);
 		text-align: center;
 	}
 	.form-actions {
 		display: flex;
 		gap: 0.75rem;
-		margin-top: 0.5rem;
+		margin-top: 1.5rem;
 	}
 	.btn-submit {
 		flex: 2;
+		background-color: var(--bumble-yellow);
+		color: var(--bumble-text);
+		font-weight: 800;
+		border: 2px solid var(--bumble-yellow);
 	}
 	.btn-reset {
 		flex: 1;
+		background-color: var(--bumble-light-grey);
+		color: var(--bumble-text);
+		font-weight: 700;
+		border: 2px solid transparent;
+	}
+	.btn-reset:hover {
+		background-color: #e4e4e2;
+	}
+
+	/* Elegant Radio/Select Tiles for Gender & Preferences to match Left Phone Screen */
+	.gender-selector-grid {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: 0.75rem;
+		margin-top: 0.5rem;
+		margin-bottom: 0.5rem;
+	}
+	.gender-tile {
+		border: 2px solid var(--bumble-border);
+		border-radius: 16px;
+		padding: 1rem 0.5rem;
+		text-align: center;
+		cursor: pointer;
+		transition: all 0.2s ease;
+		background: white;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		gap: 0.5rem;
+		color: var(--bumble-text);
+	}
+	.gender-tile:hover {
+		border-color: var(--bumble-yellow);
+		background-color: var(--bumble-cream);
+	}
+	.gender-tile.selected {
+		border-color: var(--bumble-yellow);
+		background-color: var(--bumble-yellow);
+		color: var(--bumble-text);
+		box-shadow: 0 4px 12px rgba(255, 203, 55, 0.2);
+	}
+	.gender-tile.selected .gender-icon {
+		color: var(--bumble-text);
+	}
+	.gender-icon {
+		font-size: 1.75rem;
+		line-height: 1;
+	}
+	.gender-label {
+		font-size: var(--font-xs);
+		font-weight: 700;
+		text-transform: uppercase;
+		letter-spacing: 0.05em;
+	}
+	.gender-tile input[type="radio"] {
+		display: none;
 	}
 </style>
 
-<h1 id="page-title" style="font-family: var(--font-secondary); font-size: var(--font-3xl); border-bottom: none; text-align: center;">{isEdit ? 'Edit Your Profile' : 'Create Your Profile'}</h1>
-<div id="form-error-message" style="display: none; background-color: #fef2f2; border: 1px solid #ef4444; color: #b91c1c; padding: 0.75rem; border-radius: 4px; margin-bottom: 1.5rem; font-size: var(--font-sm); text-align: center;"></div>
+<h1 id="page-title" style="font-family: var(--font-secondary); font-size: var(--font-3xl); border-bottom: none; text-align: center; margin-bottom: 2rem;">{isEdit ? 'Edit Your Profile' : 'Create Your Profile'}</h1>
+<div id="form-error-message" style="display: none; background-color: #fef2f2; border: 2px solid #ff4444; color: #b91c1c; padding: 1rem; border-radius: 12px; margin-bottom: 1.5rem; font-size: var(--font-sm); text-align: center; font-weight: 600;"></div>
 
 {isEdit ? (
 	/* EDIT PROFILE FORM */
-	<form id="detailsForm" data-is-edit="true" novalidate>
+	<form id="detailsForm" data-is-edit="true" novalidate style="background: white; border: 2px solid var(--bumble-border); border-radius: 24px; padding: 2rem; box-shadow: 0 8px 24px rgba(143,118,99,0.02);">
 		<div id="step1" class="form-step">
-			<h2 style="text-align: center; font-size: var(--font-xl); margin-bottom: 1.5rem; border: none; font-family: var(--font-secondary); color: #4a3c31;">Stage 1: Basic Details</h2>
+			<h2 style="text-align: center; font-size: var(--font-xl); margin-bottom: 2rem; border-bottom: 2px solid var(--bumble-yellow); font-family: var(--font-secondary); color: var(--bumble-text); padding-bottom: 0.5rem;">Stage 1: Basic Details</h2>
 			<div class="form-row">
 				<div class="field">
 					<label for="name">Full Name</label>
@@ -71,7 +135,7 @@ const { isEdit = false } = Astro.props;
 					<input type="email" id="email" name="email" required placeholder="your.email@example.com" />
 				</div>
 			</div>
-			<div class="form-row">
+			<div class="form-row" style="margin-top: 1rem;">
 				<div class="field">
 					<label for="dob">Date of Birth</label>
 					<input type="date" id="dob" name="dob" required max={new Date().toISOString().split('T')[0]} />
@@ -81,17 +145,30 @@ const { isEdit = false } = Astro.props;
 					<input type="time" id="tob" name="tob" required style="width: 100%;" />
 				</div>
 			</div>
-			<div class="form-row">
-				<div class="field">
-					<label for="gender">Gender</label>
-					<select id="gender" name="gender" required>
-						<option value="">Select Gender</option>
-						<option value="male">Male</option>
-						<option value="female">Female</option>
-						<option value="other">Other</option>
-					</select>
+			<div class="form-row" style="margin-top: 1rem;">
+				<div class="field" style="grid-column: span 2;">
+					<label>Gender</label>
+					<div class="gender-selector-grid">
+						<label class="gender-tile" id="tile-male">
+							<span class="gender-icon">♂️</span>
+							<span class="gender-label">Male</span>
+							<input type="radio" name="gender" value="male" />
+						</label>
+						<label class="gender-tile" id="tile-female">
+							<span class="gender-icon">♀️</span>
+							<span class="gender-label">Female</span>
+							<input type="radio" name="gender" value="female" />
+						</label>
+						<label class="gender-tile" id="tile-other">
+							<span class="gender-icon">⚧️</span>
+							<span class="gender-label">Other</span>
+							<input type="radio" name="gender" value="other" />
+						</label>
+					</div>
 				</div>
-				<div class="field">
+			</div>
+			<div class="form-row" style="margin-top: 1rem;">
+				<div class="field" style="grid-column: span 2;">
 					<label for="location">Birth Location (City, Country)</label>
 					<input type="text" id="location" name="location" required placeholder="e.g. New Delhi, India" autocomplete="off" />
 					<div id="suggestions"></div>
@@ -99,31 +176,31 @@ const { isEdit = false } = Astro.props;
 					<input type="hidden" id="lon" name="lon" />
 				</div>
 			</div>
-			<div class="form-row">
+			<div class="form-row" style="margin-top: 1rem;">
 				<div class="field">
 					<label for="phone">Mobile Number</label>
-					<input type="tel" id="phone" name="phone" readonly style="background-color: #e2e8f0; cursor: not-allowed; color: #64748b;" />
+					<input type="tel" id="phone" name="phone" readonly style="background-color: var(--bumble-light-grey); cursor: not-allowed; color: var(--bumble-text-light);" />
 				</div>
 				<div class="field">
 					<label for="pin">4-digit PIN</label>
 					<input type="password" id="pin" name="pin" required pattern="[0-9]{4}" placeholder="Enter 4-digit PIN to update" maxlength="4" inputmode="numeric" />
 				</div>
 			</div>
-			<div class="form-actions" style="margin-top: 1.5rem;">
-				<button type="button" class="btn-submit" id="next1Btn">Next</button>
-				<button type="button" class="btn-reset cancelBtn" style="background: #e2e8f0; color: #4a3c31;">Cancel</button>
+			<div class="form-actions" style="margin-top: 2rem;">
+				<button type="button" class="btn btn-submit" id="next1Btn">Next</button>
+				<button type="button" class="btn btn-reset cancelBtn">Cancel</button>
 			</div>
 		</div>
 
 		<div id="step2" class="form-step" style="display: none;">
-			<h2 style="text-align: center; font-size: var(--font-xl); margin-bottom: 1.5rem; border: none; font-family: var(--font-secondary); color: #4a3c31;">Stage 2: Additional Details</h2>
+			<h2 style="text-align: center; font-size: var(--font-xl); margin-bottom: 2rem; border-bottom: 2px solid var(--bumble-yellow); font-family: var(--font-secondary); color: var(--bumble-text); padding-bottom: 0.5rem;">Stage 2: Additional Details</h2>
 			<div class="form-row">
-				<div class="field">
+				<div class="field" style="grid-column: span 2;">
 					<label for="height">Height (Optional)</label>
 					<input type="text" id="height" name="height" placeholder="e.g. 5'8'' or 173 cm" />
 				</div>
 			</div>
-			<div class="form-row">
+			<div class="form-row" style="margin-top: 1rem;">
 				<div class="field">
 					<label for="currentLocation">Current Location (Optional)</label>
 					<input type="text" id="currentLocation" name="currentLocation" placeholder="e.g. Mumbai, India" autocomplete="off" />
@@ -136,7 +213,7 @@ const { isEdit = false } = Astro.props;
 					<input type="text" id="religion" name="religion" placeholder="e.g. Hindu, Brahmin" />
 				</div>
 			</div>
-			<div class="form-row">
+			<div class="form-row" style="margin-top: 1rem;">
 				<div class="field">
 					<label for="education">Education (Optional)</label>
 					<input type="text" id="education" name="education" placeholder="e.g. B.Tech, MBA" />
@@ -146,33 +223,33 @@ const { isEdit = false } = Astro.props;
 					<input type="text" id="occupation" name="occupation" placeholder="e.g. Software Engineer" />
 				</div>
 			</div>
-			<div class="form-row">
+			<div class="form-row" style="margin-top: 1rem;">
 				<div class="field" style="grid-column: span 2;">
 					<label for="income">Annual Income (Optional)</label>
 					<input type="text" id="income" name="income" placeholder="e.g. 15 LPA" />
 				</div>
 			</div>
-			<div class="form-row">
+			<div class="form-row" style="margin-top: 1rem;">
 				<div class="field" style="grid-column: span 2;">
 					<label for="bio">About Me / Bio (Optional)</label>
-					<textarea id="bio" name="bio" rows="3" class="bio-textarea" placeholder="Tell us a bit about yourself..."></textarea>
+					<textarea id="bio" name="bio" rows="3" class="bio-textarea" placeholder="Tell us a bit about yourself..." style="border-radius: 12px;"></textarea>
 				</div>
 			</div>
 
-			<p style="font-size: var(--font-xs); color: #64748b; text-align: center; margin-top: 1rem; margin-bottom: 0.5rem;">By submitting your details, you agree to our <a href="/terms" style="color: #b59a83; text-decoration: underline;">Terms of Service</a>.</p>
+			<p style="font-size: var(--font-xs); color: var(--bumble-text-light); text-align: center; margin-top: 1.5rem; margin-bottom: 0.5rem; font-weight: 500;">By submitting your details, you agree to our <a href="/terms" style="color: var(--bumble-text); text-decoration: underline; font-weight: 700;">Terms of Service</a>.</p>
 
 			<div class="form-actions">
-				<button type="button" class="btn-reset" id="prev1Btn">Previous</button>
-				<button type="submit" class="btn-submit" id="submitBtn">Update Details</button>
-				<button type="button" class="btn-reset cancelBtn" style="background: #e2e8f0; color: #4a3c31;">Cancel</button>
+				<button type="button" class="btn btn-reset" id="prev1Btn">Previous</button>
+				<button type="submit" class="btn btn-submit" id="submitBtn">Update Details</button>
+				<button type="button" class="btn btn-reset cancelBtn">Cancel</button>
 			</div>
 		</div>
 	</form>
 ) : (
 	/* SIGNUP FORM */
-	<form id="detailsForm" data-is-edit="false" novalidate>
+	<form id="detailsForm" data-is-edit="false" novalidate style="background: white; border: 2px solid var(--bumble-border); border-radius: 24px; padding: 2rem; box-shadow: 0 8px 24px rgba(143,118,99,0.02);">
 		<div id="step1" class="form-step">
-			<h2 style="text-align: center; font-size: var(--font-xl); margin-bottom: 1.5rem; border: none; font-family: var(--font-secondary); color: #4a3c31;">Stage 1: Account Setup</h2>
+			<h2 style="text-align: center; font-size: var(--font-xl); margin-bottom: 2rem; border-bottom: 2px solid var(--bumble-yellow); font-family: var(--font-secondary); color: var(--bumble-text); padding-bottom: 0.5rem;">Stage 1: Account Setup</h2>
 			<div class="form-row">
 				<div class="field">
 					<label for="phone">Mobile Number</label>
@@ -183,16 +260,16 @@ const { isEdit = false } = Astro.props;
 					<input type="password" id="pin" name="pin" required pattern="[0-9]{4}" placeholder="Enter 4-digit PIN" maxlength="4" inputmode="numeric" />
 				</div>
 			</div>
-			<div class="form-actions" style="margin-top: 1.5rem;">
-				<button type="button" class="btn-submit" id="next1Btn">Next</button>
+			<div class="form-actions" style="margin-top: 2rem;">
+				<button type="button" class="btn btn-submit" id="next1Btn" style="width: 100%;">Next</button>
 			</div>
-			<p style="text-align: center; margin-top: 1.5rem; font-size: var(--font-sm);">
-				Already have an account? <a href="/login" style="color: #b59a83; font-weight: 600; text-decoration: underline;">Log In</a>
+			<p style="text-align: center; margin-top: 2rem; font-size: var(--font-sm); font-weight: 500; color: var(--bumble-text-light);">
+				Already have an account? <a href="/login" style="color: var(--bumble-text); font-weight: 700; text-decoration: underline;">Log In</a>
 			</p>
 		</div>
 
 		<div id="step2" class="form-step" style="display: none;">
-			<h2 style="text-align: center; font-size: var(--font-xl); margin-bottom: 1.5rem; border: none; font-family: var(--font-secondary); color: #4a3c31;">Stage 2: Basic Details</h2>
+			<h2 style="text-align: center; font-size: var(--font-xl); margin-bottom: 2rem; border-bottom: 2px solid var(--bumble-yellow); font-family: var(--font-secondary); color: var(--bumble-text); padding-bottom: 0.5rem;">Stage 2: Basic Details</h2>
 			<div class="form-row">
 				<div class="field">
 					<label for="name">Full Name</label>
@@ -203,7 +280,7 @@ const { isEdit = false } = Astro.props;
 					<input type="email" id="email" name="email" required placeholder="your.email@example.com" />
 				</div>
 			</div>
-			<div class="form-row">
+			<div class="form-row" style="margin-top: 1rem;">
 				<div class="field">
 					<label for="dob">Date of Birth</label>
 					<input type="date" id="dob" name="dob" required max={new Date().toISOString().split('T')[0]} />
@@ -213,17 +290,30 @@ const { isEdit = false } = Astro.props;
 					<input type="time" id="tob" name="tob" required style="width: 100%;" />
 				</div>
 			</div>
-			<div class="form-row">
-				<div class="field">
-					<label for="gender">Gender</label>
-					<select id="gender" name="gender" required>
-						<option value="">Select Gender</option>
-						<option value="male">Male</option>
-						<option value="female">Female</option>
-						<option value="other">Other</option>
-					</select>
+			<div class="form-row" style="margin-top: 1rem;">
+				<div class="field" style="grid-column: span 2;">
+					<label>Gender</label>
+					<div class="gender-selector-grid">
+						<label class="gender-tile" id="tile-male">
+							<span class="gender-icon">♂️</span>
+							<span class="gender-label">Male</span>
+							<input type="radio" name="gender" value="male" />
+						</label>
+						<label class="gender-tile" id="tile-female">
+							<span class="gender-icon">♀️</span>
+							<span class="gender-label">Female</span>
+							<input type="radio" name="gender" value="female" />
+						</label>
+						<label class="gender-tile" id="tile-other">
+							<span class="gender-icon">⚧️</span>
+							<span class="gender-label">Other</span>
+							<input type="radio" name="gender" value="other" />
+						</label>
+					</div>
 				</div>
-				<div class="field">
+			</div>
+			<div class="form-row" style="margin-top: 1rem;">
+				<div class="field" style="grid-column: span 2;">
 					<label for="location">Birth Location (City, Country)</label>
 					<input type="text" id="location" name="location" required placeholder="e.g. New Delhi, India" autocomplete="off" />
 					<div id="suggestions"></div>
@@ -232,11 +322,11 @@ const { isEdit = false } = Astro.props;
 				</div>
 			</div>
 
-			<p style="font-size: var(--font-xs); color: #64748b; text-align: center; margin-top: 1.5rem; margin-bottom: 0.5rem;">By submitting your details, you agree to our <a href="/terms" style="color: #b59a83; text-decoration: underline;">Terms of Service</a>.</p>
+			<p style="font-size: var(--font-xs); color: var(--bumble-text-light); text-align: center; margin-top: 2rem; margin-bottom: 0.5rem; font-weight: 500;">By submitting your details, you agree to our <a href="/terms" style="color: var(--bumble-text); text-decoration: underline; font-weight: 700;">Terms of Service</a>.</p>
 
 			<div class="form-actions">
-				<button type="button" class="btn-reset" id="prev1Btn">Previous</button>
-				<button type="submit" class="btn-submit" id="submitBtn">Submit Details</button>
+				<button type="button" class="btn btn-reset" id="prev1Btn">Previous</button>
+				<button type="submit" class="btn btn-submit" id="submitBtn">Submit Details</button>
 			</div>
 		</div>
 	</form>
@@ -244,17 +334,17 @@ const { isEdit = false } = Astro.props;
 
 {/* Custom Mobile Verification Overlay Modal */}
 {!isEdit && (
-<div id="mobile-verify-modal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 10000; align-items: center; justify-content: center; padding: 1rem;">
-  <div style="background: #fdfbf7; border: 2px solid #b59a83; border-radius: 8px; padding: 1.5rem; max-width: 400px; width: 100%; box-shadow: 0 4px 15px rgba(0,0,0,0.15); text-align: center;">
-    <h3 style="margin-top: 0; font-family: var(--font-secondary); color: #4a3c31; border-bottom: none; font-size: var(--font-lg); text-align: center;">Check Your Mobile Number</h3>
-    <p style="font-size: var(--font-sm); color: #4a3c31; margin-bottom: 1.5rem; line-height: 1.5; text-align: center;">
-      Is your mobile number correct?<br/>
-      <strong id="modal-phone-display" style="font-size: var(--font-lg); color: #b59a83; display: block; margin: 0.5rem 0; letter-spacing: 1px;"></strong>
-      We do not allow changing the mobile number once registered.
+<div id="mobile-verify-modal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(143,118,99,0.3); z-index: 10000; align-items: center; justify-content: center; padding: 1rem; backdrop-filter: blur(4px);">
+  <div style="background: white; border: 2.5px solid var(--bumble-yellow); border-radius: 24px; padding: 2rem; max-width: 420px; width: 100%; box-shadow: 0 12px 36px rgba(143,118,99,0.12); text-align: center;">
+    <h3 style="margin-top: 0; font-family: var(--font-secondary); color: var(--bumble-text); border-bottom: none; font-size: var(--font-lg); text-align: center; font-weight: 800;">Verify Your Mobile Number</h3>
+    <p style="font-size: var(--font-sm); color: var(--bumble-text); margin-bottom: 2rem; line-height: 1.6; text-align: center; font-weight: 500;">
+      Please confirm that your mobile number is correct:<br/>
+      <strong id="modal-phone-display" style="font-size: var(--font-xl); color: var(--bumble-text); display: block; margin: 1rem 0; letter-spacing: 1.5px; background-color: var(--bumble-yellow); padding: 0.5rem; border-radius: 12px; border: 1.5px solid var(--bumble-yellow);"></strong>
+      We do not allow changing your mobile number once your account is created.
     </p>
     <div style="display: flex; gap: 0.75rem; justify-content: center;">
-      <button type="button" id="modal-cancel-btn" style="background: #e2e8f0; color: #4a3c31; flex: 1; border-radius: 4px; padding: 0.5rem;">Edit Number</button>
-      <button type="button" id="modal-confirm-btn" style="background: #b59a83; color: white; flex: 1; font-weight: 600; border-radius: 4px; padding: 0.5rem;">Confirm</button>
+      <button type="button" id="modal-cancel-btn" class="btn btn-reset" style="padding: 0.6rem; border-radius: 12px; margin: 0;">Edit Number</button>
+      <button type="button" id="modal-confirm-btn" class="btn btn-submit" style="padding: 0.6rem; border-radius: 12px; margin: 0; flex: 1.5;">Confirm</button>
     </div>
   </div>
 </div>
@@ -273,7 +363,6 @@ const { isEdit = false } = Astro.props;
 		const emailInput = document.getElementById('email') as HTMLInputElement;
 		const dobInput = document.getElementById('dob') as HTMLInputElement;
 		const tobInput = document.getElementById('tob') as HTMLInputElement;
-		const genderInput = document.getElementById('gender') as HTMLSelectElement;
 		const cancelBtns = document.querySelectorAll('.cancelBtn');
 		const locationInput = document.getElementById('location') as HTMLInputElement;
 		const suggestionsContainer = document.getElementById('suggestions') as HTMLDivElement;
@@ -295,34 +384,75 @@ const { isEdit = false } = Astro.props;
 		// Generate or retrieve the standard User ID
 		const uid = getOrSetUserId();
 
+		// Gender tiles custom script handlers to set native selected styling
+		const maleTile = document.getElementById('tile-male');
+		const femaleTile = document.getElementById('tile-female');
+		const otherTile = document.getElementById('tile-other');
+		const genderRadioInputs = document.querySelectorAll('input[name="gender"]') as NodeListOf<HTMLInputElement>;
+
+		function updateGenderTileStyles() {
+			genderRadioInputs.forEach(input => {
+				const parent = input.parentElement;
+				if (parent) {
+					if (input.checked) {
+						parent.classList.add('selected');
+					} else {
+						parent.classList.remove('selected');
+					}
+				}
+			});
+		}
+
+		[maleTile, femaleTile, otherTile].forEach(tile => {
+			if (tile) {
+				tile.addEventListener('click', () => {
+					const input = tile.querySelector('input[type="radio"]') as HTMLInputElement;
+					if (input) {
+						input.checked = true;
+						updateGenderTileStyles();
+					}
+				});
+			}
+		});
+
 		// Pre-fill form from cookies in Edit mode
 		function preFillForm() {
-			if (isEditMode) {
-				const stored = getCookie('user_details');
-				if (stored) {
-					try {
-						const details = JSON.parse(stored);
-						const fields = [
-							'name', 'email', 'phone', 'pin', 'dob', 'tob', 'gender', 'location', 'lat', 'lon',
-							'currentLocation', 'currentLat', 'currentLon', 'height',
-							'education', 'occupation', 'income', 'religion', 'bio'
-						];
-						fields.forEach(field => {
-							const element = document.getElementById(field) as HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement;
-							if (element && details[field] !== undefined) {
-								element.value = details[field];
+			const stored = getCookie('user_details');
+			if (stored) {
+				try {
+					const details = JSON.parse(stored);
+					const fields = [
+						'name', 'email', 'phone', 'pin', 'dob', 'tob', 'location', 'lat', 'lon',
+						'currentLocation', 'currentLat', 'currentLon', 'height',
+						'education', 'occupation', 'income', 'religion', 'bio'
+					];
+					fields.forEach(field => {
+						const element = document.getElementById(field) as HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement;
+						if (element && details[field] !== undefined) {
+							element.value = details[field];
+						}
+					});
+
+					if (details.tob && tobInput) {
+						tobInput.value = details.tob;
+					}
+
+					// Set gender radio checking and trigger layout updates
+					if (details.gender) {
+						genderRadioInputs.forEach(radio => {
+							if (radio.value === details.gender.toLowerCase()) {
+								radio.checked = true;
 							}
 						});
-
-						if (details.tob && tobInput) {
-							tobInput.value = details.tob;
-						}
-					} catch (e) {
-						console.error('Error parsing user_details cookie:', e);
+						updateGenderTileStyles();
 					}
+				} catch (e) {
+					console.error('Error parsing user_details cookie:', e);
 				}
 			}
 		}
+
+		// Run prefill unconditionally if data exists
 		preFillForm();
 
 		// Auto-detect current location via IP if blank and in edit mode
@@ -390,7 +520,7 @@ const { isEdit = false } = Astro.props;
 
 				timeout = setTimeout(async () => {
 					try {
-						suggestionsEl.innerHTML = '<div class="suggestion-item" style="color: #4a3c31;">Searching locations...</div>';
+						suggestionsEl.innerHTML = '<div class="suggestion-item" style="color: var(--bumble-text-light);">Searching locations...</div>';
 						suggestionsEl.style.display = 'block';
 
 						const response = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&limit=5`);
@@ -402,7 +532,7 @@ const { isEdit = false } = Astro.props;
 						renderSuggestions(data);
 					} catch (error) {
 						console.error('Error fetching locations:', error);
-						suggestionsEl.innerHTML = '<div class="suggestion-item" style="color: #dc3545;">Error connecting to location service. Please type manually or try again.</div>';
+						suggestionsEl.innerHTML = '<div class="suggestion-item" style="color: #ff4444;">Error connecting to location service. Please type manually or try again.</div>';
 						suggestionsEl.style.display = 'block';
 					}
 				}, 300);
@@ -425,7 +555,7 @@ const { isEdit = false } = Astro.props;
 					});
 					suggestionsEl.style.display = 'block';
 				} else {
-					suggestionsEl.innerHTML = '<div class="suggestion-item" style="color: #dc3545;">No locations found. Try a different city.</div>';
+					suggestionsEl.innerHTML = '<div class="suggestion-item" style="color: #ff4444;">No locations found. Try a different city.</div>';
 					suggestionsEl.style.display = 'block';
 				}
 			}
@@ -530,8 +660,10 @@ const { isEdit = false } = Astro.props;
 					return false;
 				}
 
-				if (!genderInput.value) {
-					showError('Please select your Gender.', genderInput);
+				let genderVal = '';
+				genderRadioInputs.forEach(r => { if (r.checked) genderVal = r.value; });
+				if (!genderVal) {
+					showError('Please select your Gender.');
 					return false;
 				}
 
@@ -577,12 +709,14 @@ const { isEdit = false } = Astro.props;
 				}
 
 				if (!tobInput.value) {
-					showError('Please select your complete Time of Birth.', tobInput);
+					showError('Please select your complete Time of Birth.', dobInput);
 					return false;
 				}
 
-				if (!genderInput.value) {
-					showError('Please select your Gender.', genderInput);
+				let genderVal = '';
+				genderRadioInputs.forEach(r => { if (r.checked) genderVal = r.value; });
+				if (!genderVal) {
+					showError('Please select your Gender.');
 					return false;
 				}
 
