@@ -27,7 +27,14 @@ export function generateMatchCardHtml(
     if (doshas && doshas.length > 0) {
         doshaHtml = `
             <div class="dosha-container" style="background-color: #fef2f2; border-left: 4px solid #ef4444; border-radius: 12px; padding: 1rem; margin: 1rem 0;">
-                <div class="dosha-header" style="color: #b91c1c; font-weight: 800; font-size: var(--font-xs); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.25rem;">⚠️ Dosha Alerts & Exceptions</div>
+                <div class="dosha-header" style="color: #b91c1c; font-weight: 800; font-size: var(--font-xs); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.35rem;">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display: block;">
+                        <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                        <line x1="12" y1="9" x2="12" y2="13"></line>
+                        <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                    </svg>
+                    <span>Dosha Alerts & Exceptions</span>
+                </div>
                 ${doshas.map(d => `
                     <div class="dosha-item ${d.isCancelled ? 'cancelled' : 'active'}" style="margin-bottom: 0.5rem; ${d.isCancelled ? 'opacity: 0.7;' : ''}">
                         <span class="dosha-name" style="font-weight: 700; font-size: var(--font-sm); color: var(--bumble-text); ${d.isCancelled ? 'text-decoration: line-through;' : ''}">${d.name} ${d.isCancelled ? '(Cancelled)' : ''}</span>
@@ -40,29 +47,53 @@ export function generateMatchCardHtml(
 
     let descriptionHtml = '';
     if (description) {
-        let highlightIcon = 'ℹ️';
+        let highlightIcon = `
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display: block;">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="12" y1="16" x2="12" y2="12"></line>
+                <line x1="12" y1="8" x2="12.01" y2="8"></line>
+            </svg>
+        `;
         let highlightColor = 'var(--bumble-text-light)';
         let highlightBg = 'var(--bumble-cream)';
         let highlightBorder = 'var(--bumble-border)';
         let categoryTitle = category + ' Match';
 
         if (category === "Excellent") {
-            highlightIcon = '🌟';
+            highlightIcon = `
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display: block;">
+                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                </svg>
+            `;
             highlightColor = '#059669';
             highlightBg = '#ecfdf5';
             highlightBorder = '#a7f3d0';
         } else if (category === "Very Good") {
-            highlightIcon = '✨';
+            highlightIcon = `
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display: block;">
+                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                </svg>
+            `;
             highlightColor = '#10b981';
             highlightBg = '#f0fdf4';
             highlightBorder = '#bbf7d0';
         } else if (category === "Good") {
-            highlightIcon = '👍';
+            highlightIcon = `
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display: block;">
+                    <path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"></path>
+                </svg>
+            `;
             highlightColor = '#d97706';
             highlightBg = '#fffbeb';
             highlightBorder = '#fde68a';
         } else if (category === "Not Good" || category === "Bad") {
-            highlightIcon = '⚠️';
+            highlightIcon = `
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display: block;">
+                    <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                    <line x1="12" y1="9" x2="12" y2="13"></line>
+                    <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                </svg>
+            `;
             highlightColor = '#dc2626';
             highlightBg = '#fef2f2';
             highlightBorder = '#fecaca';
@@ -70,7 +101,7 @@ export function generateMatchCardHtml(
 
         descriptionHtml = `
             <div class="match-highlight" style="background: ${highlightBg}; border: 1.5px solid ${highlightBorder}; display: flex; gap: 0.75rem; padding: 1rem; border-radius: 14px; margin-bottom: 1rem; align-items: flex-start;">
-                <div class="match-highlight-icon" style="font-size: 1.25rem; line-height: 1;">${highlightIcon}</div>
+                <div class="match-highlight-icon" style="color: ${highlightColor}; flex-shrink: 0; padding-top: 0.15rem;">${highlightIcon}</div>
                 <div class="match-highlight-content" style="font-size: var(--font-sm); color: var(--bumble-text); line-height: 1.5;">
                     <span class="match-highlight-title" style="color: ${highlightColor}; font-weight: 800; text-transform: uppercase; letter-spacing: 0.02em; font-size: var(--font-xs); margin-bottom: 0.25rem; display: block;">${categoryTitle}</span>
                     ${description}
