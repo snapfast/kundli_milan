@@ -272,6 +272,10 @@ const { title, description, noindex } = Astro.props;
 				box-shadow: 0 12px 28px rgba(143,118,99,0.08);
 				border-color: var(--bumble-yellow);
 			}
+			.flash-border-active {
+				border-color: var(--bumble-yellow) !important;
+				box-shadow: 0 0 0 4px rgba(255, 203, 55, 0.4) !important;
+			}
 			.match-header {
 				display: flex;
 				justify-content: space-between;
@@ -556,12 +560,21 @@ const { title, description, noindex } = Astro.props;
 						button.style.color = '#10b981';
 						button.style.borderColor = '#10b981';
 
+						const container = button.closest('.info-card') || button.closest('.match-card');
+						if (container) {
+							container.classList.add('flash-border-active');
+						}
+
 						setTimeout(() => {
 							if (copyIcon) copyIcon.style.display = 'block';
 							if (btnText) btnText.style.display = 'inline';
 							copiedText.style.display = 'none';
 							button.style.color = originalColor;
 							button.style.borderColor = originalBorderColor;
+
+							if (container) {
+								container.classList.remove('flash-border-active');
+							}
 						}, 1500);
 					}
 				} catch (err) {
