@@ -117,14 +117,14 @@ const { isEdit = false } = Astro.props;
 	}
 </style>
 
-<h1 id="page-title" style="font-family: var(--font-secondary); font-size: var(--font-3xl); border-bottom: none; text-align: center; margin-bottom: 2rem;">{isEdit ? 'Edit Your Profile' : 'Create Your Profile'}</h1>
+<h1 id="page-title" style="font-family: var(--font-secondary); font-size: var(--font-2xl); border-bottom: none; text-align: center; margin-bottom: 2rem;">{isEdit ? 'Edit Your Profile' : 'Create Your Profile'}</h1>
 <div id="form-error-message" style="display: none; background-color: #fef2f2; border: 2px solid #ff4444; color: #b91c1c; padding: 1rem; border-radius: 12px; margin-bottom: 1.5rem; font-size: var(--font-sm); text-align: center; font-weight: 600;"></div>
 
 {isEdit ? (
 	/* EDIT PROFILE FORM */
 	<form id="detailsForm" data-is-edit="true" novalidate style="background: white; border: 2px solid var(--bumble-border); border-radius: 24px; padding: 2rem; box-shadow: 0 8px 24px rgba(143,118,99,0.02);">
 		<div id="step1" class="form-step">
-			<h2 style="text-align: center; font-size: var(--font-xl); margin-bottom: 2rem; border-bottom: 2px solid var(--bumble-yellow); font-family: var(--font-secondary); color: var(--bumble-text); padding-bottom: 0.5rem;">Stage 1: Basic Details</h2>
+			<h2 style="text-align: center; font-size: var(--font-lg); margin-bottom: 2rem; border-bottom: 2px solid var(--bumble-yellow); font-family: var(--font-secondary); color: var(--bumble-text); padding-bottom: 0.5rem;">Stage 1: Basic Details</h2>
 			<div class="form-row">
 				<div class="field">
 					<label for="name">Full Name</label>
@@ -193,7 +193,7 @@ const { isEdit = false } = Astro.props;
 		</div>
 
 		<div id="step2" class="form-step" style="display: none;">
-			<h2 style="text-align: center; font-size: var(--font-xl); margin-bottom: 2rem; border-bottom: 2px solid var(--bumble-yellow); font-family: var(--font-secondary); color: var(--bumble-text); padding-bottom: 0.5rem;">Stage 2: Additional Details</h2>
+			<h2 style="text-align: center; font-size: var(--font-lg); margin-bottom: 2rem; border-bottom: 2px solid var(--bumble-yellow); font-family: var(--font-secondary); color: var(--bumble-text); padding-bottom: 0.5rem;">Stage 2: Additional Details</h2>
 			<div class="form-row">
 				<div class="field" style="grid-column: span 2;">
 					<label for="height">Height (Optional)</label>
@@ -249,7 +249,7 @@ const { isEdit = false } = Astro.props;
 	/* SIGNUP FORM */
 	<form id="detailsForm" data-is-edit="false" novalidate style="background: white; border: 2px solid var(--bumble-border); border-radius: 24px; padding: 2rem; box-shadow: 0 8px 24px rgba(143,118,99,0.02);">
 		<div id="step1" class="form-step">
-			<h2 style="text-align: center; font-size: var(--font-xl); margin-bottom: 2rem; border-bottom: 2px solid var(--bumble-yellow); font-family: var(--font-secondary); color: var(--bumble-text); padding-bottom: 0.5rem;">Stage 1: Account Setup</h2>
+			<h2 style="text-align: center; font-size: var(--font-lg); margin-bottom: 2rem; border-bottom: 2px solid var(--bumble-yellow); font-family: var(--font-secondary); color: var(--bumble-text); padding-bottom: 0.5rem;">Stage 1: Account Setup</h2>
 			<div class="form-row">
 				<div class="field">
 					<label for="phone">Mobile Number</label>
@@ -269,7 +269,7 @@ const { isEdit = false } = Astro.props;
 		</div>
 
 		<div id="step2" class="form-step" style="display: none;">
-			<h2 style="text-align: center; font-size: var(--font-xl); margin-bottom: 2rem; border-bottom: 2px solid var(--bumble-yellow); font-family: var(--font-secondary); color: var(--bumble-text); padding-bottom: 0.5rem;">Stage 2: Basic Details</h2>
+			<h2 style="text-align: center; font-size: var(--font-lg); margin-bottom: 2rem; border-bottom: 2px solid var(--bumble-yellow); font-family: var(--font-secondary); color: var(--bumble-text); padding-bottom: 0.5rem;">Stage 2: Basic Details</h2>
 			<div class="form-row">
 				<div class="field">
 					<label for="name">Full Name</label>
@@ -336,7 +336,7 @@ const { isEdit = false } = Astro.props;
 {!isEdit && (
 <div id="mobile-verify-modal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(143,118,99,0.3); z-index: 10000; align-items: center; justify-content: center; padding: 1rem; backdrop-filter: blur(4px);">
   <div style="background: white; border: 2.5px solid var(--bumble-yellow); border-radius: 24px; padding: 2rem; max-width: 420px; width: 100%; box-shadow: 0 12px 36px rgba(143,118,99,0.12); text-align: center;">
-    <h3 style="margin-top: 0; font-family: var(--font-secondary); color: var(--bumble-text); border-bottom: none; font-size: var(--font-lg); text-align: center; font-weight: 800;">Verify Your Mobile Number</h3>
+    <h3 style="margin-top: 0; font-family: var(--font-secondary); color: var(--bumble-text); border-bottom: none; font-size: var(--font-base); text-align: center; font-weight: 800;">Verify Your Mobile Number</h3>
     <p style="font-size: var(--font-sm); color: var(--bumble-text); margin-bottom: 2rem; line-height: 1.6; text-align: center; font-weight: 500;">
       Please confirm that your mobile number is correct:<br/>
       <strong id="modal-phone-display" style="font-size: var(--font-xl); color: var(--bumble-text); display: block; margin: 1rem 0; letter-spacing: 1.5px; background-color: var(--bumble-yellow); padding: 0.5rem; border-radius: 12px; border: 1.5px solid var(--bumble-yellow);"></strong>
