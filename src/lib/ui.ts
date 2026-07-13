@@ -64,7 +64,16 @@ export function generateMatchCardHtml(uid: string, name: string, age: number | u
         <div class="match-header" style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem;">
             <div style="display: flex; flex-direction: column; gap: 0.2rem;">
                 <span class="match-name" style="font-size: var(--font-xl); font-weight: 800; color: var(--bumble-text); letter-spacing: -0.02em;">${name}${age !== undefined ? `, ${age}` : ''}</span>
-                <span style="font-size: var(--font-xs); color: var(--bumble-text-light); font-weight: 700; background-color: var(--bumble-light-grey); padding: 0.15rem 0.5rem; border-radius: 6px; width: fit-content;">ID: ${uid}</span>
+                <div style="display: inline-flex; align-items: center; gap: 0.35rem; font-size: var(--font-xs); color: var(--bumble-text-light); font-weight: 700; background-color: var(--bumble-light-grey); padding: 0.15rem 0.5rem; border-radius: 6px; width: fit-content;">
+                    <span>ID: ${uid}</span>
+                    <button class="copy-uid-btn" data-uid="${uid}" title="Copy User ID" style="background: none; border: none; padding: 0.1rem 0.2rem; margin: 0; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; color: var(--bumble-text-light); transition: color 0.2s; vertical-align: middle; height: auto; min-height: 0; outline: none; box-shadow: none;" onmouseover="this.style.color='var(--bumble-text)'" onmouseout="this.style.color='var(--bumble-text-light)'">
+                        <svg class="copy-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display: block;">
+                            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                        </svg>
+                        <span class="copied-text" style="display: none; font-size: 10px; font-weight: 800; color: #10b981; margin-left: 0.25rem;">Copied!</span>
+                    </button>
+                </div>
             </div>
             <span class="match-category" style="background-color: var(--bumble-yellow); color: var(--bumble-text); padding: 0.35rem 0.75rem; border-radius: 9999px; font-size: var(--font-xs); font-weight: 800; text-transform: uppercase; border: 1.5px solid var(--bumble-yellow); box-shadow: 2px 2px 0 var(--bumble-yellow);">${category}</span>
         </div>
