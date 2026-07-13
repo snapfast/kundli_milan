@@ -641,9 +641,20 @@ import Layout from '../layouts/Layout.astro';
 								const distanceHtml = showDistance && m.distance !== undefined ?
 									`<div style="font-size: var(--font-sm); color: var(--bumble-text); margin-bottom: 0.75rem; font-weight: 800; display: inline-flex; align-items: center; gap: 0.25rem; background-color: var(--bumble-yellow); padding: 0.25rem 0.75rem; border-radius: 9999px; border: 1.5px solid var(--bumble-text); box-shadow: 1.5px 1.5px 0 var(--bumble-text);">📍 Approx. ${Math.round(m.distance)} km away</div>` : '';
 
+								const extraDetails = {
+									occupation: otherUser.occupation,
+									education: otherUser.education,
+									income: otherUser.income,
+									religion: otherUser.religion,
+									height: otherUser.height,
+									maritalStatus: otherUser.maritalStatus,
+									currentLocation: otherUser.currentLocation,
+									bio: otherUser.bio
+								};
+
 								const card = document.createElement('div');
 								card.className = 'match-card';
-								card.innerHTML = (distanceHtml ? `<div style="margin-bottom: 0.75rem;">${distanceHtml}</div>` : '') + generateMatchCardHtml(m.uid, m.name, age, m.category, m.score, compat.description, kootaHtml, compat.doshas);
+								card.innerHTML = (distanceHtml ? `<div style="margin-bottom: 0.75rem;">${distanceHtml}</div>` : '') + generateMatchCardHtml(m.uid, m.name, age, m.category, m.score, compat.description, kootaHtml, compat.doshas, extraDetails);
 								listContainer.appendChild(card);
 							}
 						});
