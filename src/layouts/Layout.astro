@@ -531,6 +531,44 @@ const { title, description, noindex } = Astro.props;
 				window.addEventListener('load', initTotalUsers);
 			}
 
+			// Global Copy User ID Logic
+			document.addEventListener('click', async (e) => {
+				const button = (e.target as HTMLElement).closest('.copy-uid-btn') as HTMLButtonElement | null;
+				if (!button) return;
+
+				const uid = button.getAttribute('data-uid');
+				if (!uid) return;
+
+				try {
+					await navigator.clipboard.writeText(uid);
+
+					const copyIcon = button.querySelector('.copy-icon') as HTMLElement | null;
+					const copiedText = button.querySelector('.copied-text') as HTMLElement | null;
+					const btnText = button.querySelector('.btn-text') as HTMLElement | null;
+
+					if (copiedText) {
+						if (copyIcon) copyIcon.style.display = 'none';
+						if (btnText) btnText.style.display = 'none';
+						copiedText.style.display = 'inline';
+
+						const originalColor = button.style.color;
+						const originalBorderColor = button.style.borderColor;
+						button.style.color = '#10b981';
+						button.style.borderColor = '#10b981';
+
+						setTimeout(() => {
+							if (copyIcon) copyIcon.style.display = 'block';
+							if (btnText) btnText.style.display = 'inline';
+							copiedText.style.display = 'none';
+							button.style.color = originalColor;
+							button.style.borderColor = originalBorderColor;
+						}, 1500);
+					}
+				} catch (err) {
+					console.error('Failed to copy User ID:', err);
+				}
+			});
+
 			// Optional: Re-check navigation if user details might have been updated
 			window.addEventListener('storage', updateNavigation);
 
