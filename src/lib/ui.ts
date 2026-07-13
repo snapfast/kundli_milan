@@ -51,7 +51,7 @@ export function generateMatchCardHtml(uid: string, name: string, age: number | u
 
         descriptionHtml = `
             <div class="match-highlight" style="background: ${highlightBg}; border: 1.5px solid ${highlightBorder}; display: flex; gap: 0.75rem; padding: 1rem; border-radius: 14px; margin-bottom: 1rem; align-items: flex-start;">
-                <div class="match-highlight-icon" style="font-size: 1.5rem; line-height: 1;">${highlightIcon}</div>
+                <div class="match-highlight-icon" style="font-size: 1.25rem; line-height: 1;">${highlightIcon}</div>
                 <div class="match-highlight-content" style="font-size: var(--font-sm); color: var(--bumble-text); line-height: 1.5;">
                     <span class="match-highlight-title" style="color: ${highlightColor}; font-weight: 800; text-transform: uppercase; letter-spacing: 0.02em; font-size: var(--font-xs); margin-bottom: 0.25rem; display: block;">${categoryTitle}</span>
                     ${description}

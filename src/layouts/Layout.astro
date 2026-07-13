@@ -53,18 +53,18 @@ const { title, description, noindex } = Astro.props;
 				--bumble-text-light: #8f7663; /* Dark taupe accent */
 				--bumble-accent: #ffcb37;
 
-				--font-xs: 0.85rem;
-				--font-sm: 0.95rem;
-				--font-base: 1rem;
-				--font-lg: 1.25rem;
-				--font-xl: 1.5rem;
-				--font-2xl: 2rem;
-				--font-3xl: 2.5rem;
-				--font-4xl: 4rem;
+				--font-xs: 0.75rem;
+				--font-sm: 0.85rem;
+				--font-base: 0.95rem;
+				--font-lg: 1.15rem;
+				--font-xl: 1.35rem;
+				--font-2xl: 1.6rem;
+				--font-3xl: 2rem;
+				--font-4xl: 3rem;
 			}
 			.logo {
 				font-family: 'Dancing Script', cursive;
-				font-size: clamp(3rem, 12vw, 8rem);
+				font-size: clamp(2.5rem, 10vw, 6rem);
 				font-weight: bold;
 				margin-bottom: 0.5rem;
 				line-height: 1;
@@ -76,7 +76,7 @@ const { title, description, noindex } = Astro.props;
 				text-shadow: 2px 2px 0px rgba(143, 118, 99, 0.15);
 			}
 			.logo-sm {
-				font-size: clamp(2.5rem, 8vw, 5rem);
+				font-size: clamp(2rem, 7vw, 4rem);
 				margin-bottom: 0;
 			}
 			#nav-loader {
@@ -148,15 +148,25 @@ const { title, description, noindex } = Astro.props;
 				box-shadow: 0 8px 24px rgba(0,0,0,0.04);
 				border: 1px solid var(--bumble-light-grey);
 			}
-			h1, h2 {
+			h1 {
 				color: var(--bumble-text);
 				border-bottom: 3px solid var(--bumble-yellow);
 				padding-bottom: 0.4rem;
 				margin-top: 0.5rem;
 				margin-bottom: 1rem;
-				font-size: var(--font-lg);
+				font-size: var(--font-2xl);
 				font-weight: 800;
 				letter-spacing: -0.02em;
+			}
+			h2 {
+				color: var(--bumble-text);
+				border-bottom: 2.5px solid var(--bumble-yellow);
+				padding-bottom: 0.35rem;
+				margin-top: 0.5rem;
+				margin-bottom: 1rem;
+				font-size: var(--font-xl);
+				font-weight: 800;
+				letter-spacing: -0.01em;
 			}
 
 			/* Form & Buttons */
