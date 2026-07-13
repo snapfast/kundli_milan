@@ -1,4 +1,23 @@
-export function generateMatchCardHtml(uid: string, name: string, age: number | undefined, category: string, score: number, description: string, kootaHtml: string, doshas: { name: string, description: string, isCancelled: boolean }[] = []): string {
+export function generateMatchCardHtml(
+    uid: string,
+    name: string,
+    age: number | undefined,
+    category: string,
+    score: number,
+    description: string,
+    kootaHtml: string,
+    doshas: { name: string, description: string, isCancelled: boolean }[] = [],
+    extraDetails?: {
+        occupation?: string;
+        education?: string;
+        income?: string;
+        religion?: string;
+        height?: string;
+        maritalStatus?: string;
+        currentLocation?: string;
+        bio?: string;
+    }
+): string {
     const percentage = (score / 36) * 100;
 
     // Smooth progress bar color depending on Ashta Koota match quality
@@ -60,6 +79,51 @@ export function generateMatchCardHtml(uid: string, name: string, age: number | u
         `;
     }
 
+    let extraDetailsHtml = '';
+    if (extraDetails) {
+        const detailsList = [
+            { label: 'Profession', value: extraDetails.occupation, icon: '💼' },
+            { label: 'Education', value: extraDetails.education, icon: '🎓' },
+            { label: 'Income', value: extraDetails.income, icon: '💰' },
+            { label: 'Religion', value: extraDetails.religion, icon: '📿' },
+            { label: 'Height', value: extraDetails.height, icon: '📏' },
+            { label: 'Marital Status', value: extraDetails.maritalStatus, icon: '💍' },
+            { label: 'Current Location', value: extraDetails.currentLocation, icon: '📍' }
+        ].filter(d => d.value && d.value !== 'N/A' && d.value !== '');
+
+        let bioHtml = '';
+        if (extraDetails.bio && extraDetails.bio.trim() !== '') {
+            bioHtml = `
+                <div class="match-bio" style="font-size: var(--font-sm); color: var(--bumble-text); font-style: italic; background-color: var(--bumble-light-yellow); padding: 0.75rem 1rem; border-radius: 12px; border-left: 3px solid var(--bumble-yellow); line-height: 1.45; margin-top: 0.5rem; margin-bottom: 0.25rem; font-weight: 500;">
+                    "${extraDetails.bio.trim()}"
+                </div>
+            `;
+        }
+
+        if (detailsList.length > 0 || bioHtml !== '') {
+            let pillsHtml = '';
+            if (detailsList.length > 0) {
+                pillsHtml = `
+                    <div class="match-extra-details" style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
+                        ${detailsList.map(d => `
+                            <span class="detail-pill" style="display: inline-flex; align-items: center; gap: 0.35rem; font-size: var(--font-xs); font-weight: 700; color: var(--bumble-text); background-color: var(--bumble-cream); border: 1.5px solid var(--bumble-border); padding: 0.35rem 0.75rem; border-radius: 9999px; line-height: 1.2;">
+                                <span>${d.icon}</span>
+                                <span>${d.value}</span>
+                            </span>
+                        `).join('')}
+                    </div>
+                `;
+            }
+
+            extraDetailsHtml = `
+                <div class="match-profile-section" style="margin: 1rem 0; padding-top: 0.75rem; border-top: 1px dashed var(--bumble-border); border-bottom: 1px dashed var(--bumble-border); padding-bottom: 0.75rem;">
+                    ${pillsHtml}
+                    ${bioHtml}
+                </div>
+            `;
+        }
+    }
+
     return `
         <div class="match-header" style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem;">
             <div style="display: flex; flex-direction: column; gap: 0.2rem;">
@@ -86,6 +150,7 @@ export function generateMatchCardHtml(uid: string, name: string, age: number | u
                 <div class="progress-bar-fill" style="width: ${percentage}%; background-color: ${progressColor}; height: 100%; transition: width 0.5s ease-out;"></div>
             </div>
         </div>
+        ${extraDetailsHtml}
         ${descriptionHtml}
         ${doshaHtml}
         ${kootaHtml}
