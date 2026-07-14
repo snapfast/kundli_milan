@@ -238,7 +238,6 @@ const { title, description, noindex } = Astro.props;
 			}
 			button:hover, .btn:hover {
 				background-color: var(--bumble-yellow-hover);
-				transform: translateY(-1px);
 			}
 			.nav-link {
 				background-color: transparent;
@@ -273,13 +272,11 @@ const { title, description, noindex } = Astro.props;
 				padding: 1.5rem;
 				margin-bottom: 1.5rem;
 				box-shadow: 0 6px 18px rgba(143,118,99,0.04);
-				transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+				transition: all 0.2s ease;
 				overflow: hidden;
 				position: relative;
 			}
 			.match-card:hover {
-				transform: translateY(-4px);
-				box-shadow: 0 12px 28px rgba(143,118,99,0.08);
 				border-color: var(--bumble-yellow);
 			}
 			.flash-border-active {
