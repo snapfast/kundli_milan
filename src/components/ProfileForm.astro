@@ -113,7 +113,20 @@ const { isEdit = false } = Astro.props;
 		letter-spacing: 0.05em;
 	}
 	.gender-tile input[type="radio"] {
-		display: none;
+		position: absolute;
+		opacity: 0;
+		width: 1px;
+		height: 1px;
+		margin: -1px;
+		padding: 0;
+		overflow: hidden;
+		clip: rect(0, 0, 0, 0);
+		border: 0;
+	}
+	.gender-tile:focus-within {
+		border-color: var(--bumble-yellow);
+		outline: none;
+		box-shadow: 0 0 0 4px rgba(255, 203, 55, 0.4);
 	}
 </style>
 
@@ -425,9 +438,6 @@ const { isEdit = false } = Astro.props;
 		const uid = getOrSetUserId();
 
 		// Gender tiles custom script handlers to set native selected styling
-		const maleTile = document.getElementById('tile-male');
-		const femaleTile = document.getElementById('tile-female');
-		const otherTile = document.getElementById('tile-other');
 		const genderRadioInputs = document.querySelectorAll('input[name="gender"]') as NodeListOf<HTMLInputElement>;
 
 		function updateGenderTileStyles() {
@@ -443,16 +453,10 @@ const { isEdit = false } = Astro.props;
 			});
 		}
 
-		[maleTile, femaleTile, otherTile].forEach(tile => {
-			if (tile) {
-				tile.addEventListener('click', () => {
-					const input = tile.querySelector('input[type="radio"]') as HTMLInputElement;
-					if (input) {
-						input.checked = true;
-						updateGenderTileStyles();
-					}
-				});
-			}
+		// Listen to change events on the radio buttons themselves.
+		// This handles both mouse clicks (which natively toggle the radio) and keyboard navigation.
+		genderRadioInputs.forEach(input => {
+			input.addEventListener('change', updateGenderTileStyles);
 		});
 
 		// Pre-fill form from cookies in Edit mode
