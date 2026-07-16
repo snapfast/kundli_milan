@@ -112,6 +112,11 @@ const { isEdit = false } = Astro.props;
 		text-transform: uppercase;
 		letter-spacing: 0.05em;
 	}
+	.gender-tile:focus-within {
+		border-color: var(--bumble-yellow);
+		box-shadow: 0 0 0 3px rgba(255, 203, 55, 0.4);
+		outline: none;
+	}
 	.gender-tile input[type="radio"] {
 		position: absolute;
 		opacity: 0;
@@ -455,6 +460,10 @@ const { isEdit = false } = Astro.props;
 
 		// Listen to change events on the radio buttons themselves.
 		// This handles both mouse clicks (which natively toggle the radio) and keyboard navigation.
+		genderRadioInputs.forEach(input => {
+			input.addEventListener('change', updateGenderTileStyles);
+		});
+
 		genderRadioInputs.forEach(input => {
 			input.addEventListener('change', updateGenderTileStyles);
 		});

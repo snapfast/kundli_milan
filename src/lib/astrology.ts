@@ -117,13 +117,30 @@ export function calculateAstrology(dob: string, tob: string, lat: number = 28.61
         house: 1
     });
 
+    // Pre-allocate variables to capture values during planetary iteration to avoid redundant astronomy-engine queries
+    let siderealSunLong = 0;
+    let siderealMoonLong = 0;
+    let moonRasiIdx = 0;
+    let marsRasiIdx = 0;
+
     // 2. Planets
     PLANET_MAP.forEach(p => {
+        // Compute position vector once
         const pos = Ast.GeoVector(p.body, time, true);
         const ecl = Ast.Ecliptic(pos);
         const siderealLong = (ecl.elon - ayanamsa + 360) % 360;
         const rasiIdx = Math.floor(siderealLong / 30);
         const house = ((rasiIdx - lagnaRasiIdx + 12) % 12) + 1;
+
+        // Capture Sun, Moon, and Mars properties during iteration to optimize down duplicate calls
+        if (p.name === "Sun") {
+            siderealSunLong = siderealLong;
+        } else if (p.name === "Moon") {
+            siderealMoonLong = siderealLong;
+            moonRasiIdx = rasiIdx;
+        } else if (p.name === "Mars") {
+            marsRasiIdx = rasiIdx;
+        }
 
         planets.push({
             name: p.name,
@@ -134,21 +151,11 @@ export function calculateAstrology(dob: string, tob: string, lat: number = 28.61
         });
     });
 
-    // 3. Panchang
-    const sunPos = Ast.GeoVector(Ast.Body.Sun, time, true);
-    const sunEcl = Ast.Ecliptic(sunPos);
-    const moonPos = Ast.GeoMoon(time);
-    const moonEcl = Ast.Ecliptic(moonPos);
-
-    const sunLong = sunEcl.elon;
-    const moonLong = moonEcl.elon;
-    const siderealSunLong = (sunLong - ayanamsa + 360) % 360;
-    const siderealMoonLong = (moonLong - ayanamsa + 360) % 360;
-
-    const diff = (moonLong - sunLong + 360) % 360;
+    // 3. Panchang (Using cached sidereal solar and lunar values)
+    // The relative angular difference between Moon and Sun is invariant under sidereal/tropical shift (Ayanamsa cancels out)
+    const diff = (siderealMoonLong - siderealSunLong + 360) % 360;
     const tithiIdx = Math.floor(diff / 12);
     const nakIdx = Math.floor(siderealMoonLong / (360 / 27));
-    const moonRasiIdx = Math.floor(siderealMoonLong / 30);
     const yogaIdx = Math.floor(((siderealSunLong + siderealMoonLong) % 360) / (360 / 27));
 
     const karanaIdxTotal = Math.floor(diff / 6);
@@ -161,13 +168,8 @@ export function calculateAstrology(dob: string, tob: string, lat: number = 28.61
     const sunrise = Ast.SearchRiseSet(Ast.Body.Sun, observer, 1, time, -24);
     const sunset = Ast.SearchRiseSet(Ast.Body.Sun, observer, -1, time, 24);
 
-    // Calculate Manglik Dosha
+    // Calculate Manglik Dosha (Using cached Mars position to avoid redundant astronomy-engine queries)
     // Mars (Mangal) in 1, 4, 7, 8, or 12 house from Ascendant (Lagna) or Moon (Chandra)
-    const marsPos = Ast.GeoVector(Ast.Body.Mars, time, true);
-    const marsEcl = Ast.Ecliptic(marsPos);
-    const siderealMarsLong = (marsEcl.elon - ayanamsa + 360) % 360;
-    const marsRasiIdx = Math.floor(siderealMarsLong / 30);
-
     const houseFromLagna = ((marsRasiIdx - lagnaRasiIdx + 12) % 12) + 1;
     const houseFromMoon = ((marsRasiIdx - moonRasiIdx + 12) % 12) + 1;
 
