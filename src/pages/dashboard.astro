@@ -322,7 +322,9 @@ import Layout from '../layouts/Layout.astro';
 
 			try {
 				const users = await fetchUsers();
-				let profile = users.find(u => u.uid === uid);
+				// Optimize user lookups with an O(1) Map instead of O(N) array scans
+				const usersMap = new Map(users.map(u => [u.uid, u]));
+				let profile = usersMap.get(uid || '');
 
 				const lat = details.lat ? parseFloat(details.lat) : 28.6139;
 				const lon = details.lon ? parseFloat(details.lon) : 77.2090;
@@ -528,7 +530,8 @@ import Layout from '../layouts/Layout.astro';
 				function renderMatches(listContainer: HTMLElement, matchesData: any[], showDistance: boolean = false) {
 					if (matchesData && matchesData.length > 0) {
 						matchesData.forEach((m: any) => {
-							const otherUser = users.find(u => u.uid === m.uid);
+							// Optimize to O(1) lookup using pre-built usersMap instead of O(N) array scan
+							const otherUser = usersMap.get(m.uid);
 							let kootaHtml = '';
 							let age: number | undefined = undefined;
 
