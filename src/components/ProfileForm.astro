@@ -280,6 +280,13 @@ const { isEdit = false } = Astro.props;
 					<input type="password" id="pin" name="pin" required pattern="[0-9]{4}" placeholder="Enter 4-digit PIN" maxlength="4" inputmode="numeric" />
 				</div>
 			</div>
+			<div class="field-privacy-note" style="margin-top: 1rem; background-color: var(--bumble-light-yellow); border: 1.5px solid var(--bumble-yellow); padding: 0.75rem 1rem; border-radius: 12px; font-size: var(--font-xs); color: var(--bumble-text); line-height: 1.4; display: flex; gap: 0.5rem; align-items: flex-start; font-weight: 500;">
+				<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0; margin-top: 0.1rem; color: var(--bumble-text-light);">
+					<rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+					<path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+				</svg>
+				<span><strong>100% Private & Secure:</strong> Your mobile number is confidential and strictly used for secure, PIN-based logins. It will <strong>never</strong> be shared with other users, shown publicly on your profile, or used for spam.</span>
+			</div>
 			<div class="form-actions" style="margin-top: 2rem;">
 				<button type="button" class="btn btn-submit" id="next1Btn" style="width: 100%;">Next</button>
 			</div>

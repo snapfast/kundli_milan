@@ -1,0 +1,622 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Free Kundli Matching - Accurate 36 Guna Milan Calculator" description="Check marriage compatibility instantly using the ancient Vedic Ashta Koota (36 Guna Milan) system. Accurate planetary, Nakshatra, and Dosha analysis.">
+	<style>
+		.calculator-container {
+			background: white;
+			border: 2px solid var(--bumble-border);
+			border-radius: 24px;
+			padding: 2rem;
+			box-shadow: 0 8px 24px rgba(143,118,99,0.02);
+			margin-bottom: 2.5rem;
+		}
+
+		.person-section-title {
+			font-family: var(--font-secondary);
+			font-size: var(--font-lg);
+			color: var(--bumble-text);
+			font-weight: 800;
+			border-bottom: 2px solid var(--bumble-yellow);
+			padding-bottom: 0.5rem;
+			margin-bottom: 1.25rem;
+			text-transform: uppercase;
+			letter-spacing: 0.03em;
+		}
+
+		.calc-grid {
+			display: grid;
+			grid-template-columns: 1fr 1fr;
+			gap: 2rem;
+		}
+
+		@media (max-width: 768px) {
+			.calc-grid {
+				grid-template-columns: 1fr;
+				gap: 1.5rem;
+			}
+			.calculator-container {
+				padding: 1.25rem;
+			}
+		}
+
+		/* Suggestions dropdown */
+		.suggestions-box {
+			position: absolute;
+			top: 100%;
+			left: 0;
+			right: 0;
+			background: white;
+			border: 2px solid var(--bumble-yellow);
+			border-top: none;
+			z-index: 1000;
+			max-height: 180px;
+			overflow-y: auto;
+			display: none;
+			border-radius: 0 0 12px 12px;
+			box-shadow: 0 8px 16px rgba(143,118,99,0.06);
+		}
+
+		.suggestion-item {
+			padding: 0.75rem 1rem;
+			cursor: pointer;
+			border-bottom: 1px solid var(--bumble-light-grey);
+			color: var(--bumble-text);
+			font-weight: 500;
+			font-size: var(--font-sm);
+		}
+
+		.suggestion-item:hover {
+			background-color: var(--bumble-cream);
+		}
+
+		.suggestion-item:last-child {
+			border-bottom: none;
+			border-radius: 0 0 10px 10px;
+		}
+
+		.btn-calc {
+			width: 100%;
+			background-color: var(--bumble-yellow);
+			color: var(--bumble-text);
+			font-weight: 800;
+			font-size: var(--font-base);
+			text-transform: uppercase;
+			letter-spacing: 0.05em;
+			padding: 0.9rem;
+			border-radius: 9999px;
+			border: 2px solid var(--bumble-yellow);
+			box-shadow: 3px 3px 0 var(--bumble-yellow);
+			cursor: pointer;
+			transition: all 0.2s ease;
+			margin-top: 1.5rem;
+		}
+
+		.btn-calc:hover {
+			background-color: var(--bumble-yellow-hover);
+			border-color: var(--bumble-yellow-hover);
+		}
+
+		.gender-selector-compact {
+			display: grid;
+			grid-template-columns: 1fr 1fr;
+			gap: 0.5rem;
+			margin-top: 0.4rem;
+		}
+
+		.gender-tile-compact {
+			border: 2px solid var(--bumble-border);
+			border-radius: 12px;
+			padding: 0.6rem;
+			text-align: center;
+			cursor: pointer;
+			transition: all 0.2s ease;
+			background: white;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			gap: 0.35rem;
+			color: var(--bumble-text);
+			font-size: var(--font-xs);
+			font-weight: 700;
+			text-transform: uppercase;
+		}
+
+		.gender-tile-compact:hover {
+			border-color: var(--bumble-yellow);
+			background-color: var(--bumble-cream);
+		}
+
+		.gender-tile-compact.selected {
+			border-color: var(--bumble-yellow);
+			background-color: var(--bumble-yellow);
+			box-shadow: 0 3px 8px rgba(255, 203, 55, 0.15);
+		}
+
+		.gender-tile-compact input[type="radio"] {
+			display: none;
+		}
+	</style>
+
+	<h1 style="font-family: var(--font-secondary); font-size: var(--font-2xl); border-bottom: none; text-align: center; margin-bottom: 0.5rem;">Free Kundli Matching Calculator</h1>
+	<p style="text-align: center; color: var(--bumble-text-light); font-weight: 600; font-size: var(--font-sm); margin-bottom: 2rem;">Accurate 36-Point Ashta Koota Guna Milan & Dosha Checker</p>
+
+	<div id="calc-error-msg" style="display: none; background-color: #fef2f2; border: 2px solid #ff4444; color: #b91c1c; padding: 1rem; border-radius: 12px; margin-bottom: 1.5rem; font-size: var(--font-sm); text-align: center; font-weight: 600;"></div>
+
+	<div class="calculator-container">
+		<form id="calculatorForm" novalidate style="background: transparent; padding: 0; border: none; display: flex; flex-direction: column; gap: 0;">
+			<div class="calc-grid">
+				<!-- First Person -->
+				<div style="display: flex; flex-direction: column; gap: 1rem;">
+					<h2 class="person-section-title">First Person</h2>
+					<div class="field">
+						<label for="p1_name">Name</label>
+						<input type="text" id="p1_name" name="p1_name" required placeholder="Enter name" />
+					</div>
+					<div class="form-row" style="margin-top: 0.5rem;">
+						<div class="field">
+							<label for="p1_dob">Date of Birth</label>
+							<input type="date" id="p1_dob" name="p1_dob" required max={new Date().toISOString().split('T')[0]} />
+						</div>
+						<div class="field">
+							<label for="p1_tob">Time of Birth</label>
+							<input type="time" id="p1_tob" name="p1_tob" required style="width: 100%;" />
+						</div>
+					</div>
+					<div class="field" style="margin-top: 0.5rem;">
+						<label>Gender</label>
+						<div class="gender-selector-compact">
+							<label class="gender-tile-compact selected" id="p1-male-label">
+								<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+									<circle cx="10" cy="14" r="5"></circle>
+									<polyline points="15 3 21 3 21 9"></polyline>
+									<line x1="21" y1="3" x2="13.5" y2="10.5"></line>
+								</svg>
+								<span>Male</span>
+								<input type="radio" name="p1_gender" value="male" checked />
+							</label>
+							<label class="gender-tile-compact" id="p1-female-label">
+								<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+									<circle cx="12" cy="9" r="5"></circle>
+									<line x1="12" y1="14" x2="12" y2="21"></line>
+									<line x1="9" y1="18" x2="15" y2="18"></line>
+								</svg>
+								<span>Female</span>
+								<input type="radio" name="p1_gender" value="female" />
+							</label>
+						</div>
+					</div>
+					<div class="field" style="margin-top: 0.5rem; position: relative;">
+						<label for="p1_location">Birth Location</label>
+						<input type="text" id="p1_location" name="p1_location" required placeholder="e.g. New Delhi, India" autocomplete="off" />
+						<div id="p1_suggestions" class="suggestions-box"></div>
+						<input type="hidden" id="p1_lat" name="p1_lat" />
+						<input type="hidden" id="p1_lon" name="p1_lon" />
+					</div>
+				</div>
+
+				<!-- Second Person -->
+				<div style="display: flex; flex-direction: column; gap: 1rem;">
+					<h2 class="person-section-title">Second Person</h2>
+					<div class="field">
+						<label for="p2_name">Name</label>
+						<input type="text" id="p2_name" name="p2_name" required placeholder="Enter name" />
+					</div>
+					<div class="form-row" style="margin-top: 0.5rem;">
+						<div class="field">
+							<label for="p2_dob">Date of Birth</label>
+							<input type="date" id="p2_dob" name="p2_dob" required max={new Date().toISOString().split('T')[0]} />
+						</div>
+						<div class="field">
+							<label for="p2_tob">Time of Birth</label>
+							<input type="time" id="p2_tob" name="p2_tob" required style="width: 100%;" />
+						</div>
+					</div>
+					<div class="field" style="margin-top: 0.5rem;">
+						<label>Gender</label>
+						<div class="gender-selector-compact">
+							<label class="gender-tile-compact" id="p2-male-label">
+								<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+									<circle cx="10" cy="14" r="5"></circle>
+									<polyline points="15 3 21 3 21 9"></polyline>
+									<line x1="21" y1="3" x2="13.5" y2="10.5"></line>
+								</svg>
+								<span>Male</span>
+								<input type="radio" name="p2_gender" value="male" />
+							</label>
+							<label class="gender-tile-compact selected" id="p2-female-label">
+								<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+									<circle cx="12" cy="9" r="5"></circle>
+									<line x1="12" y1="14" x2="12" y2="21"></line>
+									<line x1="9" y1="18" x2="15" y2="18"></line>
+								</svg>
+								<span>Female</span>
+								<input type="radio" name="p2_gender" value="female" checked />
+							</label>
+						</div>
+					</div>
+					<div class="field" style="margin-top: 0.5rem; position: relative;">
+						<label for="p2_location">Birth Location</label>
+						<input type="text" id="p2_location" name="p2_location" required placeholder="e.g. Mumbai, India" autocomplete="off" />
+						<div id="p2_suggestions" class="suggestions-box"></div>
+						<input type="hidden" id="p2_lat" name="p2_lat" />
+						<input type="hidden" id="p2_lon" name="p2_lon" />
+					</div>
+				</div>
+			</div>
+
+			<button type="submit" class="btn-calc" id="btn-calculate">Calculate Compatibility &rarr;</button>
+		</form>
+	</div>
+
+	<!-- Result Container -->
+	<div id="calc-result" style="display: none; margin-bottom: 2.5rem;">
+		<h2 style="font-family: var(--font-secondary); font-size: var(--font-xl); color: var(--bumble-text); text-align: center; border-bottom: none; margin-bottom: 1.5rem; text-transform: uppercase; letter-spacing: 0.03em;">Compatibility Report</h2>
+
+		<div id="result-card-container" class="match-card">
+			<!-- Populated dynamically -->
+		</div>
+
+		<!-- Share and Actions Row -->
+		<div style="display: flex; gap: 1rem; justify-content: center; margin-top: 1.5rem;">
+			<button id="btn-copy-result" style="background-color: var(--bumble-white); border: 2px solid var(--bumble-yellow); color: var(--bumble-text); padding: 0.6rem 1.5rem; border-radius: 9999px; font-weight: 700; display: inline-flex; align-items: center; gap: 0.5rem;">
+				<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+					<rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+					<path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+				</svg>
+				<span id="copy-result-text">Copy Guna Milan Summary</span>
+			</button>
+		</div>
+
+		<!-- Growth Oriented CTA -->
+		<div class="signup-cta-box" style="margin-top: 2.5rem; background: var(--bumble-light-yellow); border: 2.5px dashed var(--bumble-yellow); padding: 2rem; border-radius: 20px; text-align: center; box-shadow: 0 6px 16px rgba(143,118,99,0.03);">
+			<h3 style="margin-top: 0; color: var(--bumble-text); font-family: var(--font-secondary); font-size: var(--font-lg); font-weight: 800; border-bottom: none; text-transform: uppercase; letter-spacing: 0.02em;">Ready to find compatible partners aligned with your stars?</h3>
+			<p style="color: var(--bumble-text); margin-bottom: 1.5rem; font-size: var(--font-sm); font-weight: 500; line-height: 1.5;">
+				Join moonine today to create your private, secure profile. Discover verified partners in your area sorted by their Guna Milan compatibility score. It's completely free, secure, and respectful of your privacy.
+			</p>
+			<a href="/create-profile" class="btn" style="display: inline-block; background-color: var(--bumble-yellow); color: var(--bumble-text); font-weight: 800; padding: 0.9rem 2rem; border-radius: 9999px; text-transform: uppercase; letter-spacing: 0.05em; border: 2px solid var(--bumble-yellow); box-shadow: 3px 3px 0 var(--bumble-yellow); text-decoration: none;">Create Your Free Profile &rarr;</a>
+		</div>
+	</div>
+
+	<script>
+		import { calculateAstrology } from '../lib/astrology';
+		import { calculateCompatibility } from '../lib/compatibility';
+		import { generateMatchCardHtml } from '../lib/ui';
+
+		// Form Inputs
+		const form = document.getElementById('calculatorForm') as HTMLFormElement;
+		const errorMsgEl = document.getElementById('calc-error-msg') as HTMLDivElement;
+		const resultSection = document.getElementById('calc-result') as HTMLDivElement;
+		const resultCardContainer = document.getElementById('result-card-container') as HTMLDivElement;
+		const btnCalculate = document.getElementById('btn-calculate') as HTMLButtonElement;
+		const btnCopyResult = document.getElementById('btn-copy-result') as HTMLButtonElement;
+		const copyResultText = document.getElementById('copy-result-text') as HTMLSpanElement;
+
+		// Input fields references
+		const p1Name = document.getElementById('p1_name') as HTMLInputElement;
+		const p1Dob = document.getElementById('p1_dob') as HTMLInputElement;
+		const p1Tob = document.getElementById('p1_tob') as HTMLInputElement;
+		const p1Location = document.getElementById('p1_location') as HTMLInputElement;
+		const p1Suggestions = document.getElementById('p1_suggestions') as HTMLDivElement;
+		const p1Lat = document.getElementById('p1_lat') as HTMLInputElement;
+		const p1Lon = document.getElementById('p1_lon') as HTMLInputElement;
+
+		const p2Name = document.getElementById('p2_name') as HTMLInputElement;
+		const p2Dob = document.getElementById('p2_dob') as HTMLInputElement;
+		const p2Tob = document.getElementById('p2_tob') as HTMLInputElement;
+		const p2Location = document.getElementById('p2_location') as HTMLInputElement;
+		const p2Suggestions = document.getElementById('p2_suggestions') as HTMLDivElement;
+		const p2Lat = document.getElementById('p2_lat') as HTMLInputElement;
+		const p2Lon = document.getElementById('p2_lon') as HTMLInputElement;
+
+		// Gender Custom Styling
+		const p1RadioInputs = document.querySelectorAll('input[name="p1_gender"]') as NodeListOf<HTMLInputElement>;
+		const p2RadioInputs = document.querySelectorAll('input[name="p2_gender"]') as NodeListOf<HTMLInputElement>;
+		const p1MaleLabel = document.getElementById('p1-male-label');
+		const p1FemaleLabel = document.getElementById('p1-female-label');
+		const p2MaleLabel = document.getElementById('p2-male-label');
+		const p2FemaleLabel = document.getElementById('p2-female-label');
+
+		function updateGenderStyles(radios: NodeListOf<HTMLInputElement>) {
+			radios.forEach(input => {
+				const parent = input.parentElement;
+				if (parent) {
+					if (input.checked) {
+						parent.classList.add('selected');
+					} else {
+						parent.classList.remove('selected');
+					}
+				}
+			});
+		}
+
+		[p1MaleLabel, p1FemaleLabel].forEach(label => {
+			label?.addEventListener('click', () => {
+				const input = label.querySelector('input[type="radio"]') as HTMLInputElement;
+				if (input) {
+					input.checked = true;
+					updateGenderStyles(p1RadioInputs);
+				}
+			});
+		});
+
+		[p2MaleLabel, p2FemaleLabel].forEach(label => {
+			label?.addEventListener('click', () => {
+				const input = label.querySelector('input[type="radio"]') as HTMLInputElement;
+				if (input) {
+					input.checked = true;
+					updateGenderStyles(p2RadioInputs);
+				}
+			});
+		});
+
+		// Autocomplete Cache and setup
+		const autocompleteCache = new Map<string, any[]>();
+		function setupAutocomplete(inputEl: HTMLInputElement, suggestionsEl: HTMLDivElement, latEl: HTMLInputElement, lonEl: HTMLInputElement) {
+			if (!inputEl) return;
+			let timeout: ReturnType<typeof setTimeout>;
+			inputEl.addEventListener('input', () => {
+				clearTimeout(timeout);
+				const query = inputEl.value.trim().toLowerCase();
+				if (query.length < 3) {
+					suggestionsEl.style.display = 'none';
+					return;
+				}
+
+				if (autocompleteCache.has(query)) {
+					renderSuggestions(autocompleteCache.get(query)!);
+					return;
+				}
+
+				timeout = setTimeout(async () => {
+					try {
+						suggestionsEl.innerHTML = '<div class="suggestion-item" style="color: var(--bumble-text-light);">Searching locations...</div>';
+						suggestionsEl.style.display = 'block';
+
+						const response = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&limit=5`);
+
+						if (!response.ok) throw new Error('Network response was not ok');
+
+						const data = await response.json();
+						autocompleteCache.set(query, data);
+						renderSuggestions(data);
+					} catch (error) {
+						console.error('Error fetching locations:', error);
+						suggestionsEl.innerHTML = '<div class="suggestion-item" style="color: #ff4444;">Error connecting to location service. Please type manually or try again.</div>';
+						suggestionsEl.style.display = 'block';
+					}
+				}, 300);
+			});
+
+			function renderSuggestions(data: any[]) {
+				suggestionsEl.innerHTML = '';
+				if (data.length > 0) {
+					data.forEach((item: any) => {
+						const div = document.createElement('div');
+						div.className = 'suggestion-item';
+						div.textContent = item.display_name;
+						div.addEventListener('click', () => {
+							inputEl.value = item.display_name;
+							latEl.value = item.lat;
+							lonEl.value = item.lon;
+							suggestionsEl.style.display = 'none';
+						});
+						suggestionsEl.appendChild(div);
+					});
+					suggestionsEl.style.display = 'block';
+				} else {
+					suggestionsEl.innerHTML = '<div class="suggestion-item" style="color: #ff4444;">No locations found. Try a different city.</div>';
+					suggestionsEl.style.display = 'block';
+				}
+			}
+
+			document.addEventListener('click', (e) => {
+				if (e.target !== inputEl) {
+					suggestionsEl.style.display = 'none';
+				}
+			});
+		}
+
+		setupAutocomplete(p1Location, p1Suggestions, p1Lat, p1Lon);
+		setupAutocomplete(p2Location, p2Suggestions, p2Lat, p2Lon);
+
+		const showError = (msg: string, focusEl?: HTMLElement) => {
+			if (errorMsgEl) {
+				errorMsgEl.textContent = msg;
+				errorMsgEl.style.display = 'block';
+				window.scrollTo({ top: 0, behavior: 'smooth' });
+			} else {
+				alert(msg);
+			}
+			if (focusEl) focusEl.focus();
+		};
+
+		// Shared variables to keep track of calculated result for copying
+		let lastScore = 0;
+		let lastCategory = '';
+		let firstName = '';
+		let secondName = '';
+
+		// Submit Handler
+		form?.addEventListener('submit', async (e) => {
+			e.preventDefault();
+			if (errorMsgEl) errorMsgEl.style.display = 'none';
+
+			// Validate inputs
+			if (!p1Name.value.trim() || p1Name.value.trim().length < 2) {
+				showError('Please enter Person 1 Full Name (at least 2 characters).', p1Name);
+				return;
+			}
+			if (!p1Dob.value) {
+				showError('Please select Person 1 Date of Birth.', p1Dob);
+				return;
+			}
+			if (!p1Tob.value) {
+				showError('Please select Person 1 Time of Birth.', p1Tob);
+				return;
+			}
+			if (!p1Location.value.trim()) {
+				showError('Please enter Person 1 Birth Location.', p1Location);
+				return;
+			}
+			if (!p1Lat.value || !p1Lon.value) {
+				showError('Please select Person 1 location from the autocomplete dropdown list.', p1Location);
+				return;
+			}
+
+			if (!p2Name.value.trim() || p2Name.value.trim().length < 2) {
+				showError('Please enter Person 2 Full Name (at least 2 characters).', p2Name);
+				return;
+			}
+			if (!p2Dob.value) {
+				showError('Please select Person 2 Date of Birth.', p2Dob);
+				return;
+			}
+			if (!p2Tob.value) {
+				showError('Please select Person 2 Time of Birth.', p2Tob);
+				return;
+			}
+			if (!p2Location.value.trim()) {
+				showError('Please enter Person 2 Birth Location.', p2Location);
+				return;
+			}
+			if (!p2Lat.value || !p2Lon.value) {
+				showError('Please select Person 2 location from the autocomplete dropdown list.', p2Location);
+				return;
+			}
+
+			// Capture genders
+			let p1Gender = 'male';
+			p1RadioInputs.forEach(r => { if (r.checked) p1Gender = r.value; });
+			let p2Gender = 'female';
+			p2RadioInputs.forEach(r => { if (r.checked) p2Gender = r.value; });
+
+			btnCalculate.disabled = true;
+			btnCalculate.textContent = 'Calculating compatibility...';
+
+			try {
+				// Step 1: Calculate individual astrologies
+				const lat1 = parseFloat(p1Lat.value);
+				const lon1 = parseFloat(p1Lon.value);
+				const astro1 = calculateAstrology(p1Dob.value, p1Tob.value, lat1, lon1);
+
+				const lat2 = parseFloat(p2Lat.value);
+				const lon2 = parseFloat(p2Lon.value);
+				const astro2 = calculateAstrology(p2Dob.value, p2Tob.value, lat2, lon2);
+
+				// Step 2: Calculate Guna Milan compatibility
+				const user1Astrology = {
+					name: p1Name.value.trim(),
+					nakshatraIdx: astro1.panchang.nakshatraIdx,
+					moonSignIdx: astro1.panchang.moonSignIdx,
+					isLaganManglik: astro1.panchang.isLaganManglik,
+					gender: p1Gender
+				};
+
+				const user2Astrology = {
+					name: p2Name.value.trim(),
+					nakshatraIdx: astro2.panchang.nakshatraIdx,
+					moonSignIdx: astro2.panchang.moonSignIdx,
+					isLaganManglik: astro2.panchang.isLaganManglik,
+					gender: p2Gender
+				};
+
+				const compat = calculateCompatibility(user1Astrology, user2Astrology);
+
+				// Render result
+				const kootaHtml = `
+					<details class="koota-details" style="margin-top: 1rem; border-top: 1px dashed var(--bumble-border); padding-top: 1rem;">
+						<summary class="koota-summary" style="font-weight: 800; font-size: var(--font-xs); text-transform: uppercase; letter-spacing: 0.05em; color: var(--bumble-text); cursor: pointer;">View Full 36 Guna Milan breakdown</summary>
+						<div style="overflow-x: auto; margin-top: 0.75rem;">
+							<table class="compact-table" style="width: 100%; border-collapse: collapse; font-size: var(--font-xs); background: #fff; border-radius: 12px; overflow: hidden; border: 2px solid var(--bumble-border);">
+								<thead>
+									<tr style="background-color: var(--bumble-light-grey);">
+										<th style="padding: 0.5rem 0.75rem; text-align: left; font-weight: 800;">#</th>
+										<th style="padding: 0.5rem 0.75rem; text-align: left; font-weight: 800;">Guna</th>
+										<th style="padding: 0.5rem 0.75rem; text-align: left; font-weight: 800;">${p1Name.value.trim()}</th>
+										<th style="padding: 0.5rem 0.75rem; text-align: left; font-weight: 800;">${p2Name.value.trim()}</th>
+										<th style="padding: 0.5rem 0.75rem; text-align: left; font-weight: 800;">Obtained</th>
+										<th style="padding: 0.5rem 0.75rem; text-align: left; font-weight: 800;">Max</th>
+										<th style="padding: 0.5rem 0.75rem; text-align: left; font-weight: 800;">Area of Life</th>
+									</tr>
+								</thead>
+								<tbody>
+									${compat.kootas.map((k: any, idx: number) => `
+										<tr>
+											<td style="padding: 0.5rem 0.75rem; border-bottom: 1px solid var(--bumble-border);">${idx + 1}</td>
+											<td style="padding: 0.5rem 0.75rem; border-bottom: 1px solid var(--bumble-border); font-weight: 700;">${k.name}</td>
+											<td style="padding: 0.5rem 0.75rem; border-bottom: 1px solid var(--bumble-border);">${k.boyValue}</td>
+											<td style="padding: 0.5rem 0.75rem; border-bottom: 1px solid var(--bumble-border);">${k.girlValue}</td>
+											<td style="padding: 0.5rem 0.75rem; border-bottom: 1px solid var(--bumble-border); font-weight: 700;">${k.score}</td>
+											<td style="padding: 0.5rem 0.75rem; border-bottom: 1px solid var(--bumble-border);">${k.max}</td>
+											<td style="padding: 0.5rem 0.75rem; border-bottom: 1px solid var(--bumble-border); color: var(--bumble-text-light);">${k.areaOfLife}</td>
+										</tr>
+									`).join('')}
+								</tbody>
+								<tfoot>
+									<tr style="background: var(--bumble-light-grey); font-weight: 800; color: var(--bumble-text);">
+										<td colspan="4" style="text-align: right; padding: 0.5rem 0.75rem;">Total Guna Milan Points</td>
+										<td style="padding: 0.5rem 0.75rem; font-size: var(--font-base); font-weight: 900;">${compat.score}</td>
+										<td style="padding: 0.5rem 0.75rem;">${compat.maxScore}</td>
+										<td></td>
+									</tr>
+								</tfoot>
+							</table>
+						</div>
+					</details>
+				`;
+
+				resultCardContainer.innerHTML = generateMatchCardHtml(
+					'GUEST-' + Math.floor(1000 + Math.random() * 9000),
+					`${p1Name.value.trim()} & ${p2Name.value.trim()}`,
+					undefined,
+					compat.category,
+					compat.score,
+					compat.description,
+					kootaHtml,
+					compat.doshas
+				);
+
+				lastScore = compat.score;
+				lastCategory = compat.category;
+				firstName = p1Name.value.trim();
+				secondName = p2Name.value.trim();
+
+				// Smooth scroll to results
+				resultSection.style.display = 'block';
+				resultSection.scrollIntoView({ behavior: 'smooth' });
+
+			} catch (err) {
+				console.error('Calculation Error:', err);
+				showError('Failed to calculate compatibility. Please check your inputs and try again.');
+			} finally {
+				btnCalculate.disabled = false;
+				btnCalculate.textContent = 'Calculate Compatibility →';
+			}
+		});
+
+		// Copy Result Handler
+		btnCopyResult?.addEventListener('click', async () => {
+			if (!firstName || !secondName) return;
+
+			const textToCopy = `🌙 Guna Milan Compatibility Report via moonine\n----------------------------------\nPartners: ${firstName} & ${secondName}\nMatch Compatibility: ${lastScore} / 36 Gunas (${lastCategory})\nFind compatible matches aligned with your stars: https://moonine.netlify.app/\n----------------------------------`;
+
+			try {
+				await navigator.clipboard.writeText(textToCopy);
+				const originalText = copyResultText.textContent;
+				copyResultText.textContent = 'Summary Copied to Clipboard!';
+				btnCopyResult.style.borderColor = '#10b981';
+				btnCopyResult.style.color = '#10b981';
+
+				setTimeout(() => {
+					copyResultText.textContent = originalText;
+					btnCopyResult.style.borderColor = 'var(--bumble-yellow)';
+					btnCopyResult.style.color = 'var(--bumble-text)';
+				}, 2000);
+			} catch (e) {
+				console.error('Failed to copy text summary:', e);
+			}
+		});
+	</script>
+</Layout>

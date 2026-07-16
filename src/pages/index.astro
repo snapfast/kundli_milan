@@ -117,8 +117,9 @@ import Layout from '../layouts/Layout.astro';
 			<div class="logo" data-text="moonine"><span class="logo-text" style="color: var(--bumble-text);">moonine</span></div>
 			<!-- Explicit starting lowercase letter per preferred memory -->
 			<p class="subtitle">discover verified local profiles and find the right life partner.</p>
-			<div>
+			<div style="display: flex; flex-direction: column; align-items: center; gap: 1rem;">
 				<a href="/create-profile" id="cta-btn" class="btn-cta">Sign Up</a>
+				<a href="/guna-milan" style="color: var(--bumble-text); font-weight: 700; font-size: var(--font-sm); text-decoration: underline;">Or check compatibility first with our Free Guna Milan Calculator &rarr;</a>
 			</div>
 			<p class="growing-community-tag">
 				join our growing community · discover verified local profiles · connect with mindful individuals · personal vetting · privacy first
@@ -141,6 +142,15 @@ import Layout from '../layouts/Layout.astro';
 					<div class="info-label">Verified Matches</div>
 					<div class="info-value">Every profile is treated with respect and privacy, giving you a secure space to connect.</div>
 				</div>
+			</div>
+
+			<!-- Free Guna Milan Promotion Card -->
+			<div class="info-card" style="margin-top: 1rem; border-color: var(--bumble-yellow); background-color: var(--bumble-light-yellow); text-align: center; padding: 2rem 1.5rem; border-radius: 20px;">
+				<div class="info-label">Try Before You Join</div>
+				<div class="info-value" style="margin-top: 0.5rem; margin-bottom: 1rem; color: var(--bumble-text); font-weight: 500;">
+					Want to test our matching accuracy? Try our completely free, instant Guna Milan Calculator with someone's birth details. No signup or account required!
+				</div>
+				<a href="/guna-milan" class="btn" style="background-color: var(--bumble-yellow); color: var(--bumble-text); padding: 0.6rem 1.5rem; border-radius: 9999px; font-weight: 800; text-decoration: none; text-transform: uppercase; font-size: var(--font-xs); display: inline-block;">Run Compatibility Test &rarr;</a>
 			</div>
 
 			<p style="text-align: center; margin-top: 2rem;">

@@ -3,6 +3,7 @@ Allow: /
 Allow: /about
 Allow: /login
 Allow: /create-profile
+Allow: /guna-milan
 Allow: /terms
 Allow: /privacy
 Disallow: /dashboard
