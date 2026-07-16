@@ -112,8 +112,19 @@ const { isEdit = false } = Astro.props;
 		text-transform: uppercase;
 		letter-spacing: 0.05em;
 	}
+	.gender-tile:focus-within {
+		border-color: var(--bumble-yellow);
+		box-shadow: 0 0 0 3px rgba(255, 203, 55, 0.4);
+		outline: none;
+	}
 	.gender-tile input[type="radio"] {
-		display: none;
+		position: absolute;
+		opacity: 0;
+		width: 0;
+		height: 0;
+		margin: 0;
+		padding: 0;
+		pointer-events: none;
 	}
 </style>
 
@@ -453,6 +464,10 @@ const { isEdit = false } = Astro.props;
 					}
 				});
 			}
+		});
+
+		genderRadioInputs.forEach(input => {
+			input.addEventListener('change', updateGenderTileStyles);
 		});
 
 		// Pre-fill form from cookies in Edit mode
