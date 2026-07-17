@@ -134,8 +134,22 @@ import Layout from '../layouts/Layout.astro';
 			box-shadow: 0 3px 8px rgba(255, 203, 55, 0.15);
 		}
 
+		.gender-tile-compact:focus-within {
+			border-color: var(--bumble-yellow);
+			outline: none;
+			box-shadow: 0 0 0 4px rgba(255, 203, 55, 0.4);
+		}
+
 		.gender-tile-compact input[type="radio"] {
-			display: none;
+			position: absolute;
+			opacity: 0;
+			width: 1px;
+			height: 1px;
+			margin: -1px;
+			padding: 0;
+			overflow: hidden;
+			clip: rect(0, 0, 0, 0);
+			border: 0;
 		}
 	</style>
 
@@ -313,10 +327,6 @@ import Layout from '../layouts/Layout.astro';
 		// Gender Custom Styling
 		const p1RadioInputs = document.querySelectorAll('input[name="p1_gender"]') as NodeListOf<HTMLInputElement>;
 		const p2RadioInputs = document.querySelectorAll('input[name="p2_gender"]') as NodeListOf<HTMLInputElement>;
-		const p1MaleLabel = document.getElementById('p1-male-label');
-		const p1FemaleLabel = document.getElementById('p1-female-label');
-		const p2MaleLabel = document.getElementById('p2-male-label');
-		const p2FemaleLabel = document.getElementById('p2-female-label');
 
 		function updateGenderStyles(radios: NodeListOf<HTMLInputElement>) {
 			radios.forEach(input => {
@@ -331,24 +341,12 @@ import Layout from '../layouts/Layout.astro';
 			});
 		}
 
-		[p1MaleLabel, p1FemaleLabel].forEach(label => {
-			label?.addEventListener('click', () => {
-				const input = label.querySelector('input[type="radio"]') as HTMLInputElement;
-				if (input) {
-					input.checked = true;
-					updateGenderStyles(p1RadioInputs);
-				}
-			});
+		p1RadioInputs.forEach(input => {
+			input.addEventListener('change', () => updateGenderStyles(p1RadioInputs));
 		});
 
-		[p2MaleLabel, p2FemaleLabel].forEach(label => {
-			label?.addEventListener('click', () => {
-				const input = label.querySelector('input[type="radio"]') as HTMLInputElement;
-				if (input) {
-					input.checked = true;
-					updateGenderStyles(p2RadioInputs);
-				}
-			});
+		p2RadioInputs.forEach(input => {
+			input.addEventListener('change', () => updateGenderStyles(p2RadioInputs));
 		});
 
 		// Autocomplete Cache and setup
