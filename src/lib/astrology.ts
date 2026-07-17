@@ -164,10 +164,6 @@ export function calculateAstrology(dob: string, tob: string, lat: number = 28.61
     else if (karanaIdxTotal >= 57) karanaIdx = 7 + (karanaIdxTotal - 57);
     else karanaIdx = (karanaIdxTotal - 1) % 7;
 
-    const observer = new Ast.Observer(lat, lon, 0);
-    const sunrise = Ast.SearchRiseSet(Ast.Body.Sun, observer, 1, time, -24);
-    const sunset = Ast.SearchRiseSet(Ast.Body.Sun, observer, -1, time, 24);
-
     // Calculate Manglik Dosha (Using cached Mars position to avoid redundant astronomy-engine queries)
     // Mars (Mangal) in 1, 4, 7, 8, or 12 house from Ascendant (Lagna) or Moon (Chandra)
     const houseFromLagna = ((marsRasiIdx - lagnaRasiIdx + 12) % 12) + 1;
@@ -178,6 +174,9 @@ export function calculateAstrology(dob: string, tob: string, lat: number = 28.61
     const isMoonManglik = manglikHouses.includes(houseFromMoon);
 
     const dayIdx = istDate.getUTCDay();
+    let cachedSunrise: string | null = null;
+    let cachedSunset: string | null = null;
+
     const panchang: PanchangData = {
         tithi: TITHIS[tithiIdx],
         nakshatra: NAKSHATRAS[nakIdx],
@@ -189,8 +188,24 @@ export function calculateAstrology(dob: string, tob: string, lat: number = 28.61
         sunSign: RASIS[Math.floor(siderealSunLong / 30)],
         moonSign: RASIS[moonRasiIdx],
         moonSignIdx: moonRasiIdx,
-        sunrise: formatTime(sunrise ? new Date(sunrise.date.getTime() + 5.5*60*60*1000) : null),
-        sunset: formatTime(sunset ? new Date(sunset.date.getTime() + 5.5*60*60*1000) : null),
+        get sunrise(): string {
+            if (cachedSunrise === null) {
+                // Lazy load extremely expensive sunrise calculation
+                const observer = new Ast.Observer(lat, lon, 0);
+                const sr = Ast.SearchRiseSet(Ast.Body.Sun, observer, 1, time, -24);
+                cachedSunrise = formatTime(sr ? new Date(sr.date.getTime() + 5.5 * 60 * 60 * 1000) : null);
+            }
+            return cachedSunrise;
+        },
+        get sunset(): string {
+            if (cachedSunset === null) {
+                // Lazy load extremely expensive sunset calculation
+                const observer = new Ast.Observer(lat, lon, 0);
+                const ss = Ast.SearchRiseSet(Ast.Body.Sun, observer, -1, time, 24);
+                cachedSunset = formatTime(ss ? new Date(ss.date.getTime() + 5.5 * 60 * 60 * 1000) : null);
+            }
+            return cachedSunset;
+        },
         isMoonManglik,
         isLaganManglik
     };

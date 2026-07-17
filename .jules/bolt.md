@@ -8,3 +8,7 @@
 **Action:**
 1. Keep `SearchRiseSet` in mind as an optimization target if we ever need to make astrology calculation faster.
 2. Always pre-build maps/dictionaries for multi-element dashboard list lookups.
+
+## 2026-07-16 - [Memoized ES6 Getters for Lazy Calculations]
+**Learning:** Lazy-loading expensive computations (like `SearchRiseSet`) via getters is extremely powerful, but getters can be called multiple times during destructuring, serialization, or rendering. Implementing simple closure-based memoization within the getter prevents redundant invocations of the underlying expensive function and guarantees it executes at most once.
+**Action:** Always memoize/cache values returned by lazy getters for any computationally heavy properties to avoid performance degradation on multiple accesses.
