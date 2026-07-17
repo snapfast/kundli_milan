@@ -150,7 +150,7 @@ const { isEdit = false } = Astro.props;
 				</div>
 				<div class="field">
 					<label for="email">Email Address</label>
-					<input type="email" id="email" name="email" required placeholder="your.email@example.com" />
+					<input type="email" id="email" name="email" required placeholder="your.email@example.com" maxlength="100" />
 				</div>
 			</div>
 			<div class="form-row" style="margin-top: 1rem;">
@@ -208,7 +208,7 @@ const { isEdit = false } = Astro.props;
 			<div class="form-row" style="margin-top: 1rem;">
 				<div class="field" style="grid-column: span 2;">
 					<label for="location">Birth Location (City, Country)</label>
-					<input type="text" id="location" name="location" required placeholder="e.g. New Delhi, India" autocomplete="off" />
+					<input type="text" id="location" name="location" required placeholder="e.g. New Delhi, India" autocomplete="off" maxlength="100" />
 					<div id="suggestions"></div>
 					<input type="hidden" id="lat" name="lat" />
 					<input type="hidden" id="lon" name="lon" />
@@ -235,42 +235,43 @@ const { isEdit = false } = Astro.props;
 			<div class="form-row">
 				<div class="field" style="grid-column: span 2;">
 					<label for="height">Height (Optional)</label>
-					<input type="text" id="height" name="height" placeholder="e.g. 5'8'' or 173 cm" />
+					<input type="text" id="height" name="height" placeholder="e.g. 5'8'' or 173 cm" maxlength="30" />
 				</div>
 			</div>
 			<div class="form-row" style="margin-top: 1rem;">
 				<div class="field">
 					<label for="currentLocation">Current Location (Optional)</label>
-					<input type="text" id="currentLocation" name="currentLocation" placeholder="e.g. Mumbai, India" autocomplete="off" />
+					<input type="text" id="currentLocation" name="currentLocation" placeholder="e.g. Mumbai, India" autocomplete="off" maxlength="100" />
 					<div id="currentSuggestions"></div>
 					<input type="hidden" id="currentLat" name="currentLat" />
 					<input type="hidden" id="currentLon" name="currentLon" />
 				</div>
 				<div class="field">
 					<label for="religion">Religion / Community (Optional)</label>
-					<input type="text" id="religion" name="religion" placeholder="e.g. Hindu, Brahmin" />
+					<input type="text" id="religion" name="religion" placeholder="e.g. Hindu, Brahmin" maxlength="50" />
 				</div>
 			</div>
 			<div class="form-row" style="margin-top: 1rem;">
 				<div class="field">
 					<label for="education">Education (Optional)</label>
-					<input type="text" id="education" name="education" placeholder="e.g. B.Tech, MBA" />
+					<input type="text" id="education" name="education" placeholder="e.g. B.Tech, MBA" maxlength="80" />
 				</div>
 				<div class="field">
 					<label for="occupation">Occupation (Optional)</label>
-					<input type="text" id="occupation" name="occupation" placeholder="e.g. Software Engineer" />
+					<input type="text" id="occupation" name="occupation" placeholder="e.g. Software Engineer" maxlength="80" />
 				</div>
 			</div>
 			<div class="form-row" style="margin-top: 1rem;">
 				<div class="field" style="grid-column: span 2;">
 					<label for="income">Annual Income (Optional)</label>
-					<input type="text" id="income" name="income" placeholder="e.g. 15 LPA" />
+					<input type="text" id="income" name="income" placeholder="e.g. 15 LPA" maxlength="50" />
 				</div>
 			</div>
 			<div class="form-row" style="margin-top: 1rem;">
 				<div class="field" style="grid-column: span 2;">
 					<label for="bio">About Me / Bio (Optional)</label>
-					<textarea id="bio" name="bio" rows="3" class="bio-textarea" placeholder="Tell us a bit about yourself..." style="border-radius: 12px;"></textarea>
+					<textarea id="bio" name="bio" rows="3" class="bio-textarea" placeholder="Tell us a bit about yourself..." style="border-radius: 12px;" maxlength="500"></textarea>
+					<div id="bio-char-counter" style="text-align: right; font-size: var(--font-xs); color: var(--bumble-text-light); margin-top: 0.25rem; font-weight: 500;">500 characters remaining</div>
 				</div>
 			</div>
 
@@ -322,7 +323,7 @@ const { isEdit = false } = Astro.props;
 				</div>
 				<div class="field">
 					<label for="email">Email Address</label>
-					<input type="email" id="email" name="email" required placeholder="your.email@example.com" />
+					<input type="email" id="email" name="email" required placeholder="your.email@example.com" maxlength="100" />
 				</div>
 			</div>
 			<div class="form-row" style="margin-top: 1rem;">
@@ -380,7 +381,7 @@ const { isEdit = false } = Astro.props;
 			<div class="form-row" style="margin-top: 1rem;">
 				<div class="field" style="grid-column: span 2;">
 					<label for="location">Birth Location (City, Country)</label>
-					<input type="text" id="location" name="location" required placeholder="e.g. New Delhi, India" autocomplete="off" />
+					<input type="text" id="location" name="location" required placeholder="e.g. New Delhi, India" autocomplete="off" maxlength="100" />
 					<div id="suggestions"></div>
 					<input type="hidden" id="lat" name="lat" />
 					<input type="hidden" id="lon" name="lon" />
@@ -439,6 +440,25 @@ const { isEdit = false } = Astro.props;
 		const currentLonInput = document.getElementById('currentLon') as HTMLInputElement;
 		const phoneInput = document.getElementById('phone') as HTMLInputElement;
 		const pinInput = document.getElementById('pin') as HTMLInputElement;
+		const heightInput = document.getElementById('height') as HTMLInputElement | null;
+		const religionInput = document.getElementById('religion') as HTMLInputElement | null;
+		const educationInput = document.getElementById('education') as HTMLInputElement | null;
+		const occupationInput = document.getElementById('occupation') as HTMLInputElement | null;
+		const incomeInput = document.getElementById('income') as HTMLInputElement | null;
+		const bioInput = document.getElementById('bio') as HTMLTextAreaElement | null;
+		const bioCounter = document.getElementById('bio-char-counter') as HTMLDivElement | null;
+
+		if (bioInput && bioCounter) {
+			const updateBioCounter = () => {
+				const remaining = 500 - bioInput.value.length;
+				bioCounter.textContent = `${remaining} characters remaining`;
+			};
+			bioInput.addEventListener('input', updateBioCounter);
+			// Update initially on page load/prefill
+			updateBioCounter();
+			// Also update after a tiny delay to ensure preFill is done
+			setTimeout(updateBioCounter, 150);
+		}
 
 		// Modal Elements for Signup
 		const verifyModal = document.getElementById('mobile-verify-modal') as HTMLDivElement;
@@ -703,10 +723,18 @@ const { isEdit = false } = Astro.props;
 					showError('Please enter your full name (at least 2 characters).', nameInput);
 					return false;
 				}
+				if (nameInput.value.length > 50) {
+					showError('Full Name cannot exceed 50 characters.', nameInput);
+					return false;
+				}
 
 				const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 				if (!emailInput.value || !emailRegex.test(emailInput.value)) {
 					showError('Please enter a valid email address.', emailInput);
+					return false;
+				}
+				if (emailInput.value.length > 100) {
+					showError('Email Address cannot exceed 100 characters.', emailInput);
 					return false;
 				}
 
@@ -729,6 +757,10 @@ const { isEdit = false } = Astro.props;
 
 				if (!locationInput.value) {
 					showError('Please enter your birth location.', locationInput);
+					return false;
+				}
+				if (locationInput.value.length > 100) {
+					showError('Birth Location cannot exceed 100 characters.', locationInput);
 					return false;
 				}
 
@@ -756,10 +788,18 @@ const { isEdit = false } = Astro.props;
 					showError('Please enter your full name (at least 2 characters).', nameInput);
 					return false;
 				}
+				if (nameInput.value.length > 50) {
+					showError('Full Name cannot exceed 50 characters.', nameInput);
+					return false;
+				}
 
 				const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 				if (!emailInput.value || !emailRegex.test(emailInput.value)) {
 					showError('Please enter a valid email address.', emailInput);
+					return false;
+				}
+				if (emailInput.value.length > 100) {
+					showError('Email Address cannot exceed 100 characters.', emailInput);
 					return false;
 				}
 
@@ -784,6 +824,10 @@ const { isEdit = false } = Astro.props;
 					showError('Please enter your birth location.', locationInput);
 					return false;
 				}
+				if (locationInput.value.length > 100) {
+					showError('Birth Location cannot exceed 100 characters.', locationInput);
+					return false;
+				}
 
 				if (!latInput.value || !lonInput.value) {
 					showError('Please select a location from the suggestions list to get accurate coordinates.', locationInput);
@@ -793,8 +837,38 @@ const { isEdit = false } = Astro.props;
 				return true;
 			} else {
 				// EDIT STAGE 2: Validate Optional Details
-				if (currentLocationInput.value && (!currentLatInput.value || !currentLonInput.value)) {
-					showError('Please select your current location from the suggestions list to get accurate coordinates.', currentLocationInput);
+				if (heightInput && heightInput.value.length > 30) {
+					showError('Height cannot exceed 30 characters.', heightInput);
+					return false;
+				}
+				if (currentLocationInput && currentLocationInput.value) {
+					if (currentLocationInput.value.length > 100) {
+						showError('Current Location cannot exceed 100 characters.', currentLocationInput);
+						return false;
+					}
+					if (!currentLatInput.value || !currentLonInput.value) {
+						showError('Please select your current location from the suggestions list to get accurate coordinates.', currentLocationInput);
+						return false;
+					}
+				}
+				if (religionInput && religionInput.value.length > 50) {
+					showError('Religion / Community cannot exceed 50 characters.', religionInput);
+					return false;
+				}
+				if (educationInput && educationInput.value.length > 80) {
+					showError('Education cannot exceed 80 characters.', educationInput);
+					return false;
+				}
+				if (occupationInput && occupationInput.value.length > 80) {
+					showError('Occupation cannot exceed 80 characters.', occupationInput);
+					return false;
+				}
+				if (incomeInput && incomeInput.value.length > 50) {
+					showError('Annual Income cannot exceed 50 characters.', incomeInput);
+					return false;
+				}
+				if (bioInput && bioInput.value.length > 500) {
+					showError('About Me / Bio cannot exceed 500 characters.', bioInput);
 					return false;
 				}
 				return true;

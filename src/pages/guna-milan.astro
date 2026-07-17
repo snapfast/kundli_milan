@@ -166,7 +166,7 @@ import Layout from '../layouts/Layout.astro';
 					<h2 class="person-section-title">First Person</h2>
 					<div class="field">
 						<label for="p1_name">Name</label>
-						<input type="text" id="p1_name" name="p1_name" required placeholder="Enter name" />
+						<input type="text" id="p1_name" name="p1_name" required placeholder="Enter name" maxlength="50" />
 					</div>
 					<div class="form-row" style="margin-top: 0.5rem;">
 						<div class="field">
@@ -203,7 +203,7 @@ import Layout from '../layouts/Layout.astro';
 					</div>
 					<div class="field" style="margin-top: 0.5rem; position: relative;">
 						<label for="p1_location">Birth Location</label>
-						<input type="text" id="p1_location" name="p1_location" required placeholder="e.g. New Delhi, India" autocomplete="off" />
+						<input type="text" id="p1_location" name="p1_location" required placeholder="e.g. New Delhi, India" autocomplete="off" maxlength="100" />
 						<div id="p1_suggestions" class="suggestions-box"></div>
 						<input type="hidden" id="p1_lat" name="p1_lat" />
 						<input type="hidden" id="p1_lon" name="p1_lon" />
@@ -215,7 +215,7 @@ import Layout from '../layouts/Layout.astro';
 					<h2 class="person-section-title">Second Person</h2>
 					<div class="field">
 						<label for="p2_name">Name</label>
-						<input type="text" id="p2_name" name="p2_name" required placeholder="Enter name" />
+						<input type="text" id="p2_name" name="p2_name" required placeholder="Enter name" maxlength="50" />
 					</div>
 					<div class="form-row" style="margin-top: 0.5rem;">
 						<div class="field">
@@ -252,7 +252,7 @@ import Layout from '../layouts/Layout.astro';
 					</div>
 					<div class="field" style="margin-top: 0.5rem; position: relative;">
 						<label for="p2_location">Birth Location</label>
-						<input type="text" id="p2_location" name="p2_location" required placeholder="e.g. Mumbai, India" autocomplete="off" />
+						<input type="text" id="p2_location" name="p2_location" required placeholder="e.g. Mumbai, India" autocomplete="off" maxlength="100" />
 						<div id="p2_suggestions" class="suggestions-box"></div>
 						<input type="hidden" id="p2_lat" name="p2_lat" />
 						<input type="hidden" id="p2_lon" name="p2_lon" />
@@ -443,7 +443,11 @@ import Layout from '../layouts/Layout.astro';
 
 			// Validate inputs
 			if (!p1Name.value.trim() || p1Name.value.trim().length < 2) {
-				showError('Please enter Person 1 Full Name (at least 2 characters).', p1Name);
+				showError('Please enter Person 1 Name (at least 2 characters).', p1Name);
+				return;
+			}
+			if (p1Name.value.trim().length > 50) {
+				showError('Person 1 Name cannot exceed 50 characters.', p1Name);
 				return;
 			}
 			if (!p1Dob.value) {
@@ -458,13 +462,21 @@ import Layout from '../layouts/Layout.astro';
 				showError('Please enter Person 1 Birth Location.', p1Location);
 				return;
 			}
+			if (p1Location.value.trim().length > 100) {
+				showError('Person 1 Birth Location cannot exceed 100 characters.', p1Location);
+				return;
+			}
 			if (!p1Lat.value || !p1Lon.value) {
 				showError('Please select Person 1 location from the autocomplete dropdown list.', p1Location);
 				return;
 			}
 
 			if (!p2Name.value.trim() || p2Name.value.trim().length < 2) {
-				showError('Please enter Person 2 Full Name (at least 2 characters).', p2Name);
+				showError('Please enter Person 2 Name (at least 2 characters).', p2Name);
+				return;
+			}
+			if (p2Name.value.trim().length > 50) {
+				showError('Person 2 Name cannot exceed 50 characters.', p2Name);
 				return;
 			}
 			if (!p2Dob.value) {
@@ -477,6 +489,10 @@ import Layout from '../layouts/Layout.astro';
 			}
 			if (!p2Location.value.trim()) {
 				showError('Please enter Person 2 Birth Location.', p2Location);
+				return;
+			}
+			if (p2Location.value.trim().length > 100) {
+				showError('Person 2 Birth Location cannot exceed 100 characters.', p2Location);
 				return;
 			}
 			if (!p2Lat.value || !p2Lon.value) {

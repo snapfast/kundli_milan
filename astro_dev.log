@@ -1,0 +1,19 @@
+
+> moonine-a-vedic-matchmaker@0.3.1 dev
+> astro dev
+
+[vite] connected.
+20:45:54 [types] Generated 1ms
+[vite] connected.
+20:45:54 [vite] Re-optimizing dependencies because vite config has changed
+ astro  v6.4.7 ready in 2195 ms
+┃ Local    http://localhost:4321/
+┃ Network  use --host to expose
+20:45:54 watching for file changes...
+
+ update  ▶ New version of Astro available: 7.1.1
+  Run pnpm dlx @astrojs/upgrade to update
+
+20:47:33 [200] /guna-milan 54ms
+20:47:34 [vite] ✨ new dependencies optimized: uuid, astronomy-engine
+20:47:34 [vite] ✨ optimized dependencies changed. reloading
