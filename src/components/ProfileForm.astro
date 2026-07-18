@@ -150,7 +150,7 @@ const { isEdit = false } = Astro.props;
 				</div>
 				<div class="field">
 					<label for="email">Email Address</label>
-					<input type="email" id="email" name="email" required placeholder="your.email@example.com" />
+					<input type="email" id="email" name="email" required placeholder="your.email@example.com" maxlength="100" />
 				</div>
 			</div>
 			<div class="form-row" style="margin-top: 1rem;">
@@ -208,7 +208,7 @@ const { isEdit = false } = Astro.props;
 			<div class="form-row" style="margin-top: 1rem;">
 				<div class="field" style="grid-column: span 2;">
 					<label for="location">Birth Location (City, Country)</label>
-					<input type="text" id="location" name="location" required placeholder="e.g. New Delhi, India" autocomplete="off" />
+					<input type="text" id="location" name="location" required placeholder="e.g. New Delhi, India" autocomplete="off" maxlength="100" />
 					<div id="suggestions"></div>
 					<input type="hidden" id="lat" name="lat" />
 					<input type="hidden" id="lon" name="lon" />
@@ -270,7 +270,8 @@ const { isEdit = false } = Astro.props;
 			<div class="form-row" style="margin-top: 1rem;">
 				<div class="field" style="grid-column: span 2;">
 					<label for="bio">About Me / Bio (Optional)</label>
-					<textarea id="bio" name="bio" rows="3" class="bio-textarea" placeholder="Tell us a bit about yourself..." style="border-radius: 12px;"></textarea>
+					<textarea id="bio" name="bio" rows="3" class="bio-textarea" placeholder="Tell us a bit about yourself..." style="border-radius: 12px;" maxlength="500"></textarea>
+					<div id="bio-countdown" style="text-align: right; font-size: var(--font-xs); color: var(--bumble-text-light); margin-top: 0.25rem; font-weight: 500;">500 characters remaining</div>
 				</div>
 			</div>
 
@@ -322,7 +323,7 @@ const { isEdit = false } = Astro.props;
 				</div>
 				<div class="field">
 					<label for="email">Email Address</label>
-					<input type="email" id="email" name="email" required placeholder="your.email@example.com" />
+					<input type="email" id="email" name="email" required placeholder="your.email@example.com" maxlength="100" />
 				</div>
 			</div>
 			<div class="form-row" style="margin-top: 1rem;">
@@ -380,7 +381,7 @@ const { isEdit = false } = Astro.props;
 			<div class="form-row" style="margin-top: 1rem;">
 				<div class="field" style="grid-column: span 2;">
 					<label for="location">Birth Location (City, Country)</label>
-					<input type="text" id="location" name="location" required placeholder="e.g. New Delhi, India" autocomplete="off" />
+					<input type="text" id="location" name="location" required placeholder="e.g. New Delhi, India" autocomplete="off" maxlength="100" />
 					<div id="suggestions"></div>
 					<input type="hidden" id="lat" name="lat" />
 					<input type="hidden" id="lon" name="lon" />
@@ -439,6 +440,19 @@ const { isEdit = false } = Astro.props;
 		const currentLonInput = document.getElementById('currentLon') as HTMLInputElement;
 		const phoneInput = document.getElementById('phone') as HTMLInputElement;
 		const pinInput = document.getElementById('pin') as HTMLInputElement;
+
+		const bioInput = document.getElementById('bio') as HTMLTextAreaElement;
+		const bioCountdown = document.getElementById('bio-countdown') as HTMLDivElement;
+
+		if (bioInput && bioCountdown) {
+			const updateCountdown = () => {
+				const remaining = 500 - bioInput.value.length;
+				bioCountdown.textContent = `${remaining} characters remaining`;
+			};
+			bioInput.addEventListener('input', updateCountdown);
+			// Update initially on page load/pre-fill
+			updateCountdown();
+		}
 
 		// Modal Elements for Signup
 		const verifyModal = document.getElementById('mobile-verify-modal') as HTMLDivElement;

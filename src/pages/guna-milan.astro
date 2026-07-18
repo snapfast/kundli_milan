@@ -166,7 +166,7 @@ import Layout from '../layouts/Layout.astro';
 					<h2 class="person-section-title">First Person</h2>
 					<div class="field">
 						<label for="p1_name">Name</label>
-						<input type="text" id="p1_name" name="p1_name" required placeholder="Enter name" />
+						<input type="text" id="p1_name" name="p1_name" required placeholder="Enter name" maxlength="50" />
 					</div>
 					<div class="form-row" style="margin-top: 0.5rem;">
 						<div class="field">
@@ -203,7 +203,7 @@ import Layout from '../layouts/Layout.astro';
 					</div>
 					<div class="field" style="margin-top: 0.5rem; position: relative;">
 						<label for="p1_location">Birth Location</label>
-						<input type="text" id="p1_location" name="p1_location" required placeholder="e.g. New Delhi, India" autocomplete="off" />
+						<input type="text" id="p1_location" name="p1_location" required placeholder="e.g. New Delhi, India" autocomplete="off" maxlength="100" />
 						<div id="p1_suggestions" class="suggestions-box"></div>
 						<input type="hidden" id="p1_lat" name="p1_lat" />
 						<input type="hidden" id="p1_lon" name="p1_lon" />
@@ -215,7 +215,7 @@ import Layout from '../layouts/Layout.astro';
 					<h2 class="person-section-title">Second Person</h2>
 					<div class="field">
 						<label for="p2_name">Name</label>
-						<input type="text" id="p2_name" name="p2_name" required placeholder="Enter name" />
+						<input type="text" id="p2_name" name="p2_name" required placeholder="Enter name" maxlength="50" />
 					</div>
 					<div class="form-row" style="margin-top: 0.5rem;">
 						<div class="field">
@@ -252,7 +252,7 @@ import Layout from '../layouts/Layout.astro';
 					</div>
 					<div class="field" style="margin-top: 0.5rem; position: relative;">
 						<label for="p2_location">Birth Location</label>
-						<input type="text" id="p2_location" name="p2_location" required placeholder="e.g. Mumbai, India" autocomplete="off" />
+						<input type="text" id="p2_location" name="p2_location" required placeholder="e.g. Mumbai, India" autocomplete="off" maxlength="100" />
 						<div id="p2_suggestions" class="suggestions-box"></div>
 						<input type="hidden" id="p2_lat" name="p2_lat" />
 						<input type="hidden" id="p2_lon" name="p2_lon" />
