@@ -78,10 +78,19 @@ function formatTime(date: Date | null): string {
            date.getUTCMinutes().toString().padStart(2, '0');
 }
 
+// In-memory cache to memoize expensive astronomical calculations
+const astrologyCache = new Map<string, ChartData>();
+
 export function calculateAstrology(dob: string, tob: string, lat: number = 28.6139, lon: number = 77.2090): ChartData {
     if (!dob || !tob) {
         throw new Error("Date of Birth and Time of Birth are required for astrology calculation.");
     }
+
+    const cacheKey = `${dob}_${tob}_${lat}_${lon}`;
+    if (astrologyCache.has(cacheKey)) {
+        return astrologyCache.get(cacheKey)!;
+    }
+
     const [year, month, day] = dob.split('-').map(Number);
     const [hour, minute] = tob.split(':').map(Number);
 
@@ -210,7 +219,9 @@ export function calculateAstrology(dob: string, tob: string, lat: number = 28.61
         isLaganManglik
     };
 
-    return { planets, panchang };
+    const result = { planets, panchang };
+    astrologyCache.set(cacheKey, result);
+    return result;
 }
 
 function formatDegree(deg: number): string {
