@@ -159,14 +159,26 @@ export function generateMatchCardHtml(
         <div class="match-header" style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem;">
             <div style="display: flex; flex-direction: column; gap: 0.2rem;">
                 <span class="match-name" style="font-size: var(--font-xl); font-weight: 800; color: var(--bumble-text); letter-spacing: -0.02em;">${name}${age !== undefined ? `, ${age}` : ''}</span>
-                <div style="display: inline-flex; align-items: center; gap: 0.35rem; font-size: var(--font-xs); color: var(--bumble-text-light); font-weight: 700; background-color: var(--bumble-light-grey); padding: 0.15rem 0.5rem; border-radius: 6px; width: fit-content;">
-                    <span>ID: ${uid}</span>
-                    <button class="copy-uid-btn" data-uid="${uid}" title="Copy User ID" style="background: none; border: none; padding: 0.1rem 0.2rem; margin: 0; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; color: var(--bumble-text-light); transition: color 0.2s; vertical-align: middle; height: auto; min-height: 0; outline: none; box-shadow: none;" onmouseover="this.style.color='var(--bumble-text)'" onmouseout="this.style.color='var(--bumble-text-light)'">
-                        <svg class="copy-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display: block;">
-                            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-                            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                <div style="display: inline-flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
+                    <div style="display: inline-flex; align-items: center; gap: 0.35rem; font-size: var(--font-xs); color: var(--bumble-text-light); font-weight: 700; background-color: var(--bumble-light-grey); padding: 0.15rem 0.5rem; border-radius: 6px; width: fit-content;">
+                        <span>ID: ${uid}</span>
+                        <button class="copy-uid-btn" data-uid="${uid}" title="Copy User ID" style="background: none; border: none; padding: 0.1rem 0.2rem; margin: 0; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; color: var(--bumble-text-light); transition: color 0.2s; vertical-align: middle; height: auto; min-height: 0; outline: none; box-shadow: none;" onmouseover="this.style.color='var(--bumble-text)'" onmouseout="this.style.color='var(--bumble-text-light)'">
+                            <svg class="copy-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display: block;">
+                                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                            </svg>
+                            <span class="copied-text" style="display: none; font-size: 10px; font-weight: 800; color: #10b981; margin-left: 0.25rem;">Copied!</span>
+                        </button>
+                    </div>
+                    <button class="copy-match-btn" data-name="${name}" data-uid="${uid}" data-score="${score}" data-category="${category}" title="Copy Match Summary" style="background: var(--bumble-cream); border: 1.5px solid var(--bumble-border); padding: 0.15rem 0.5rem; border-radius: 6px; font-size: var(--font-xs); font-weight: 700; color: var(--bumble-text); cursor: pointer; display: inline-flex; align-items: center; gap: 0.25rem; transition: all 0.2s ease;">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display: block;">
+                            <circle cx="18" cy="5" r="3"></circle>
+                            <circle cx="6" cy="12" r="3"></circle>
+                            <circle cx="18" cy="19" r="3"></circle>
+                            <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+                            <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
                         </svg>
-                        <span class="copied-text" style="display: none; font-size: 10px; font-weight: 800; color: #10b981; margin-left: 0.25rem;">Copied!</span>
+                        <span class="copy-match-text">Share Summary</span>
                     </button>
                 </div>
             </div>

@@ -192,6 +192,34 @@ import Layout from '../layouts/Layout.astro';
 			background-color: white;
 			border-color: var(--bumble-yellow-hover);
 		}
+		.filter-pills-bar {
+			display: flex;
+			gap: 0.5rem;
+			flex-wrap: wrap;
+			margin-bottom: 1.5rem;
+			align-items: center;
+			background: white;
+			padding: 0.75rem 1rem;
+			border-radius: 16px;
+			border: 2px solid var(--bumble-border);
+		}
+		.filter-pill {
+			background: var(--bumble-light-grey);
+			border: 1.5px solid transparent;
+			color: var(--bumble-text-light);
+			font-size: var(--font-xs);
+			font-weight: 700;
+			padding: 0.4rem 0.85rem;
+			border-radius: 9999px;
+			cursor: pointer;
+			transition: all 0.2s ease;
+		}
+		.filter-pill.active, .filter-pill:hover {
+			background: var(--bumble-yellow);
+			border-color: var(--bumble-yellow);
+			color: var(--bumble-text);
+			box-shadow: 0 2px 6px rgba(255,203,55,0.25);
+		}
 	</style>
 
 	<h1 style="font-family: var(--font-secondary); font-size: var(--font-2xl); border-bottom: none; text-align: center; margin-bottom: 2rem;">moonine</h1>
@@ -202,6 +230,13 @@ import Layout from '../layouts/Layout.astro';
 	</div>
 
 	<div id="dashboard-content" style="display: none;">
+		<div class="filter-pills-bar">
+			<span style="font-size: var(--font-xs); font-weight: 800; color: var(--bumble-text-light); text-transform: uppercase; letter-spacing: 0.05em; margin-right: 0.25rem;">Quick Filter:</span>
+			<button class="filter-pill active" data-filter="all">All Matches</button>
+			<button class="filter-pill" data-filter="high">21+ Points (High Match)</button>
+			<button class="filter-pill" data-filter="excellent">Excellent (28+ Points)</button>
+		</div>
+
 		<details open>
 			<summary id="matches-opposite-title" class="section-title" style="cursor: pointer; list-style-position: inside;">Matches (Opposite Sex)</summary>
 			<div id="matches-list-opposite">
@@ -660,6 +695,8 @@ import Layout from '../layouts/Layout.astro';
 
 								const card = document.createElement('div');
 								card.className = 'match-card';
+								card.setAttribute('data-score', m.score ? m.score.toString() : '0');
+								card.setAttribute('data-category', m.category || '');
 								card.innerHTML = (distanceHtml ? `<div style="margin-bottom: 0.75rem;">${distanceHtml}</div>` : '') + generateMatchCardHtml(m.uid, m.name, age, m.category, m.score, compat.description, kootaHtml, compat.doshas, extraDetails);
 								listContainer.appendChild(card);
 							}
@@ -690,6 +727,40 @@ import Layout from '../layouts/Layout.astro';
 				const nearestSectionOpposite = document.getElementById('nearest-section-opposite')!;
 				const nearestListOpposite = document.getElementById('nearest-list-opposite')!;
 				nearestListOpposite.innerHTML = '';
+
+				// Filter Pills Logic
+				const filterPills = document.querySelectorAll('.filter-pill');
+				filterPills.forEach(pill => {
+					pill.addEventListener('click', () => {
+						filterPills.forEach(p => p.classList.remove('active'));
+						pill.classList.add('active');
+
+						const filterType = pill.getAttribute('data-filter');
+						const allCards = document.querySelectorAll('.match-card');
+
+						allCards.forEach(cardEl => {
+							const htmlCard = cardEl as HTMLElement;
+							const scoreVal = parseInt(htmlCard.getAttribute('data-score') || '0', 10);
+							const categoryVal = htmlCard.getAttribute('data-category') || '';
+
+							if (filterType === 'high') {
+								if (scoreVal >= 21) {
+									htmlCard.style.display = 'block';
+								} else {
+									htmlCard.style.display = 'none';
+								}
+							} else if (filterType === 'excellent') {
+								if (scoreVal >= 28 || categoryVal === 'Excellent') {
+									htmlCard.style.display = 'block';
+								} else {
+									htmlCard.style.display = 'none';
+								}
+							} else {
+								htmlCard.style.display = 'block';
+							}
+						});
+					});
+				});
 
 				if (profile.currentLat && profile.currentLon) {
 					nearestSection.style.display = 'block';

@@ -471,6 +471,13 @@ const { isEdit = false } = Astro.props;
 		// Run prefill unconditionally if data exists
 		preFillForm();
 
+		// Auto-focus on first active input
+		if (isEditMode) {
+			if (nameInput) nameInput.focus();
+		} else {
+			if (phoneInput) phoneInput.focus();
+		}
+
 		// Auto-detect current location via IP if blank and in edit mode
 		async function autoDetectLocation() {
 			if (isEditMode && currentLocationInput && currentLatInput && currentLonInput && !currentLocationInput.value) {

@@ -216,6 +216,7 @@ const { title, description, noindex } = Astro.props;
 				background-color: #fff;
 				color: var(--bumble-text);
 				font-weight: 500;
+				min-height: 44px;
 			}
 			input:focus, select:focus, textarea:focus {
 				border-color: var(--bumble-yellow);
@@ -235,6 +236,8 @@ const { title, description, noindex } = Astro.props;
 				display: inline-block;
 				text-align: center;
 				transition: all 0.2s ease;
+				min-height: 44px;
+				line-height: 1.2;
 			}
 			button:hover, .btn:hover {
 				background-color: var(--bumble-yellow-hover);
@@ -384,6 +387,54 @@ const { title, description, noindex } = Astro.props;
 					grid-template-columns: repeat(2, 1fr);
 				}
 			}
+
+			/* Mobile Bottom Navigation Bar */
+			.mobile-bottom-nav {
+				display: none;
+			}
+			@media (max-width: 768px) {
+				body {
+					padding-bottom: 70px;
+				}
+				.mobile-bottom-nav {
+					display: flex;
+					position: fixed;
+					bottom: 0;
+					left: 0;
+					right: 0;
+					background: var(--bumble-white);
+					border-top: 2px solid var(--bumble-border);
+					padding: 0.5rem 0.25rem;
+					justify-content: space-around;
+					align-items: center;
+					z-index: 999;
+					box-shadow: 0 -4px 16px rgba(143,118,99,0.08);
+				}
+				.mobile-nav-item {
+					display: flex;
+					flex-direction: column;
+					align-items: center;
+					justify-content: center;
+					gap: 0.2rem;
+					color: var(--bumble-text-light);
+					text-decoration: none;
+					font-size: var(--font-xs);
+					font-weight: 700;
+					flex: 1;
+					padding: 0.25rem 0;
+					transition: color 0.2s ease;
+				}
+				.mobile-nav-item.active, .mobile-nav-item:hover {
+					color: var(--bumble-text);
+				}
+				.mobile-nav-item svg {
+					stroke: currentColor;
+				}
+				.mobile-nav-item.active svg {
+					stroke: var(--bumble-text);
+					fill: var(--bumble-yellow);
+				}
+			}
 			.koota-item {
 				font-size: var(--font-xs);
 				color: var(--bumble-text);
@@ -423,6 +474,47 @@ const { title, description, noindex } = Astro.props;
 			<slot />
 		</div>
 
+		<!-- Mobile Bottom Bar -->
+		<nav class="mobile-bottom-nav" aria-label="Mobile Bottom Navigation">
+			<a href="/" class="mobile-nav-item" id="mobile-nav-home">
+				<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+					<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+					<polyline points="9 22 9 12 15 12 15 22"></polyline>
+				</svg>
+				<span>Home</span>
+			</a>
+			<a href="/guna-milan" class="mobile-nav-item" id="mobile-nav-guna">
+				<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+					<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+				</svg>
+				<span>Matching</span>
+			</a>
+			<a href="/dashboard" class="mobile-nav-item" id="mobile-nav-dashboard" style="display: none;">
+				<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+					<rect x="3" y="3" width="7" height="7"></rect>
+					<rect x="14" y="3" width="7" height="7"></rect>
+					<rect x="14" y="14" width="7" height="7"></rect>
+					<rect x="3" y="14" width="7" height="7"></rect>
+				</svg>
+				<span>Matches</span>
+			</a>
+			<a href="/profile" class="mobile-nav-item" id="mobile-nav-profile" style="display: none;">
+				<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+					<path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+					<circle cx="12" cy="7" r="4"></circle>
+				</svg>
+				<span>Profile</span>
+			</a>
+			<a href="/login" class="mobile-nav-item" id="mobile-nav-login">
+				<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+					<path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path>
+					<polyline points="10 17 15 12 10 7"></polyline>
+					<line x1="15" y1="12" x2="3" y2="12"></line>
+				</svg>
+				<span>Log In</span>
+			</a>
+		</nav>
+
 		<footer style="margin-top: 3rem; font-size: var(--font-xs); color: var(--bumble-text-light); text-align: center; border-top: 1px solid var(--bumble-border); padding-top: 2rem; position: relative;">
 			<div class="user-counter" style="position: absolute; top: 1.5rem; right: 0;">
 				<strong id="total-users-count">...</strong>
@@ -455,26 +547,40 @@ const { title, description, noindex } = Astro.props;
 				const logoutLink = document.getElementById('nav-logout');
 				const currentPath = window.location.pathname;
 
+				const mDashboardLink = document.getElementById('mobile-nav-dashboard');
+				const mProfileLink = document.getElementById('mobile-nav-profile');
+				const mLoginLink = document.getElementById('mobile-nav-login');
+
 				if (userDetails) {
 					if (dashboardLink) dashboardLink.style.display = 'inline-block';
 					if (profileLink) profileLink.style.display = 'inline-block';
 					if (loginLink) loginLink.style.display = 'none';
 					if (logoutLink) logoutLink.style.display = 'inline-block';
+
+					if (mDashboardLink) mDashboardLink.style.display = 'flex';
+					if (mProfileLink) mProfileLink.style.display = 'flex';
+					if (mLoginLink) mLoginLink.style.display = 'none';
 				} else {
 					if (dashboardLink) dashboardLink.style.display = 'none';
 					if (profileLink) profileLink.style.display = 'none';
 					if (loginLink) loginLink.style.display = 'inline-block';
 					if (logoutLink) logoutLink.style.display = 'none';
+
+					if (mDashboardLink) mDashboardLink.style.display = 'none';
+					if (mProfileLink) mProfileLink.style.display = 'none';
+					if (mLoginLink) mLoginLink.style.display = 'flex';
 				}
 
 				// Active Link Highlighting
-				const links = document.querySelectorAll('.nav-link');
+				const links = document.querySelectorAll('.nav-link, .mobile-nav-item');
 				links.forEach(link => {
 					const href = link.getAttribute('href');
-					if (href === currentPath || (href !== '/' && currentPath.startsWith(href))) {
+					if (href === currentPath || (href && href !== '/' && currentPath.startsWith(href))) {
 						link.classList.add('active');
 					} else if (href === '/' && currentPath === '/') {
 						link.classList.add('active');
+					} else {
+						link.classList.remove('active');
 					}
 				});
 			}
@@ -545,48 +651,79 @@ const { title, description, noindex } = Astro.props;
 
 			// Global Copy User ID Logic
 			document.addEventListener('click', async (e) => {
-				const button = (e.target as HTMLElement).closest('.copy-uid-btn') as HTMLButtonElement | null;
-				if (!button) return;
+				const uidButton = (e.target as HTMLElement).closest('.copy-uid-btn') as HTMLButtonElement | null;
+				if (uidButton) {
+					const uid = uidButton.getAttribute('data-uid');
+					if (!uid) return;
 
-				const uid = button.getAttribute('data-uid');
-				if (!uid) return;
+					try {
+						await navigator.clipboard.writeText(uid);
 
-				try {
-					await navigator.clipboard.writeText(uid);
+						const copyIcon = uidButton.querySelector('.copy-icon') as HTMLElement | null;
+						const copiedText = uidButton.querySelector('.copied-text') as HTMLElement | null;
+						const btnText = uidButton.querySelector('.btn-text') as HTMLElement | null;
 
-					const copyIcon = button.querySelector('.copy-icon') as HTMLElement | null;
-					const copiedText = button.querySelector('.copied-text') as HTMLElement | null;
-					const btnText = button.querySelector('.btn-text') as HTMLElement | null;
+						if (copiedText) {
+							if (copyIcon) copyIcon.style.display = 'none';
+							if (btnText) btnText.style.display = 'none';
+							copiedText.style.display = 'inline';
 
-					if (copiedText) {
-						if (copyIcon) copyIcon.style.display = 'none';
-						if (btnText) btnText.style.display = 'none';
-						copiedText.style.display = 'inline';
+							const originalColor = uidButton.style.color;
+							const originalBorderColor = uidButton.style.borderColor;
+							uidButton.style.color = '#10b981';
+							uidButton.style.borderColor = '#10b981';
 
-						const originalColor = button.style.color;
-						const originalBorderColor = button.style.borderColor;
-						button.style.color = '#10b981';
-						button.style.borderColor = '#10b981';
-
-						const container = button.closest('.info-card') || button.closest('.match-card');
-						if (container) {
-							container.classList.add('flash-border-active');
-						}
-
-						setTimeout(() => {
-							if (copyIcon) copyIcon.style.display = 'block';
-							if (btnText) btnText.style.display = 'inline';
-							copiedText.style.display = 'none';
-							button.style.color = originalColor;
-							button.style.borderColor = originalBorderColor;
-
+							const container = uidButton.closest('.info-card') || uidButton.closest('.match-card');
 							if (container) {
-								container.classList.remove('flash-border-active');
+								container.classList.add('flash-border-active');
 							}
-						}, 1500);
+
+							setTimeout(() => {
+								if (copyIcon) copyIcon.style.display = 'block';
+								if (btnText) btnText.style.display = 'inline';
+								copiedText.style.display = 'none';
+								uidButton.style.color = originalColor;
+								uidButton.style.borderColor = originalBorderColor;
+
+								if (container) {
+									container.classList.remove('flash-border-active');
+								}
+							}, 1500);
+						}
+					} catch (err) {
+						console.error('Failed to copy User ID:', err);
 					}
-				} catch (err) {
-					console.error('Failed to copy User ID:', err);
+					return;
+				}
+
+				// Global Copy Match Summary Logic
+				const matchButton = (e.target as HTMLElement).closest('.copy-match-btn') as HTMLButtonElement | null;
+				if (matchButton) {
+					const name = matchButton.getAttribute('data-name');
+					const uid = matchButton.getAttribute('data-uid');
+					const score = matchButton.getAttribute('data-score');
+					const category = matchButton.getAttribute('data-category');
+
+					const textToCopy = `🌙 Guna Milan Match via moonine\n----------------------------------\nMatch: ${name} (User ID: ${uid})\nCompatibility Score: ${score} / 36 Points (${category})\nDiscover aligned matches on moonine: https://moonine.netlify.app/\n----------------------------------`;
+
+					try {
+						await navigator.clipboard.writeText(textToCopy);
+						const labelEl = matchButton.querySelector('.copy-match-text') as HTMLElement | null;
+						if (labelEl) {
+							const originalText = labelEl.textContent;
+							labelEl.textContent = 'Copied Summary!';
+							matchButton.style.borderColor = '#10b981';
+							matchButton.style.color = '#10b981';
+
+							setTimeout(() => {
+								labelEl.textContent = originalText;
+								matchButton.style.borderColor = 'var(--bumble-border)';
+								matchButton.style.color = 'var(--bumble-text)';
+							}, 1500);
+						}
+					} catch (err) {
+						console.error('Failed to copy match summary:', err);
+					}
 				}
 			});
 
