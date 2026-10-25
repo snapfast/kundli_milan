@@ -128,11 +128,6 @@ const { isEdit = false } = Astro.props;
 		clip: rect(0, 0, 0, 0);
 		border: 0;
 	}
-	.gender-tile:focus-within {
-		border-color: var(--bumble-yellow);
-		outline: none;
-		box-shadow: 0 0 0 4px rgba(255, 203, 55, 0.4);
-	}
 </style>
 
 <h1 id="page-title" style="font-family: var(--font-secondary); font-size: var(--font-2xl); border-bottom: none; text-align: center; margin-bottom: 2rem;">{isEdit ? 'Edit Your Profile' : 'Create Your Profile'}</h1>
@@ -149,8 +144,8 @@ const { isEdit = false } = Astro.props;
 					<input type="text" id="name" name="name" required minlength="2" maxlength="50" placeholder="Enter your full name" />
 				</div>
 				<div class="field">
-					<label for="email">Email Address</label>
-					<input type="email" id="email" name="email" required placeholder="your.email@example.com" />
+					<label for="email">Email Address (Optional)</label>
+					<input type="email" id="email" name="email" placeholder="your.email@example.com" />
 				</div>
 			</div>
 			<div class="form-row" style="margin-top: 1rem;">
@@ -284,135 +279,108 @@ const { isEdit = false } = Astro.props;
 		</div>
 	</form>
 ) : (
-	/* SIGNUP FORM */
+	/* MINIMAL SIGNUP FORM */
 	<form id="detailsForm" data-is-edit="false" novalidate style="background: white; border: 2px solid var(--bumble-border); border-radius: 24px; padding: 2rem; box-shadow: 0 8px 24px rgba(143,118,99,0.02);">
-		<div id="step1" class="form-step">
-			<h2 style="text-align: center; font-size: var(--font-lg); margin-bottom: 2rem; border-bottom: 2px solid var(--bumble-yellow); font-family: var(--font-secondary); color: var(--bumble-text); padding-bottom: 0.5rem;">Stage 1: Account Setup</h2>
-			<div class="form-row">
-				<div class="field">
-					<label for="phone">Mobile Number</label>
-					<input type="tel" id="phone" name="phone" required pattern="[0-9]{10}" placeholder="Enter 10-digit mobile number" maxlength="10" />
-				</div>
-				<div class="field">
-					<label for="pin">4-digit PIN</label>
-					<input type="password" id="pin" name="pin" required pattern="[0-9]{4}" placeholder="Enter 4-digit PIN" maxlength="4" inputmode="numeric" />
-				</div>
+		<div class="form-row">
+			<div class="field">
+				<label for="phone">Mobile Number</label>
+				<input type="tel" id="phone" name="phone" required pattern="[0-9]{10}" placeholder="Enter 10-digit mobile number" maxlength="10" />
 			</div>
-			<div class="field-privacy-note" style="margin-top: 1rem; background-color: var(--bumble-light-yellow); border: 1.5px solid var(--bumble-yellow); padding: 0.75rem 1rem; border-radius: 12px; font-size: var(--font-xs); color: var(--bumble-text); line-height: 1.4; display: flex; gap: 0.5rem; align-items: flex-start; font-weight: 500;">
-				<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0; margin-top: 0.1rem; color: var(--bumble-text-light);">
-					<rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
-					<path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
-				</svg>
-				<span><strong>100% Private & Secure:</strong> Your mobile number is confidential and strictly used for secure, PIN-based logins. It will <strong>never</strong> be shared with other users, shown publicly on your profile, or used for spam.</span>
-			</div>
-			<div class="form-actions" style="margin-top: 2rem;">
-				<button type="button" class="btn btn-submit" id="next1Btn" style="width: 100%;">Next</button>
-			</div>
-			<p style="text-align: center; margin-top: 2rem; font-size: var(--font-sm); font-weight: 500; color: var(--bumble-text-light);">
-				Already have an account? <a href="/login" style="color: var(--bumble-text); font-weight: 700; text-decoration: underline;">Log In</a>
-			</p>
-		</div>
-
-		<div id="step2" class="form-step" style="display: none;">
-			<h2 style="text-align: center; font-size: var(--font-lg); margin-bottom: 2rem; border-bottom: 2px solid var(--bumble-yellow); font-family: var(--font-secondary); color: var(--bumble-text); padding-bottom: 0.5rem;">Stage 2: Basic Details</h2>
-			<div class="form-row">
-				<div class="field">
-					<label for="name">Full Name</label>
-					<input type="text" id="name" name="name" required minlength="2" maxlength="50" placeholder="Enter your full name" />
-				</div>
-				<div class="field">
-					<label for="email">Email Address</label>
-					<input type="email" id="email" name="email" required placeholder="your.email@example.com" />
-				</div>
-			</div>
-			<div class="form-row" style="margin-top: 1rem;">
-				<div class="field">
-					<label for="dob">Date of Birth</label>
-					<input type="date" id="dob" name="dob" required max={new Date().toISOString().split('T')[0]} />
-				</div>
-				<div class="field">
-					<label for="tob">Time of Birth</label>
-					<input type="time" id="tob" name="tob" required style="width: 100%;" />
-				</div>
-			</div>
-			<div class="form-row" style="margin-top: 1rem;">
-				<div class="field" style="grid-column: span 2;">
-					<label>Gender</label>
-					<div class="gender-selector-grid">
-						<label class="gender-tile" id="tile-male">
-							<span class="gender-icon" style="display: inline-flex; align-items: center; justify-content: center;">
-								<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-									<circle cx="10" cy="14" r="5"></circle>
-									<polyline points="15 3 21 3 21 9"></polyline>
-									<line x1="21" y1="3" x2="13.5" y2="10.5"></line>
-								</svg>
-							</span>
-							<span class="gender-label">Male</span>
-							<input type="radio" name="gender" value="male" />
-						</label>
-						<label class="gender-tile" id="tile-female">
-							<span class="gender-icon" style="display: inline-flex; align-items: center; justify-content: center;">
-								<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-									<circle cx="12" cy="9" r="5"></circle>
-									<line x1="12" y1="14" x2="12" y2="21"></line>
-									<line x1="9" y1="18" x2="15" y2="18"></line>
-								</svg>
-							</span>
-							<span class="gender-label">Female</span>
-							<input type="radio" name="gender" value="female" />
-						</label>
-						<label class="gender-tile" id="tile-other">
-							<span class="gender-icon" style="display: inline-flex; align-items: center; justify-content: center;">
-								<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-									<circle cx="12" cy="12" r="4"></circle>
-									<line x1="12" y1="16" x2="12" y2="22"></line>
-									<line x1="9" y1="19" x2="15" y2="19"></line>
-									<polyline points="16 4 20 4 20 8"></polyline>
-									<line x1="20" y1="4" x2="15" y2="9"></line>
-								</svg>
-							</span>
-							<span class="gender-label">Other</span>
-							<input type="radio" name="gender" value="other" />
-						</label>
-					</div>
-				</div>
-			</div>
-			<div class="form-row" style="margin-top: 1rem;">
-				<div class="field" style="grid-column: span 2;">
-					<label for="location">Birth Location (City, Country)</label>
-					<input type="text" id="location" name="location" required placeholder="e.g. New Delhi, India" autocomplete="off" />
-					<div id="suggestions"></div>
-					<input type="hidden" id="lat" name="lat" />
-					<input type="hidden" id="lon" name="lon" />
-				</div>
-			</div>
-
-			<p style="font-size: var(--font-xs); color: var(--bumble-text-light); text-align: center; margin-top: 2rem; margin-bottom: 0.5rem; font-weight: 500;">By submitting your details, you agree to our <a href="/terms" style="color: var(--bumble-text); text-decoration: underline; font-weight: 700;">Terms of Service</a>.</p>
-
-			<div class="form-actions">
-				<button type="button" class="btn btn-reset" id="prev1Btn">Previous</button>
-				<button type="submit" class="btn btn-submit" id="submitBtn">Submit Details</button>
+			<div class="field">
+				<label for="pin">4-digit PIN</label>
+				<input type="password" id="pin" name="pin" required pattern="[0-9]{4}" placeholder="Create 4-digit PIN" maxlength="4" inputmode="numeric" />
 			</div>
 		</div>
+
+		<div class="form-row" style="margin-top: 1rem;">
+			<div class="field" style="grid-column: span 2;">
+				<label for="name">Full Name</label>
+				<input type="text" id="name" name="name" required minlength="2" maxlength="50" placeholder="Enter your full name" />
+			</div>
+		</div>
+
+		<div class="form-row" style="margin-top: 1rem;">
+			<div class="field">
+				<label for="dob">Date of Birth</label>
+				<input type="date" id="dob" name="dob" required max={new Date().toISOString().split('T')[0]} />
+			</div>
+			<div class="field">
+				<label for="tob">Time of Birth</label>
+				<input type="time" id="tob" name="tob" required style="width: 100%;" />
+			</div>
+		</div>
+
+		<div class="form-row" style="margin-top: 1rem;">
+			<div class="field" style="grid-column: span 2;">
+				<label>Gender</label>
+				<div class="gender-selector-grid">
+					<label class="gender-tile" id="tile-male">
+						<span class="gender-icon" style="display: inline-flex; align-items: center; justify-content: center;">
+							<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+								<circle cx="10" cy="14" r="5"></circle>
+								<polyline points="15 3 21 3 21 9"></polyline>
+								<line x1="21" y1="3" x2="13.5" y2="10.5"></line>
+							</svg>
+						</span>
+						<span class="gender-label">Male</span>
+						<input type="radio" name="gender" value="male" />
+					</label>
+					<label class="gender-tile" id="tile-female">
+						<span class="gender-icon" style="display: inline-flex; align-items: center; justify-content: center;">
+							<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+								<circle cx="12" cy="9" r="5"></circle>
+								<line x1="12" y1="14" x2="12" y2="21"></line>
+								<line x1="9" y1="18" x2="15" y2="18"></line>
+							</svg>
+						</span>
+						<span class="gender-label">Female</span>
+						<input type="radio" name="gender" value="female" />
+					</label>
+					<label class="gender-tile" id="tile-other">
+						<span class="gender-icon" style="display: inline-flex; align-items: center; justify-content: center;">
+							<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+								<circle cx="12" cy="12" r="4"></circle>
+								<line x1="12" y1="16" x2="12" y2="22"></line>
+								<line x1="9" y1="19" x2="15" y2="19"></line>
+								<polyline points="16 4 20 4 20 8"></polyline>
+								<line x1="20" y1="4" x2="15" y2="9"></line>
+							</svg>
+						</span>
+						<span class="gender-label">Other</span>
+						<input type="radio" name="gender" value="other" />
+					</label>
+				</div>
+			</div>
+		</div>
+
+		<div class="form-row" style="margin-top: 1rem;">
+			<div class="field" style="grid-column: span 2;">
+				<label for="location">Birth Location (City, Country)</label>
+				<input type="text" id="location" name="location" required placeholder="e.g. New Delhi, India" autocomplete="off" />
+				<div id="suggestions"></div>
+				<input type="hidden" id="lat" name="lat" />
+				<input type="hidden" id="lon" name="lon" />
+			</div>
+		</div>
+
+		<div class="field-privacy-note" style="margin-top: 1.5rem; background-color: var(--bumble-light-yellow); border: 1.5px solid var(--bumble-yellow); padding: 0.75rem 1rem; border-radius: 12px; font-size: var(--font-xs); color: var(--bumble-text); line-height: 1.4; display: flex; gap: 0.5rem; align-items: flex-start; font-weight: 500;">
+			<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0; margin-top: 0.1rem; color: var(--bumble-text-light);">
+				<rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+				<path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+			</svg>
+			<span><strong>100% Private & Secure:</strong> Your mobile number is confidential and strictly used for secure, PIN-based logins. It will <strong>never</strong> be shared with other users or shown publicly. You can complete additional profile details anytime from your dashboard.</span>
+		</div>
+
+		<p style="font-size: var(--font-xs); color: var(--bumble-text-light); text-align: center; margin-top: 1.5rem; margin-bottom: 0.5rem; font-weight: 500;">By creating a profile, you agree to our <a href="/terms" style="color: var(--bumble-text); text-decoration: underline; font-weight: 700;">Terms of Service</a>.</p>
+
+		<div class="form-actions" style="margin-top: 1.5rem;">
+			<button type="submit" class="btn btn-submit" id="submitBtn" style="width: 100%;">Create Profile</button>
+		</div>
+
+		<p style="text-align: center; margin-top: 1.5rem; font-size: var(--font-sm); font-weight: 500; color: var(--bumble-text-light);">
+			Already have an account? <a href="/login" style="color: var(--bumble-text); font-weight: 700; text-decoration: underline;">Log In</a>
+		</p>
 	</form>
-)}
-
-{/* Custom Mobile Verification Overlay Modal */}
-{!isEdit && (
-<div id="mobile-verify-modal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(143,118,99,0.3); z-index: 10000; align-items: center; justify-content: center; padding: 1rem; backdrop-filter: blur(4px);">
-  <div style="background: white; border: 2.5px solid var(--bumble-yellow); border-radius: 24px; padding: 2rem; max-width: 420px; width: 100%; box-shadow: 0 12px 36px rgba(143,118,99,0.12); text-align: center;">
-    <h3 style="margin-top: 0; font-family: var(--font-secondary); color: var(--bumble-text); border-bottom: none; font-size: var(--font-base); text-align: center; font-weight: 800;">Verify Your Mobile Number</h3>
-    <p style="font-size: var(--font-sm); color: var(--bumble-text); margin-bottom: 2rem; line-height: 1.6; text-align: center; font-weight: 500;">
-      Please confirm that your mobile number is correct:<br/>
-      <strong id="modal-phone-display" style="font-size: var(--font-xl); color: var(--bumble-text); display: block; margin: 1rem 0; letter-spacing: 1.5px; background-color: var(--bumble-yellow); padding: 0.5rem; border-radius: 12px; border: 1.5px solid var(--bumble-yellow);"></strong>
-      We do not allow changing your mobile number once your account is created.
-    </p>
-    <div style="display: flex; gap: 0.75rem; justify-content: center;">
-      <button type="button" id="modal-cancel-btn" class="btn btn-reset" style="padding: 0.6rem; border-radius: 12px; margin: 0;">Edit Number</button>
-      <button type="button" id="modal-confirm-btn" class="btn btn-submit" style="padding: 0.6rem; border-radius: 12px; margin: 0; flex: 1.5;">Confirm</button>
-    </div>
-  </div>
-</div>
 )}
 
 <script>
@@ -422,10 +390,9 @@ const { isEdit = false } = Astro.props;
 		const form = document.getElementById('detailsForm') as HTMLFormElement;
 		const isEditMode = form?.getAttribute('data-is-edit') === 'true';
 
-		const pageTitle = document.getElementById('page-title') as HTMLHeadingElement;
 		const submitBtn = document.getElementById('submitBtn') as HTMLButtonElement;
 		const nameInput = document.getElementById('name') as HTMLInputElement;
-		const emailInput = document.getElementById('email') as HTMLInputElement;
+		const emailInput = document.getElementById('email') as HTMLInputElement | null;
 		const dobInput = document.getElementById('dob') as HTMLInputElement;
 		const tobInput = document.getElementById('tob') as HTMLInputElement;
 		const cancelBtns = document.querySelectorAll('.cancelBtn');
@@ -433,18 +400,12 @@ const { isEdit = false } = Astro.props;
 		const suggestionsContainer = document.getElementById('suggestions') as HTMLDivElement;
 		const latInput = document.getElementById('lat') as HTMLInputElement;
 		const lonInput = document.getElementById('lon') as HTMLInputElement;
-		const currentLocationInput = document.getElementById('currentLocation') as HTMLInputElement;
-		const currentSuggestionsContainer = document.getElementById('currentSuggestions') as HTMLDivElement;
-		const currentLatInput = document.getElementById('currentLat') as HTMLInputElement;
-		const currentLonInput = document.getElementById('currentLon') as HTMLInputElement;
+		const currentLocationInput = document.getElementById('currentLocation') as HTMLInputElement | null;
+		const currentSuggestionsContainer = document.getElementById('currentSuggestions') as HTMLDivElement | null;
+		const currentLatInput = document.getElementById('currentLat') as HTMLInputElement | null;
+		const currentLonInput = document.getElementById('currentLon') as HTMLInputElement | null;
 		const phoneInput = document.getElementById('phone') as HTMLInputElement;
 		const pinInput = document.getElementById('pin') as HTMLInputElement;
-
-		// Modal Elements for Signup
-		const verifyModal = document.getElementById('mobile-verify-modal') as HTMLDivElement;
-		const modalPhoneDisplay = document.getElementById('modal-phone-display') as HTMLElement;
-		const modalCancelBtn = document.getElementById('modal-cancel-btn') as HTMLButtonElement;
-		const modalConfirmBtn = document.getElementById('modal-confirm-btn') as HTMLButtonElement;
 
 		// Generate or retrieve the standard User ID
 		const uid = getOrSetUserId();
@@ -465,12 +426,7 @@ const { isEdit = false } = Astro.props;
 			});
 		}
 
-		// Listen to change events on the radio buttons themselves.
-		// This handles both mouse clicks (which natively toggle the radio) and keyboard navigation.
-		genderRadioInputs.forEach(input => {
-			input.addEventListener('change', updateGenderTileStyles);
-		});
-
+		// Listen to change events on the radio buttons
 		genderRadioInputs.forEach(input => {
 			input.addEventListener('change', updateGenderTileStyles);
 		});
@@ -517,7 +473,7 @@ const { isEdit = false } = Astro.props;
 
 		// Auto-detect current location via IP if blank and in edit mode
 		async function autoDetectLocation() {
-			if (isEditMode && currentLocationInput && !currentLocationInput.value) {
+			if (isEditMode && currentLocationInput && currentLatInput && currentLonInput && !currentLocationInput.value) {
 				const SESSION_CACHE_KEY = 'auto_detected_location';
 				const cached = sessionStorage.getItem(SESSION_CACHE_KEY);
 				if (cached) {
@@ -562,8 +518,8 @@ const { isEdit = false } = Astro.props;
 
 		// Location Autocomplete Setup Function
 		const autocompleteCache = new Map<string, any[]>();
-		function setupAutocomplete(inputEl: HTMLInputElement, suggestionsEl: HTMLDivElement, latEl: HTMLInputElement, lonEl: HTMLInputElement) {
-			if (!inputEl) return;
+		function setupAutocomplete(inputEl: HTMLInputElement | null, suggestionsEl: HTMLDivElement | null, latEl: HTMLInputElement | null, lonEl: HTMLInputElement | null) {
+			if (!inputEl || !suggestionsEl || !latEl || !lonEl) return;
 			let timeout: ReturnType<typeof setTimeout>;
 			inputEl.addEventListener('input', () => {
 				clearTimeout(timeout);
@@ -599,6 +555,7 @@ const { isEdit = false } = Astro.props;
 			});
 
 			function renderSuggestions(data: any[]) {
+				if (!suggestionsEl || !inputEl || !latEl || !lonEl) return;
 				suggestionsEl.innerHTML = '';
 				if (data.length > 0) {
 					data.forEach((item: any) => {
@@ -643,34 +600,133 @@ const { isEdit = false } = Astro.props;
 			if (focusEl) focusEl.focus();
 		};
 
-		const step1 = document.getElementById('step1') as HTMLDivElement;
-		const step2 = document.getElementById('step2') as HTMLDivElement;
+		const step1 = document.getElementById('step1') as HTMLDivElement | null;
+		const step2 = document.getElementById('step2') as HTMLDivElement | null;
 
-		const next1Btn = document.getElementById('next1Btn') as HTMLButtonElement;
-		const prev1Btn = document.getElementById('prev1Btn') as HTMLButtonElement;
+		const next1Btn = document.getElementById('next1Btn') as HTMLButtonElement | null;
+		const prev1Btn = document.getElementById('prev1Btn') as HTMLButtonElement | null;
 
-		// Validation logic based on form type (Signup vs Edit)
-		const validateStage1 = async (): Promise<boolean> => {
+		// Stage 1 validation for Edit Mode wizard
+		const validateStage1Edit = (): boolean => {
 			if (errorMsgEl) errorMsgEl.style.display = 'none';
 
-			if (!isEditMode) {
-				// SIGNUP: Validate phone and pin
-				const phoneRegex = /^[0-9]{10}$/;
-				if (!phoneInput.value || !phoneRegex.test(phoneInput.value)) {
-					showError('Please enter a valid 10-digit mobile number.', phoneInput);
+			if (!nameInput.value || nameInput.value.length < 2) {
+				showError('Please enter your full name (at least 2 characters).', nameInput);
+				return false;
+			}
+
+			if (emailInput && emailInput.value) {
+				const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+				if (!emailRegex.test(emailInput.value)) {
+					showError('Please enter a valid email address.', emailInput);
 					return false;
 				}
+			}
 
-				const pinRegex = /^[0-9]{4}$/;
-				if (!pinInput.value || !pinRegex.test(pinInput.value)) {
-					showError('Please enter a valid 4-digit numeric PIN.', pinInput);
+			if (!dobInput.value) {
+				showError('Please select your Date of Birth.', dobInput);
+				return false;
+			}
+
+			if (!tobInput.value) {
+				showError('Please select your complete Time of Birth.', tobInput);
+				return false;
+			}
+
+			let genderVal = '';
+			genderRadioInputs.forEach(r => { if (r.checked) genderVal = r.value; });
+			if (!genderVal) {
+				showError('Please select your Gender.');
+				return false;
+			}
+
+			if (!locationInput.value) {
+				showError('Please enter your birth location.', locationInput);
+				return false;
+			}
+
+			if (!latInput.value || !lonInput.value) {
+				showError('Please select a location from the suggestions list to get accurate coordinates.', locationInput);
+				return false;
+			}
+
+			const pinRegex = /^[0-9]{4}$/;
+			if (!pinInput.value || !pinRegex.test(pinInput.value)) {
+				showError('Please enter a valid 4-digit numeric PIN.', pinInput);
+				return false;
+			}
+
+			return true;
+		};
+
+		// Validation for entire Form Submission
+		const validateFullForm = async (): Promise<boolean> => {
+			if (errorMsgEl) errorMsgEl.style.display = 'none';
+
+			// Validate Mobile Number & PIN
+			const phoneRegex = /^[0-9]{10}$/;
+			if (!phoneInput.value || !phoneRegex.test(phoneInput.value)) {
+				showError('Please enter a valid 10-digit mobile number.', phoneInput);
+				return false;
+			}
+
+			const pinRegex = /^[0-9]{4}$/;
+			if (!pinInput.value || !pinRegex.test(pinInput.value)) {
+				showError('Please enter a valid 4-digit numeric PIN.', pinInput);
+				return false;
+			}
+
+			// Validate Basic Details
+			if (!nameInput.value || nameInput.value.length < 2) {
+				showError('Please enter your full name (at least 2 characters).', nameInput);
+				return false;
+			}
+
+			if (emailInput && emailInput.value) {
+				const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+				if (!emailRegex.test(emailInput.value)) {
+					showError('Please enter a valid email address.', emailInput);
 					return false;
 				}
+			}
 
-				// Check if the mobile number is already registered in the system
-				next1Btn.disabled = true;
-				const originalText = next1Btn.textContent;
-				next1Btn.textContent = 'Verifying...';
+			if (!dobInput.value) {
+				showError('Please select your Date of Birth.', dobInput);
+				return false;
+			}
+
+			if (!tobInput.value) {
+				showError('Please select your complete Time of Birth.', tobInput);
+				return false;
+			}
+
+			let genderVal = '';
+			genderRadioInputs.forEach(r => { if (r.checked) genderVal = r.value; });
+			if (!genderVal) {
+				showError('Please select your Gender.');
+				return false;
+			}
+
+			if (!locationInput.value) {
+				showError('Please enter your birth location.', locationInput);
+				return false;
+			}
+
+			if (!latInput.value || !lonInput.value) {
+				showError('Please select a location from the suggestions list to get accurate coordinates.', locationInput);
+				return false;
+			}
+
+			if (isEditMode) {
+				if (currentLocationInput && currentLocationInput.value && currentLatInput && currentLonInput && (!currentLatInput.value || !currentLonInput.value)) {
+					showError('Please select your current location from the suggestions list to get accurate coordinates.', currentLocationInput);
+					return false;
+				}
+			} else {
+				// SIGNUP: Check mobile uniqueness
+				if (submitBtn) submitBtn.disabled = true;
+				const originalText = submitBtn ? submitBtn.textContent : '';
+				if (submitBtn) submitBtn.textContent = 'Checking account...';
 
 				try {
 					invalidateUsersCache();
@@ -678,127 +734,23 @@ const { isEdit = false } = Astro.props;
 					const phoneExists = users.some(u => u.phone === phoneInput.value);
 					if (phoneExists) {
 						showError('This mobile number is already registered. Please log in.', phoneInput);
-						next1Btn.disabled = false;
-						next1Btn.textContent = originalText;
+						if (submitBtn) {
+							submitBtn.disabled = false;
+							submitBtn.textContent = originalText;
+						}
 						return false;
 					}
 				} catch (err) {
 					console.error('Failed to verify phone uniqueness:', err);
 				}
 
-				next1Btn.disabled = false;
-				next1Btn.textContent = originalText;
-
-				// Show Custom Mobile Verification Modal
-				if (verifyModal && modalPhoneDisplay) {
-					modalPhoneDisplay.textContent = phoneInput.value;
-					verifyModal.style.display = 'flex';
-					return false; // Don't proceed to Stage 2 yet; wait for modal confirmation
+				if (submitBtn) {
+					submitBtn.disabled = false;
+					submitBtn.textContent = originalText;
 				}
-
-				return true;
-			} else {
-				// EDIT MODE: Validate Basic Details
-				if (!nameInput.value || nameInput.value.length < 2) {
-					showError('Please enter your full name (at least 2 characters).', nameInput);
-					return false;
-				}
-
-				const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-				if (!emailInput.value || !emailRegex.test(emailInput.value)) {
-					showError('Please enter a valid email address.', emailInput);
-					return false;
-				}
-
-				if (!dobInput.value) {
-					showError('Please select your Date of Birth.', dobInput);
-					return false;
-				}
-
-				if (!tobInput.value) {
-					showError('Please select your complete Time of Birth.', tobInput);
-					return false;
-				}
-
-				let genderVal = '';
-				genderRadioInputs.forEach(r => { if (r.checked) genderVal = r.value; });
-				if (!genderVal) {
-					showError('Please select your Gender.');
-					return false;
-				}
-
-				if (!locationInput.value) {
-					showError('Please enter your birth location.', locationInput);
-					return false;
-				}
-
-				if (!latInput.value || !lonInput.value) {
-					showError('Please select a location from the suggestions list to get accurate coordinates.', locationInput);
-					return false;
-				}
-
-				const pinRegex = /^[0-9]{4}$/;
-				if (!pinInput.value || !pinRegex.test(pinInput.value)) {
-					showError('Please enter a valid 4-digit numeric PIN.', pinInput);
-					return false;
-				}
-
-				return true;
 			}
-		};
 
-		const validateStage2 = () => {
-			if (errorMsgEl) errorMsgEl.style.display = 'none';
-
-			if (!isEditMode) {
-				// SIGNUP STAGE 2: Validate Basic Details
-				if (!nameInput.value || nameInput.value.length < 2) {
-					showError('Please enter your full name (at least 2 characters).', nameInput);
-					return false;
-				}
-
-				const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-				if (!emailInput.value || !emailRegex.test(emailInput.value)) {
-					showError('Please enter a valid email address.', emailInput);
-					return false;
-				}
-
-				if (!dobInput.value) {
-					showError('Please select your Date of Birth.', dobInput);
-					return false;
-				}
-
-				if (!tobInput.value) {
-					showError('Please select your complete Time of Birth.', dobInput);
-					return false;
-				}
-
-				let genderVal = '';
-				genderRadioInputs.forEach(r => { if (r.checked) genderVal = r.value; });
-				if (!genderVal) {
-					showError('Please select your Gender.');
-					return false;
-				}
-
-				if (!locationInput.value) {
-					showError('Please enter your birth location.', locationInput);
-					return false;
-				}
-
-				if (!latInput.value || !lonInput.value) {
-					showError('Please select a location from the suggestions list to get accurate coordinates.', locationInput);
-					return false;
-				}
-
-				return true;
-			} else {
-				// EDIT STAGE 2: Validate Optional Details
-				if (currentLocationInput.value && (!currentLatInput.value || !currentLonInput.value)) {
-					showError('Please select your current location from the suggestions list to get accurate coordinates.', currentLocationInput);
-					return false;
-				}
-				return true;
-			}
+			return true;
 		};
 
 		form?.addEventListener('keydown', function(event) {
@@ -810,38 +762,29 @@ const { isEdit = false } = Astro.props;
 			}
 		});
 
-		// Modal button listeners (Signup only)
-		modalCancelBtn?.addEventListener('click', () => {
-			if (verifyModal) verifyModal.style.display = 'none';
-		});
-
-		modalConfirmBtn?.addEventListener('click', () => {
-			if (verifyModal) verifyModal.style.display = 'none';
-			// Proceed to Stage 2
-			step1.style.display = 'none';
-			step2.style.display = 'block';
-			window.scrollTo({ top: 0, behavior: 'smooth' });
-		});
-
-		next1Btn?.addEventListener('click', async () => {
-			const success = await validateStage1();
-			if (success) {
-				step1.style.display = 'none';
-				step2.style.display = 'block';
-				window.scrollTo({ top: 0, behavior: 'smooth' });
+		next1Btn?.addEventListener('click', () => {
+			if (validateStage1Edit()) {
+				if (step1 && step2) {
+					step1.style.display = 'none';
+					step2.style.display = 'block';
+					window.scrollTo({ top: 0, behavior: 'smooth' });
+				}
 			}
 		});
 
 		prev1Btn?.addEventListener('click', () => {
-			step2.style.display = 'none';
-			step1.style.display = 'block';
-			window.scrollTo({ top: 0, behavior: 'smooth' });
+			if (step1 && step2) {
+				step2.style.display = 'none';
+				step1.style.display = 'block';
+				window.scrollTo({ top: 0, behavior: 'smooth' });
+			}
 		});
 
 		form?.addEventListener('submit', async (e) => {
 			e.preventDefault();
 
-			if (!validateStage2()) {
+			const isValid = await validateFullForm();
+			if (!isValid) {
 				return;
 			}
 
@@ -852,6 +795,7 @@ const { isEdit = false } = Astro.props;
 			const payload: any = {
 				...data,
 				uid: uid,
+				email: data.email || '',
 				maritalStatus: isEditMode ? (data.maritalStatus || 'available') : 'available'
 			};
 
@@ -859,9 +803,10 @@ const { isEdit = false } = Astro.props;
 			setCookie('user_details', JSON.stringify(payload), 365);
 
 			// Show loading state on submit button
-			submitBtn.disabled = true;
-			const originalBtnText = submitBtn.textContent;
-			submitBtn.textContent = 'Saving...';
+			if (submitBtn) {
+				submitBtn.disabled = true;
+				submitBtn.textContent = isEditMode ? 'Saving...' : 'Creating Profile...';
+			}
 
 			try {
 				const { saveUserProfile } = await import('../lib/api');
