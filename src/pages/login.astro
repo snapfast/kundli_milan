@@ -126,6 +126,11 @@ import Layout from '../layouts/Layout.astro';
 		const pinInput = document.getElementById('pin') as HTMLInputElement;
 		const errorMsgEl = document.getElementById('form-error-message') as HTMLDivElement;
 
+		// Focus on phone input automatically on load
+		if (phoneInput) {
+			phoneInput.focus();
+		}
+
 		const showError = (msg: string, focusEl?: HTMLElement) => {
 			if (errorMsgEl) {
 				errorMsgEl.textContent = msg;

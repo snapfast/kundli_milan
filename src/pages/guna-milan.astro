@@ -163,7 +163,10 @@ import Layout from '../layouts/Layout.astro';
 			<div class="calc-grid">
 				<!-- First Person -->
 				<div style="display: flex; flex-direction: column; gap: 1rem;">
-					<h2 class="person-section-title">First Person</h2>
+					<div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--bumble-yellow); padding-bottom: 0.5rem; margin-bottom: 1.25rem;">
+						<h2 class="person-section-title" style="border-bottom: none; padding-bottom: 0; margin-bottom: 0;">First Person</h2>
+						<span id="p1-prefilled-badge" style="display: none; font-size: var(--font-xs); background: var(--bumble-light-yellow); color: var(--bumble-text); padding: 0.25rem 0.6rem; border-radius: 9999px; border: 1px solid var(--bumble-yellow); font-weight: 700;">Prefilled from profile</span>
+					</div>
 					<div class="field">
 						<label for="p1_name">Name</label>
 						<input type="text" id="p1_name" name="p1_name" required placeholder="Enter name" />
@@ -294,6 +297,7 @@ import Layout from '../layouts/Layout.astro';
 	</div>
 
 	<script>
+		import { getCookie } from '../lib/user';
 		import { calculateAstrology } from '../lib/astrology';
 		import { calculateCompatibility } from '../lib/compatibility';
 		import { generateMatchCardHtml } from '../lib/ui';
@@ -418,6 +422,43 @@ import Layout from '../layouts/Layout.astro';
 
 		setupAutocomplete(p1Location, p1Suggestions, p1Lat, p1Lon);
 		setupAutocomplete(p2Location, p2Suggestions, p2Lat, p2Lon);
+
+		// Auto-prefill Person 1 if logged in
+		function prefillPersonOne() {
+			const stored = getCookie('user_details');
+			const prefilledBadge = document.getElementById('p1-prefilled-badge');
+			if (stored) {
+				try {
+					const details = JSON.parse(stored);
+					if (details.name && p1Name) p1Name.value = details.name;
+					if (details.dob && p1Dob) p1Dob.value = details.dob;
+					if (details.tob && p1Tob) p1Tob.value = details.tob;
+					if (details.location && p1Location) p1Location.value = details.location;
+					if (details.lat && p1Lat) p1Lat.value = details.lat;
+					if (details.lon && p1Lon) p1Lon.value = details.lon;
+
+					if (details.gender) {
+						p1RadioInputs.forEach(radio => {
+							if (radio.value.toLowerCase() === details.gender.toLowerCase()) {
+								radio.checked = true;
+							}
+						});
+						updateGenderStyles(p1RadioInputs);
+					}
+
+					if (prefilledBadge) prefilledBadge.style.display = 'inline-block';
+
+					// Auto focus on person 2 name for faster workflow
+					if (p2Name) p2Name.focus();
+				} catch (e) {
+					console.error('Error auto-prefilling Person 1:', e);
+				}
+			} else {
+				if (p1Name) p1Name.focus();
+			}
+		}
+
+		prefillPersonOne();
 
 		const showError = (msg: string, focusEl?: HTMLElement) => {
 			if (errorMsgEl) {
