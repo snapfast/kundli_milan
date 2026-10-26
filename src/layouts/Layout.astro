@@ -224,7 +224,7 @@ const { title, description, noindex } = Astro.props;
 				box-shadow: 0 0 0 3px rgba(255, 203, 55, 0.25);
 			}
 			button, .btn, .nav-link {
-				padding: 0.6rem 1.25rem;
+				padding: 0.5rem 1.25rem;
 				background-color: var(--bumble-yellow);
 				color: var(--bumble-text);
 				border: none;
@@ -233,11 +233,14 @@ const { title, description, noindex } = Astro.props;
 				font-size: var(--font-sm);
 				font-weight: 700;
 				text-decoration: none;
-				display: inline-block;
+				display: inline-flex;
+				align-items: center;
+				justify-content: center;
 				text-align: center;
 				transition: all 0.2s ease;
 				min-height: 44px;
-				line-height: 1.2;
+				line-height: 1;
+				box-sizing: border-border-box;
 			}
 			button:hover, .btn:hover {
 				background-color: var(--bumble-yellow-hover);
