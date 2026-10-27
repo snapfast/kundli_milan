@@ -6,12 +6,12 @@ import Layout from '../layouts/Layout.astro';
 	<style>
 		.login-card {
 			max-width: 440px;
-			margin: 4rem auto;
+			margin: 3.5rem auto;
 			padding: 2.5rem 2rem;
 			background: var(--bumble-white);
-			border: 2px solid var(--bumble-border);
-			border-radius: 24px;
-			box-shadow: 0 12px 32px rgba(143,118,99,0.06);
+			border: 1.5px solid var(--bumble-border);
+			border-radius: 20px;
+			box-shadow: 0 6px 24px rgba(143,118,99,0.04);
 			color: var(--bumble-text);
 			position: relative;
 		}
@@ -52,8 +52,14 @@ import Layout from '../layouts/Layout.astro';
 			color: var(--bumble-text);
 			font-weight: 800;
 			cursor: pointer;
-			border: 2px solid var(--bumble-yellow);
-			transition: all 0.2s ease;
+			border: 1.5px solid var(--bumble-yellow);
+			transition: background-color 0.2s ease, border-color 0.2s ease;
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			text-align: center;
+			line-height: 1;
+			min-height: 48px;
 			text-transform: uppercase;
 			letter-spacing: 0.05em;
 		}
