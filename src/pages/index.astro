@@ -165,27 +165,7 @@ import Layout from '../layouts/Layout.astro';
 	</div>
 
 	<script>
-			import { getCookie } from '../lib/user';
 			import { fetchUsers } from '../lib/api';
-			import { getOrSetUserId } from '../lib/user';
-
-			const storedDetails = getCookie('user_details');
-			const uid = getOrSetUserId();
-
-			function updateCtaButton(name) {
-				const ctaBtn = document.getElementById('cta-btn');
-				const ctaBtnBottom = document.getElementById('cta-btn-bottom');
-
-				if (ctaBtn && name) {
-					ctaBtn.textContent = 'Dashboard';
-					ctaBtn.href = '/dashboard';
-				}
-
-				if (ctaBtnBottom && name) {
-					ctaBtnBottom.textContent = 'Dashboard';
-					ctaBtnBottom.href = '/dashboard';
-				}
-			}
 
 			function updateUserCounter(count) {
 				const counterEl = document.getElementById('user-counter');
@@ -203,29 +183,9 @@ import Layout from '../layouts/Layout.astro';
 			}
 
 			async function initHomePage() {
-				let isLoggedIn = false;
-				if (storedDetails) {
-					try {
-						const details = JSON.parse(decodeURIComponent(storedDetails));
-						if (details && details.name) {
-							updateCtaButton(details.name);
-							isLoggedIn = true;
-						}
-					} catch (e) {
-						console.error('Failed to parse user details:', e);
-					}
-				}
-
 				try {
 					const users = await fetchUsers();
 					updateUserCounter(users.length);
-
-					if (!isLoggedIn) {
-						const existingUser = users.find(u => u.uid === uid);
-						if (existingUser && existingUser.name) {
-							updateCtaButton(existingUser.name);
-						}
-					}
 				} catch (error) {
 					console.error('Failed to fetch users:', error);
 					updateUserCounter(0);
