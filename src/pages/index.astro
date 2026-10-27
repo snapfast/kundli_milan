@@ -158,10 +158,6 @@ import Layout from '../layouts/Layout.astro';
 				<a href="/guna-milan" class="btn" style="background-color: var(--bumble-yellow); color: var(--bumble-text); padding: 0.6rem 1.5rem; border-radius: 9999px; font-weight: 800; text-decoration: none; text-transform: uppercase; font-size: var(--font-xs); display: inline-flex; align-items: center; justify-content: center; text-align: center;">Run Compatibility Test &rarr;</a>
 			</div>
 
-			<p style="text-align: center; margin-top: 2rem;">
-				<a href="/about" class="btn" style="background-color: var(--bumble-yellow); color: var(--bumble-text); padding: 0.75rem 1.75rem; display: inline-flex; align-items: center; justify-content: center; text-align: center;">About moonine &rarr;</a>
-			</p>
-
 			<div style="text-align: center; margin-top: 4rem; margin-bottom: 3rem;">
 				<a href="/create-profile" id="cta-btn-bottom" class="btn-cta">Sign Up</a>
 			</div>
@@ -169,27 +165,7 @@ import Layout from '../layouts/Layout.astro';
 	</div>
 
 	<script>
-			import { getCookie } from '../lib/user';
 			import { fetchUsers } from '../lib/api';
-			import { getOrSetUserId } from '../lib/user';
-
-			const storedDetails = getCookie('user_details');
-			const uid = getOrSetUserId();
-
-			function updateCtaButton(name) {
-				const ctaBtn = document.getElementById('cta-btn');
-				const ctaBtnBottom = document.getElementById('cta-btn-bottom');
-
-				if (ctaBtn && name) {
-					ctaBtn.textContent = `Welcome ${name}`;
-					ctaBtn.href = '/dashboard';
-				}
-
-				if (ctaBtnBottom && name) {
-					ctaBtnBottom.textContent = `Welcome ${name}`;
-					ctaBtnBottom.href = '/dashboard';
-				}
-			}
 
 			function updateUserCounter(count) {
 				const counterEl = document.getElementById('user-counter');
@@ -207,29 +183,9 @@ import Layout from '../layouts/Layout.astro';
 			}
 
 			async function initHomePage() {
-				let isLoggedIn = false;
-				if (storedDetails) {
-					try {
-						const details = JSON.parse(decodeURIComponent(storedDetails));
-						if (details && details.name) {
-							updateCtaButton(details.name);
-							isLoggedIn = true;
-						}
-					} catch (e) {
-						console.error('Failed to parse user details:', e);
-					}
-				}
-
 				try {
 					const users = await fetchUsers();
 					updateUserCounter(users.length);
-
-					if (!isLoggedIn) {
-						const existingUser = users.find(u => u.uid === uid);
-						if (existingUser && existingUser.name) {
-							updateCtaButton(existingUser.name);
-						}
-					}
 				} catch (error) {
 					console.error('Failed to fetch users:', error);
 					updateUserCounter(0);
