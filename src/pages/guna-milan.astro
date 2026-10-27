@@ -1,8 +1,31 @@
 ---
 import Layout from '../layouts/Layout.astro';
+
+const jsonLdCalculator = {
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "moonine Free Guna Milan Calculator",
+  "applicationCategory": "UtilitiesApplication",
+  "operatingSystem": "All",
+  "url": "https://moonine.netlify.app/guna-milan",
+  "description": "Free online 36 Guna Milan Kundli matching calculator using authentic Vedic Ashta Koota astrology algorithms.",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  },
+  "featureList": [
+    "36-point Ashta Koota Guna Milan calculation",
+    "Manglik Dosha analysis",
+    "Nakshatra and Rasi matching",
+    "Instant compatibility score report"
+  ]
+};
 ---
 
-<Layout title="Free Kundli Matching - Accurate 36 Guna Milan Calculator" description="Check marriage compatibility instantly using the ancient Vedic Ashta Koota (36 Guna Milan) system. Accurate planetary, Nakshatra, and Dosha analysis.">
+<Layout title="Free Kundli Matching Online - 36 Guna Milan Calculator | moonine" description="Check marriage compatibility instantly using the ancient Vedic Ashta Koota (36 Guna Milan) system. Accurate planetary, Nakshatra, and Manglik Dosha analysis.">
+	<script type="application/ld+json" is:inline set:html={JSON.stringify(jsonLdCalculator)} />
+
 	<style>
 		.calculator-container {
 			background: white;

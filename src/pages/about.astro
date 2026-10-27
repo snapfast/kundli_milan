@@ -1,8 +1,31 @@
 ---
 import Layout from '../layouts/Layout.astro';
+
+const jsonLdAbout = {
+  "@context": "https://schema.org",
+  "@type": "AboutPage",
+  "name": "About moonine - Philosophy of Vedic Astrology Matchmaking",
+  "url": "https://moonine.netlify.app/about",
+  "description": "Learn how moonine bridges traditional 36-point Ashta Koota Vedic compatibility and modern matchmaking.",
+  "mainEntity": {
+    "@type": "Organization",
+    "name": "moonine - A Vedic Matchmaker",
+    "founder": {
+      "@type": "Person",
+      "name": "Rahul Bali"
+    },
+    "contactPoint": {
+      "@type": "ContactPoint",
+      "email": "rahulbaliastrology@gmail.com",
+      "contactType": "customer service"
+    }
+  }
+};
 ---
 
 <Layout title="About moonine - Philosophy of Vedic Astrology Matchmaking" description="Learn how moonine uses the traditional 36-point Ashta Koota system, Guna Milan, and planetary alignments to help you find your celestial partner.">
+    <script type="application/ld+json" is:inline set:html={JSON.stringify(jsonLdAbout)} />
+
     <style>
         .guide-section {
             margin-bottom: 2.5rem;
